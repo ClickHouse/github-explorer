@@ -5445,7 +5445,7 @@ var toc = document.getElementById('toc');
 /// Create table of contents.
 
 document.querySelectorAll('h2,h3').forEach(elem => {
-    var anchor_name = elem.innerText.toLowerCase().replaceAll(/\W+/g, '-').replace(/\W+$/, '');
+    var anchor_name = elem.innerText.toLowerCase().replace(/\W+/g, '-').replace(/\W+$/, '');
 
     var anchor = document.createElement('a');
     anchor.className = 'anchor';
