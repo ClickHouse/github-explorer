@@ -5156,7 +5156,7 @@ clickhouse-local --query "
 
 <p><b>2. All event types in a single table.</b></p>
 
-<p>The table works like a "discriminated union". It will contain a field names <span class="code">event_type</span> to discriminate various events. It will contain all columns that are common for different events like "event date and time", "actor name", "repository name". It will also contain the union of all different properties of different event types. We will have a wide table with many columns, but some columns will be very sparse (filled with values only for certain rare event types).</p>
+<p>The table works like a "discriminated union". It will contain a field named <span class="code">event_type</span> to discriminate various events. It will contain all columns that are common for different events like "event date and time", "actor name", "repository name". It will also contain the union of all different properties of different event types. We will have a wide table with many columns, but some columns will be very sparse (filled with values only for certain rare event types).</p>
 
 <p>I can strongly recommend the second option: all events in one table.</p>
 
