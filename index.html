@@ -5420,6 +5420,8 @@ clickhouse-client --progress --max_threads 1 --query "SELECT * FROM github_event
 
 <p>We prepared an instance of ClickHouse in <a href="https://cloud.yandex.com/">Yandex.Cloud</a> for public access. It is a single server 80 vCPU (40 cores) Intel Cascade Lake with 640 GiB or RAM and 4 TiB network SSD. You can connect to it directly and execute your queries (TODO). Many restrictions apply and we don't guarantee it will work at the current moment of time. The server is located in Europe, if you are in different region, hundreds ms latency is expected.</p>
 
+<p>TODO rerun all queries on this server (current results are from slow server).</p>
+
 <p>Actually the dataset is not a "Big Data". It is "Fits on Your Laptop" kind of data. But if your laptop is not powerful enough, you can roll your own <a href="https://cloud.yandex.com/services/managed-clickhouse">Managed ClickHouse</a> instance to play with the data.</p>
 
 <p>Keep in mind that this dataset is actually very small for ClickHouse. There are <a href="https://clickhouse.tech/docs/en/introduction/adopters/">multiple companies</a> that use distributed multi-petabyte ClickHouse setups for various heavy duty tasks, e.g. to analyze significant share of all the internet traffic in realtime. This article is not to advertise ClickHouse, but at least you know where to look.</p>
