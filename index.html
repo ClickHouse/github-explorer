@@ -5100,7 +5100,7 @@ gzip -cd &lt; 2020-11-13-9.json.gz | grep -F 'PullRequestEvent' | head -n1 | jq 
 
 <p>There are multiple ways to analyze a bunch of <span class="code">.json.gz</span> files without any preprocessing. For example, you can use <span class="code">jq</span> tool. Though it will be very inefficient.</p>
 
-<p>A more efficient way to analyze data "on rest" without proprocessing is <span class="code">clickhouse-local</span> tool. It is like the replacement of <span class="code">awk</span>, <span class="code">sed</span>, <span class="code">grep</span> but with ClickHouse SQL engine:</p>
+<p>A more efficient way to analyze data "on rest" without proprocessing is the <span class="code">clickhouse-local</span> tool. It is like the replacement of <span class="code">awk</span>, <span class="code">sed</span>, <span class="code">grep</span> but with ClickHouse SQL engine:</p>
 
 <pre>
 clickhouse-local --query "
@@ -5110,10 +5110,10 @@ clickhouse-local --query "
 
 <p>Here we parse input data as single String field per line and then process it with JSON functions.<br/>
 <span class="code">clickhouse-local</span> will do all the heavy-lifting:<br/>
-- select files by wildcard pattern;<br/>
-- decompress gzip data on the fly (with zlib-ng );<br/>
-- parallelize data processing by files and by chunks within each file;<br/>
-- process JSON with the help of <a href="https://github.com/simdjson/simdjson/">simdjson</a> &mdash; the fastest JSON library out of existence;</p>
+&mdash; select files by wildcard pattern;<br/>
+&mdash; decompress gzip data on the fly (with zlib-ng);<br/>
+&mdash; parallelize data processing by files and by chunks within each file;<br/>
+&mdash; process JSON with the help of <a href="https://github.com/simdjson/simdjson/">simdjson</a> &mdash; the fastest JSON library out of existence;</p>
 
 <p>Data processing will be limited by disk speed. If we assume 1 GB/sec sequential read speed, it will take about 20 minutes per query. You may think it's okay but it isn't. It is just the best possible speed of processing raw <span class="code">.json.gz</span> data, but we can do better if we preprocess our data.</p>
 
