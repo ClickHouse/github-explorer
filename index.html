@@ -1403,7 +1403,158 @@ LIMIT 50
 <p>Here are my friends... and I don't know what to do with this list.</p>
 
 
+<h3>Affinity by issues and PRs</h3>
+
+<p>Authors that contributed to ClickHouse also contributed to what repositories?</p>
+
+<pre>
+SELECT
+    repo_name,
+    count() AS prs,
+    uniq(actor_login) AS authors
+FROM github_events
+WHERE (event_type = 'PullRequestEvent') AND (action = 'opened') AND (actor_login IN
+(
+    SELECT actor_login
+    FROM github_events
+    WHERE (event_type = 'PullRequestEvent') AND (action = 'opened') AND (repo_name IN ('yandex/ClickHouse', 'ClickHouse/ClickHouse'))
+)) AND (repo_name NOT ILIKE '%ClickHouse%')
+GROUP BY repo_name
+ORDER BY authors DESC
+LIMIT 50
+
+┌─repo_name─────────────────────────┬──prs─┬─authors─┐
+│ <a href="https://github.com/Homebrew/homebrew-core">Homebrew/homebrew-core</a>            │   28 │      14 │
+│ <a href="https://github.com/pocoproject/poco">pocoproject/poco</a>                  │   28 │      14 │
+│ <a href="https://github.com/ansible/ansible">ansible/ansible</a>                   │   33 │      12 │
+│ <a href="https://github.com/apache/flink">apache/flink</a>                      │   53 │      11 │
+│ <a href="https://github.com/grafana/grafana">grafana/grafana</a>                   │   85 │      10 │
+│ <a href="https://github.com/helm/charts">helm/charts</a>                       │   35 │      10 │
+│ <a href="https://github.com/avelino/awesome-go">avelino/awesome-go</a>                │   33 │      10 │
+│ <a href="https://github.com/kubernetes/kubernetes">kubernetes/kubernetes</a>             │   17 │       9 │
+│ <a href="https://github.com/NixOS/nixpkgs">NixOS/nixpkgs</a>                     │  208 │       9 │
+│ <a href="https://github.com/python/cpython">python/cpython</a>                    │   16 │       8 │
+│ <a href="https://github.com/Vertamedia/chproxy">Vertamedia/chproxy</a>                │   30 │       8 │
+│ <a href="https://github.com/saltstack/salt">saltstack/salt</a>                    │   26 │       8 │
+│ <a href="https://github.com/hashicorp/consul">hashicorp/consul</a>                  │    9 │       8 │
+│ <a href="https://github.com/apache/spark">apache/spark</a>                      │   17 │       8 │
+│ <a href="https://github.com/getredash/redash">getredash/redash</a>                  │   19 │       8 │
+│ <a href="https://github.com/facebook/rocksdb">facebook/rocksdb</a>                  │   16 │       8 │
+│ <a href="https://github.com/catboost/catboost">catboost/catboost</a>                 │   13 │       7 │
+│ <a href="https://github.com/grafana/grafana-plugin-repository">grafana/grafana-plugin-repository</a> │   34 │       7 │
+│ <a href="https://github.com/apache/incubator-doris">apache/incubator-doris</a>            │   63 │       7 │
+│ <a href="https://github.com/ant-design/ant-design">ant-design/ant-design</a>             │  234 │       6 │
+│ <a href="https://github.com/DefinitelyTyped/DefinitelyTyped">DefinitelyTyped/DefinitelyTyped</a>   │   14 │       6 │
+│ <a href="https://github.com/edenhill/librdkafka">edenhill/librdkafka</a>               │    8 │       6 │
+│ <a href="https://github.com/aio-libs/aiohttp">aio-libs/aiohttp</a>                  │  505 │       6 │
+│ <a href="https://github.com/caskroom/homebrew-cask">caskroom/homebrew-cask</a>            │   24 │       6 │
+│ <a href="https://github.com/grpc/grpc">grpc/grpc</a>                         │   11 │       6 │
+│ <a href="https://github.com/nodejs/node">nodejs/node</a>                       │   12 │       6 │
+│ <a href="https://github.com/iovisor/bcc">iovisor/bcc</a>                       │   34 │       6 │
+│ <a href="https://github.com/ceph/ceph">ceph/ceph</a>                         │   14 │       5 │
+│ <a href="https://github.com/prometheus/client_java">prometheus/client_java</a>            │   25 │       5 │
+│ <a href="https://github.com/VictoriaMetrics/VictoriaMetrics">VictoriaMetrics/VictoriaMetrics</a>   │   94 │       5 │
+│ <a href="https://github.com/pinterest/secor">pinterest/secor</a>                   │ 1048 │       5 │
+│ <a href="https://github.com/golang/go">golang/go</a>                         │    5 │       5 │
+│ <a href="https://github.com/symfony/symfony">symfony/symfony</a>                   │   11 │       5 │
+│ <a href="https://github.com/apache/hadoop">apache/hadoop</a>                     │   11 │       5 │
+│ <a href="https://github.com/TechEmpower/FrameworkBenchmarks">TechEmpower/FrameworkBenchmarks</a>   │   38 │       5 │
+│ <a href="https://github.com/apache/mesos">apache/mesos</a>                      │    5 │       5 │
+│ <a href="https://github.com/php/php-src">php/php-src</a>                       │   12 │       5 │
+│ <a href="https://github.com/the-benchmarker/web-frameworks">the-benchmarker/web-frameworks</a>    │ 1009 │       5 │
+│ <a href="https://github.com/apache/incubator-dolphinscheduler">apache/incubator-dolphinscheduler</a> │   51 │       5 │
+│ <a href="https://github.com/apache/zookeeper">apache/zookeeper</a>                  │   15 │       5 │
+│ <a href="https://github.com/Homebrew/brew">Homebrew/brew</a>                     │  598 │       5 │
+│ <a href="https://github.com/rust-lang/rust">rust-lang/rust</a>                    │    6 │       5 │
+│ <a href="https://github.com/yandex/graphouse">yandex/graphouse</a>                  │   74 │       5 │
+│ <a href="https://github.com/coreos/prometheus-operator">coreos/prometheus-operator</a>        │    5 │       5 │
+│ <a href="https://github.com/monicahq/monica">monicahq/monica</a>                   │ 1296 │       5 │
+│ <a href="https://github.com/prometheus/docs">prometheus/docs</a>                   │    9 │       5 │
+│ <a href="https://github.com/tomchristie/django-rest-framework">tomchristie/django-rest-framework</a> │    6 │       5 │
+│ <a href="https://github.com/greenplum-db/gpdb">greenplum-db/gpdb</a>                 │   22 │       5 │
+│ <a href="https://github.com/getsentry/sentry">getsentry/sentry</a>                  │  209 │       5 │
+│ <a href="https://github.com/golangci/golangci-lint">golangci/golangci-lint</a>            │  128 │       5 │
+└───────────────────────────────────┴──────┴─────────┘
+
+50 rows in set. Elapsed: 0.546 sec. Processed 199.18 million rows, 2.64 GB (364.86 million rows/s., 4.84 GB/s.)
+</pre>
+
+<p>Authors that filed an issue in ClickHouse also filed issues to what repositories?</p>
+
+<pre>
+SELECT
+    repo_name,
+    count() AS prs,
+    uniq(actor_login) AS authors
+FROM github_events
+WHERE (event_type = 'IssuesEvent') AND (action = 'opened') AND (actor_login IN
+(
+    SELECT actor_login
+    FROM github_events
+    WHERE (event_type = 'IssuesEvent') AND (action = 'opened') AND (repo_name IN ('yandex/ClickHouse', 'ClickHouse/ClickHouse'))
+)) AND (repo_name NOT ILIKE '%ClickHouse%')
+GROUP BY repo_name
+ORDER BY authors DESC
+LIMIT 50
+
+┌─repo_name─────────────────────────┬─prs─┬─authors─┐
+│ <a href="https://github.com/grafana/grafana">grafana/grafana</a>                   │ 219 │      66 │
+│ <a href="https://github.com/golang/go">golang/go</a>                         │ 186 │      54 │
+│ <a href="https://github.com/apache/incubator-superset">apache/incubator-superset</a>         │ 120 │      34 │
+│ <a href="https://github.com/kubernetes/kubernetes">kubernetes/kubernetes</a>             │  96 │      33 │
+│ <a href="https://github.com/elastic/elasticsearch">elastic/elasticsearch</a>             │  66 │      30 │
+│ <a href="https://github.com/ansible/ansible">ansible/ansible</a>                   │  43 │      25 │
+│ <a href="https://github.com/pingcap/tidb">pingcap/tidb</a>                      │ 121 │      24 │
+│ <a href="https://github.com/Microsoft/vscode">Microsoft/vscode</a>                  │  39 │      23 │
+│ <a href="https://github.com/prestodb/presto">prestodb/presto</a>                   │  96 │      22 │
+│ <a href="https://github.com/prometheus/prometheus">prometheus/prometheus</a>             │  49 │      21 │
+│ <a href="https://github.com/Vertamedia/chproxy">Vertamedia/chproxy</a>                │  31 │      21 │
+│ <a href="https://github.com/VictoriaMetrics/VictoriaMetrics">VictoriaMetrics/VictoriaMetrics</a>   │  74 │      20 │
+│ <a href="https://github.com/docker/docker">docker/docker</a>                     │  50 │      20 │
+│ <a href="https://github.com/sysown/proxysql">sysown/proxysql</a>                   │  36 │      19 │
+│ <a href="https://github.com/metabase/metabase">metabase/metabase</a>                 │  55 │      19 │
+│ <a href="https://github.com/getredash/redash">getredash/redash</a>                  │  48 │      18 │
+│ <a href="https://github.com/travis-ci/travis-ci">travis-ci/travis-ci</a>               │  25 │      18 │
+│ <a href="https://github.com/telegramdesktop/tdesktop">telegramdesktop/tdesktop</a>          │  79 │      18 │
+│ <a href="https://github.com/tabixio/tabix">tabixio/tabix</a>                     │  39 │      18 │
+│ <a href="https://github.com/influxdata/influxdb">influxdata/influxdb</a>               │  30 │      17 │
+│ <a href="https://github.com/edenhill/librdkafka">edenhill/librdkafka</a>               │  30 │      16 │
+│ <a href="https://github.com/pypa/pip">pypa/pip</a>                          │  15 │      15 │
+│ <a href="https://github.com/pandas-dev/pandas">pandas-dev/pandas</a>                 │  26 │      15 │
+│ <a href="https://github.com/alibaba/druid">alibaba/druid</a>                     │  31 │      15 │
+│ <a href="https://github.com/apache/incubator-dolphinscheduler">apache/incubator-dolphinscheduler</a> │  38 │      15 │
+│ <a href="https://github.com/minio/minio">minio/minio</a>                       │  29 │      15 │
+│ <a href="https://github.com/rust-lang/rust">rust-lang/rust</a>                    │  28 │      15 │
+│ <a href="https://github.com/tensorflow/tensorflow">tensorflow/tensorflow</a>             │  30 │      15 │
+│ <a href="https://github.com/elastic/logstash">elastic/logstash</a>                  │  21 │      15 │
+│ <a href="https://github.com/timberio/vector">timberio/vector</a>                   │ 178 │      15 │
+│ <a href="https://github.com/druid-io/druid">druid-io/druid</a>                    │  83 │      15 │
+│ <a href="https://github.com/kubernetes/ingress-nginx">kubernetes/ingress-nginx</a>          │  19 │      14 │
+│ <a href="https://github.com/containous/traefik">containous/traefik</a>                │  18 │      14 │
+│ <a href="https://github.com/saltstack/salt">saltstack/salt</a>                    │  59 │      14 │
+│ <a href="https://github.com/elastic/kibana">elastic/kibana</a>                    │  16 │      14 │
+│ <a href="https://github.com/prestosql/presto">prestosql/presto</a>                  │  85 │      14 │
+│ <a href="https://github.com/go-gitea/gitea">go-gitea/gitea</a>                    │  20 │      13 │
+│ <a href="https://github.com/helm/charts">helm/charts</a>                       │  26 │      13 │
+│ <a href="https://github.com/apache/incubator-doris">apache/incubator-doris</a>            │  40 │      13 │
+│ <a href="https://github.com/grpc/grpc">grpc/grpc</a>                         │  29 │      13 │
+│ <a href="https://github.com/nodejs/node">nodejs/node</a>                       │  20 │      13 │
+│ <a href="https://github.com/alibaba/DataX">alibaba/DataX</a>                     │  15 │      13 │
+│ <a href="https://github.com/rancher/rancher">rancher/rancher</a>                   │  63 │      13 │
+│ <a href="https://github.com/hashicorp/consul">hashicorp/consul</a>                  │  26 │      12 │
+│ <a href="https://github.com/getsentry/sentry">getsentry/sentry</a>                  │ 202 │      12 │
+│ <a href="https://github.com/dbeaver/dbeaver">dbeaver/dbeaver</a>                   │  18 │      12 │
+│ <a href="https://github.com/systemd/systemd">systemd/systemd</a>                   │  21 │      12 │
+│ <a href="https://github.com/apache/incubator-druid">apache/incubator-druid</a>            │  72 │      12 │
+│ <a href="https://github.com/InterestingLab/waterdrop">InterestingLab/waterdrop</a>          │  18 │      12 │
+│ <a href="https://github.com/apache/pulsar">apache/pulsar</a>                     │  29 │      12 │
+└───────────────────────────────────┴─────┴─────────┘
+
+50 rows in set. Elapsed: 0.272 sec. Processed 94.18 million rows, 1.35 GB (345.72 million rows/s., 4.97 GB/s.)
+</pre>
+
 <h3>Repositories with the most stars over one day</h3>
+
 
 <pre>
 SELECT
@@ -4027,84 +4178,455 @@ LIMIT 50
 <p>To avoid showing users with a huge number of forked repositories or users with some GitHub misuse, we added a threshold of 10 stars. Microsoft wins by a huge margin. <a href="https://github.com/packtpublishing">Packt Publishing</a> is quite interesting &mdash; they have repositories for articles and books. <a href="https://github.com/sindresorhus">Sindre Sorhus</a> is also very notable open-source contributor, mostly for the list of <a href="https://github.com/sindresorhus/awesome">awesome awesomeness</a>.</p>
 
 
+<h3>Repositories by amount of modified code</h3>
+
+<p>I want to get repositories with the most added and removed code over time. If I do it in naive way, the multiple forks of <a href="https://github.com/cdnjs/cdnjs">cdn.js</a> repository will be on top. By the way, cdn.js is the larges repository in GitHub by size in bytes (it contains all popular JavaScript libraries, the total size is ). To get something interesting, I added threshold by the number of diff size and also by the ratio of added and removed code (in actively developing codebases, the ratio should be close to one).</p>
+
+<pre>
+SELECT
+    repo_name,
+    count() AS prs,
+    uniq(actor_login) AS authors,
+    sum(additions) AS adds,
+    sum(deletions) AS dels
+FROM github_events
+WHERE (event_type = 'PullRequestEvent') AND (action = 'opened') AND (additions &lt; 10000) AND (deletions &lt; 10000)
+GROUP BY repo_name
+HAVING (adds / dels) &lt; 10
+ORDER BY adds + dels DESC
+LIMIT 50
+
+┌─repo_name──────────────────────────────────┬────prs─┬─authors─┬─────adds─┬─────dels─┐
+│ <a href="https://github.com/everypolitician/everypolitician-data">everypolitician/everypolitician-data</a>       │ 150505 │      18 │ 66774979 │ 71198331 │
+│ <a href="https://github.com/brianchandotcom/liferay-portal">brianchandotcom/liferay-portal</a>             │  69999 │     298 │ 23759517 │ 11153070 │
+│ <a href="https://github.com/googleapis/google-api-java-client-services">googleapis/google-api-java-client-services</a> │   4531 │      17 │ 11555494 │  9686845 │
+│ <a href="https://github.com/code-dot-org/code-dot-org">code-dot-org/code-dot-org</a>                  │  34711 │     119 │ 13678999 │  6495467 │
+│ <a href="https://github.com/elastic/kibana">elastic/kibana</a>                             │  50710 │     791 │ 12081740 │  5892660 │
+│ <a href="https://github.com/dotnet/roslyn">dotnet/roslyn</a>                              │  23474 │     576 │ 12044376 │  5661598 │
+│ <a href="https://github.com/shuyangzhou/liferay-portal">shuyangzhou/liferay-portal</a>                 │   6530 │     117 │ 10501279 │  5790200 │
+│ <a href="https://github.com/Azure/azure-sdk-for-python">Azure/azure-sdk-for-python</a>                 │  10055 │     322 │ 10495343 │  3633379 │
+│ <a href="https://github.com/Azure/azure-sdk-for-java">Azure/azure-sdk-for-java</a>                   │  11226 │     259 │ 10696769 │  2050548 │
+│ <a href="https://github.com/kubernetes/kubernetes">kubernetes/kubernetes</a>                      │  49709 │    3973 │  8481634 │  4197993 │
+│ <a href="https://github.com/Azure/azure-sdk-for-net">Azure/azure-sdk-for-net</a>                    │   9341 │     904 │  9398629 │  3050157 │
+│ <a href="https://github.com/Azure/azure-sdk-for-js">Azure/azure-sdk-for-js</a>                     │   8414 │     170 │  7876506 │  2719889 │
+│ <a href="https://github.com/cms-sw/cmssw">cms-sw/cmssw</a>                               │  21521 │     835 │  6929819 │  3622179 │
+│ <a href="https://github.com/brain-tec/odoo">brain-tec/odoo</a>                             │  11319 │      25 │  6660938 │  3694935 │
+│ <a href="https://github.com/ImagicalMine/ImagicalMine">ImagicalMine/ImagicalMine</a>                  │   1808 │     494 │  5657300 │  4651706 │
+│ <a href="https://github.com/Azure/azure-sdk-for-go">Azure/azure-sdk-for-go</a>                     │  11141 │     144 │  8686751 │  1606291 │
+│ <a href="https://github.com/cockroachdb/cockroach">cockroachdb/cockroach</a>                      │  26734 │     429 │  6176616 │  3606564 │
+│ <a href="https://github.com/rust-lang/rust">rust-lang/rust</a>                             │  32185 │    3007 │  5759893 │  3708281 │
+│ <a href="https://github.com/AzureSDKAutomation/azure-sdk-for-go">AzureSDKAutomation/azure-sdk-for-go</a>        │   9760 │       5 │  6644702 │  2481832 │
+│ <a href="https://github.com/dotnet/corefx">dotnet/corefx</a>                              │  23714 │    1037 │  5493853 │  3581829 │
+│ <a href="https://github.com/elastic/elasticsearch">elastic/elasticsearch</a>                      │  34915 │    1938 │  6029424 │  3010171 │
+│ <a href="https://github.com/Azure/azure-powershell">Azure/azure-powershell</a>                     │   6524 │    1130 │  6047252 │  2474510 │
+│ <a href="https://github.com/DefinitelyTyped/DefinitelyTyped">DefinitelyTyped/DefinitelyTyped</a>            │  35674 │   13669 │  5657114 │  2602057 │
+│ <a href="https://github.com/AzureSDKAutomation/azure-sdk-for-java">AzureSDKAutomation/azure-sdk-for-java</a>      │   5051 │       2 │  7354228 │   849503 │
+│ <a href="https://github.com/ballerina-platform/ballerina-lang">ballerina-platform/ballerina-lang</a>          │  11413 │     199 │  4616443 │  2875219 │
+│ <a href="https://github.com/NixOS/nixpkgs">NixOS/nixpkgs</a>                              │  78174 │    3598 │  4614970 │  2559528 │
+│ <a href="https://github.com/apple/swift">apple/swift</a>                                │  33382 │    1143 │  4589651 │  2409912 │
+│ <a href="https://github.com/Roll20/roll20-character-sheets">Roll20/roll20-character-sheets</a>             │   6315 │    1001 │  5032187 │  1895650 │
+│ <a href="https://github.com/Azure/azure-rest-api-specs">Azure/azure-rest-api-specs</a>                 │   9544 │    1803 │  5948263 │   964469 │
+│ <a href="https://github.com/AzureSDKAutomation/azure-sdk-for-python">AzureSDKAutomation/azure-sdk-for-python</a>    │   2931 │       8 │  4895763 │  2005661 │
+│ <a href="https://github.com/BabylonJS/Babylon.js">BabylonJS/Babylon.js</a>                       │   6107 │     349 │  3696792 │  2945386 │
+│ <a href="https://github.com/apache/flink">apache/flink</a>                               │  13373 │    1129 │  4799537 │  1761085 │
+│ <a href="https://github.com/Ericsson/llvm-project">Ericsson/llvm-project</a>                      │   5167 │       7 │  4289505 │  1913596 │
+│ <a href="https://github.com/pytorch/pytorch">pytorch/pytorch</a>                            │  29362 │    2136 │  3770167 │  2228040 │
+│ <a href="https://github.com/Azure/azure-sdk-for-ruby">Azure/azure-sdk-for-ruby</a>                   │   1551 │      78 │  3330278 │  2666009 │
+│ <a href="https://github.com/apache/ignite">apache/ignite</a>                              │   6824 │     364 │  4482922 │  1463175 │
+│ <a href="https://github.com/CleverRaven/Cataclysm-DDA">CleverRaven/Cataclysm-DDA</a>                  │  20997 │    1186 │  3591146 │  2308179 │
+│ <a href="https://github.com/ansible/ansible">ansible/ansible</a>                            │  36641 │    6007 │  4616410 │  1249895 │
+│ <a href="https://github.com/sergiogonzalez/liferay-portal">sergiogonzalez/liferay-portal</a>              │   2480 │     128 │  3807913 │  1839588 │
+│ <a href="https://github.com/ceph/ceph">ceph/ceph</a>                                  │  33776 │    1255 │  3898911 │  1574798 │
+│ <a href="https://github.com/tensorflow/tensorflow">tensorflow/tensorflow</a>                      │  15248 │    3771 │  3979711 │  1489446 │
+│ <a href="https://github.com/odoo/odoo">odoo/odoo</a>                                  │  43051 │    1826 │  3568318 │  1865714 │
+│ <a href="https://github.com/juju/juju">juju/juju</a>                                  │  10554 │     135 │  3656742 │  1741308 │
+│ <a href="https://github.com/servo/servo">servo/servo</a>                                │  13251 │    1081 │  3501364 │  1748202 │
+│ <a href="https://github.com/mapsme/omim">mapsme/omim</a>                                │  12107 │     161 │  3181089 │  2034016 │
+│ <a href="https://github.com/edx/edx-platform">edx/edx-platform</a>                           │  18528 │     600 │  3022458 │  2103869 │
+│ <a href="https://github.com/KabirKwatra/tensorflow">KabirKwatra/tensorflow</a>                     │   4855 │       3 │  3062465 │  1945412 │
+│ <a href="https://github.com/angular/angular">angular/angular</a>                            │  16651 │    2151 │  3064285 │  1893494 │
+│ <a href="https://github.com/demisto/content">demisto/content</a>                            │   9585 │     337 │  4145382 │   800865 │
+│ <a href="https://github.com/skn123/chromium">skn123/chromium</a>                            │   2854 │       1 │  2955835 │  1984311 │
+└────────────────────────────────────────────┴────────┴─────────┴──────────┴──────────┘
+
+50 rows in set. Elapsed: 1.287 sec. Processed 199.08 million rows, 5.12 GB (154.70 million rows/s., 3.98 GB/s.)
+</pre>
+
+
+<h3>Repositories by the number of pushes</h3>
+
+<pre>
+SELECT
+    repo_name,
+    count() AS pushes,
+    uniq(actor_login) AS authors
+FROM github_events
+WHERE (event_type = 'PushEvent') AND (repo_name IN
+(
+    SELECT repo_name
+    FROM github_events
+    WHERE event_type = 'WatchEvent'
+    GROUP BY repo_name
+    ORDER BY count() DESC
+    LIMIT 10000
+))
+GROUP BY repo_name
+ORDER BY count() DESC
+LIMIT 50
+
+┌─repo_name────────────────────┬─pushes─┬─authors─┐
+│ <a href="https://github.com/CocoaPods/Specs">CocoaPods/Specs</a>              │ 482617 │      13 │
+│ <a href="https://github.com/docker-library/docs">docker-library/docs</a>          │ 232686 │       6 │
+│ <a href="https://github.com/odoo/odoo">odoo/odoo</a>                    │ 231047 │      93 │
+│ <a href="https://github.com/openstack/openstack">openstack/openstack</a>          │ 175962 │       2 │
+│ <a href="https://github.com/enkidevs/commit">enkidevs/commit</a>              │ 149222 │       4 │
+│ <a href="https://github.com/pytorch/pytorch">pytorch/pytorch</a>              │ 143845 │     207 │
+│ <a href="https://github.com/greatfire/wiki">greatfire/wiki</a>               │ 139722 │       4 │
+│ <a href="https://github.com/Automattic/wp-calypso">Automattic/wp-calypso</a>        │ 119574 │     431 │
+│ <a href="https://github.com/NixOS/nixpkgs">NixOS/nixpkgs</a>                │ 109600 │     165 │
+│ <a href="https://github.com/edx/edx-platform">edx/edx-platform</a>             │  87203 │     279 │
+│ <a href="https://github.com/freebsd/freebsd">freebsd/freebsd</a>              │  86666 │       2 │
+│ <a href="https://github.com/servo/servo">servo/servo</a>                  │  72117 │      29 │
+│ <a href="https://github.com/elastic/elasticsearch">elastic/elasticsearch</a>        │  69691 │     250 │
+│ <a href="https://github.com/chromium/chromium">chromium/chromium</a>            │  67465 │       3 │
+│ <a href="https://github.com/JetBrains/kotlin">JetBrains/kotlin</a>             │  64307 │     111 │
+│ <a href="https://github.com/keybase/client">keybase/client</a>               │  61821 │      44 │
+│ <a href="https://github.com/gradle/gradle">gradle/gradle</a>                │  61507 │      65 │
+│ <a href="https://github.com/llvm-mirror/llvm">llvm-mirror/llvm</a>             │  58758 │       2 │
+│ <a href="https://github.com/getsentry/sentry">getsentry/sentry</a>             │  58517 │      93 │
+│ <a href="https://github.com/elastic/kibana">elastic/kibana</a>               │  58298 │     326 │
+│ <a href="https://github.com/arangodb/arangodb">arangodb/arangodb</a>            │  55407 │      46 │
+│ <a href="https://github.com/llvm/llvm-project">llvm/llvm-project</a>            │  54176 │     807 │
+│ <a href="https://github.com/cockroachdb/cockroach">cockroachdb/cockroach</a>        │  53880 │     126 │
+│ <a href="https://github.com/rust-lang/rust">rust-lang/rust</a>               │  52419 │      35 │
+│ <a href="https://github.com/apple/swift">apple/swift</a>                  │  51804 │     186 │
+│ <a href="https://github.com/tensorflow/tensorflow">tensorflow/tensorflow</a>        │  49511 │     110 │
+│ <a href="https://github.com/WordPress/gutenberg">WordPress/gutenberg</a>          │  48818 │     177 │
+│ <a href="https://github.com/Homebrew/homebrew-core">Homebrew/homebrew-core</a>       │  48526 │      50 │
+│ <a href="https://github.com/ornicar/lila">ornicar/lila</a>                 │  48393 │      13 │
+│ <a href="https://github.com/sourcegraph/sourcegraph">sourcegraph/sourcegraph</a>      │  47996 │      83 │
+│ <a href="https://github.com/discourse/discourse">discourse/discourse</a>          │  44038 │      46 │
+│ <a href="https://github.com/cdnjs/cdnjs">cdnjs/cdnjs</a>                  │  40895 │      21 │
+│ <a href="https://github.com/JuliaLang/julia">JuliaLang/julia</a>              │  40722 │      70 │
+│ <a href="https://github.com/dart-lang/sdk">dart-lang/sdk</a>                │  40552 │     104 │
+│ <a href="https://github.com/guardian/frontend">guardian/frontend</a>            │  39875 │     172 │
+│ <a href="https://github.com/Homebrew/homebrew-cask">Homebrew/homebrew-cask</a>       │  39815 │      14 │
+│ <a href="https://github.com/h2oai/h2o-3">h2oai/h2o-3</a>                  │  38730 │      98 │
+│ <a href="https://github.com/kubernetes/kubernetes">kubernetes/kubernetes</a>        │  38473 │      94 │
+│ <a href="https://github.com/owncloud/core">owncloud/core</a>                │  38007 │     104 │
+│ <a href="https://github.com/Microsoft/vscode">Microsoft/vscode</a>             │  36726 │      41 │
+│ <a href="https://github.com/ansible/ansible">ansible/ansible</a>              │  35078 │      70 │
+│ <a href="https://github.com/ceph/ceph">ceph/ceph</a>                    │  34788 │     127 │
+│ <a href="https://github.com/crate/crate">crate/crate</a>                  │  34398 │      45 │
+│ <a href="https://github.com/mamedev/mame">mamedev/mame</a>                 │  34359 │      61 │
+│ <a href="https://github.com/caskroom/homebrew-cask">caskroom/homebrew-cask</a>       │  33644 │      20 │
+│ <a href="https://github.com/JetBrains/intellij-community">JetBrains/intellij-community</a> │  33320 │      10 │
+│ <a href="https://github.com/libretro/RetroArch">libretro/RetroArch</a>           │  33188 │      16 │
+│ <a href="https://github.com/tootsuite/mastodon">tootsuite/mastodon</a>           │  32911 │      17 │
+│ <a href="https://github.com/PX4/Firmware">PX4/Firmware</a>                 │  32829 │      63 │
+│ <a href="https://github.com/mapbox/mapbox-gl-native">mapbox/mapbox-gl-native</a>      │  31693 │     109 │
+└──────────────────────────────┴────────┴─────────┘
+
+50 rows in set. Elapsed: 1.783 sec. Processed 77.63 million rows, 675.13 MB (43.53 million rows/s., 378.57 MB/s.)
+</pre>
+
 <h3>TODO</h3>
 
 <p>Stars over time for your favorite repositories.</p>
 
-<p>The largest pull requests by diff size.</p>
-<p>The largest pull requests by code removal.</p>
-<p>Repositories by the total size of pull requests diffs.</p>
-<p>Repositories by the total amount of removed code.</p>
-<p>Repositories by the number of pushes.</p>
+<h3>Authors with the most code reviews</h3>
 
-<p>Authors that contributed to ClickHouse also contributed to (by pull requests).</p>
-<p>Authors that contributed to ClickHouse also contributed to (by issues).</p>
+<pre>SELECT
+    actor_login,
+    count(),
+    uniq(repo_name) AS repos,
+    uniq(repo_name, number) AS prs,
+    replaceRegexpAll(substringUTF8(anyHeavy(body), 1, 100), '[\r\n]', ' ') AS comment
+FROM github_events
+WHERE (event_type = 'PullRequestReviewCommentEvent') AND (action = 'created')
+GROUP BY actor_login
+ORDER BY count() DESC
+LIMIT 50
 
-<p>Wordcounts for PR and issue descriptions.</p>
-<p>Wordcounts for repository description.</p>
+┌─actor_login──────────────┬─count()─┬─repos─┬───prs─┬─comment─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+│ <a href="https://github.com/houndci-bot">houndci-bot</a>              │  989833 │  5870 │ 78479 │ Layout/DotPosition: Place the . on the previous line, together with the method call receiver. (https                                            │
+│ <a href="https://github.com/codacy-bot">codacy-bot</a>               │  327699 │  2313 │ 21579 │ ![Codacy](https://app.codacy.com/assets/images/favicon.png) Issue found: [Avoid reassigning paramete                                            │
+│ <a href="https://github.com/houndci">houndci</a>                  │  266272 │  2607 │ 24427 │ Color literals like `#ffffff` should only be used in variable declarations; they should be referred                                             │
+│ <a href="https://github.com/hound[bot]">hound[bot]</a>               │  219880 │  1708 │ 13426 │ Missing semicolon.                                                                                                                              │
+│ <a href="https://github.com/codeclimate[bot]">codeclimate[bot]</a>         │   89326 │  1404 │ 11388 │ Similar blocks of code found in 2 locations. Consider refactoring.                                                                              │
+│ <a href="https://github.com/github-learning-lab[bot]">github-learning-lab[bot]</a> │   60937 │ 14580 │ 26091 │ Thanks for opening this pull request, @arroway78.   ```suggestion You can play the game at: https://                                            │
+│ <a href="https://github.com/stickler-ci">stickler-ci</a>              │   55866 │   457 │  7734 │ E501 line too long (80 > 79 characters)                                                                                                         │
+│ <a href="https://github.com/golangcibot">golangcibot</a>              │   40319 │   885 │  8302 │ Error return value of `response.NewErrorResponse` is not checked (from `errcheck`)                                                              │
+│ <a href="https://github.com/accesslint[bot]">accesslint[bot]</a>          │   34609 │  1100 │  3793 │ This image is missing a text alternative (`alt` attribute). This is a problem for people using scree                                            │
+│ <a href="https://github.com/daosbuild1">daosbuild1</a>               │   34097 │     5 │  1370 │ (style)  spaces required around that '=' (ctx:WxV)                                                                                              │
+│ <a href="https://github.com/foreign-sub">foreign-sub</a>              │   33407 │     3 │   196 │ Codacy found an issue: [Use of assert detected. The enclosed code will be removed when compiling to                                             │
+│ <a href="https://github.com/github-actions[bot]">github-actions[bot]</a>      │   32534 │   685 │  3006 │ :no_entry_sign: **LINT ERROR:** **"lime" is often a scanning error and should be corrected to "time"                                            │
+│ <a href="https://github.com/jreback">jreback</a>                  │   28972 │    35 │  5817 │ not sure what the standard for numpy is, but usually ``timezone=None`` is by definition naive.                                                  │
+│ <a href="https://github.com/seanlip">seanlip</a>                  │   28941 │    18 │  2684 │ Output standardization should be independent of whether the client/server version is being used.                                                │
+│ <a href="https://github.com/TOMARUMARU">TOMARUMARU</a>               │   28121 │  4219 │  9700 │ デバッグ消しましょう                                                                                                                            │
+│ <a href="https://github.com/stephentoub">stephentoub</a>              │   28049 │    69 │  6147 │ I always have a small preference for not introducing new delegate types, but if you think it leads t                                            │
+│ <a href="https://github.com/CyrusNajmabadi">CyrusNajmabadi</a>           │   27920 │    55 │  3461 │ @praeclarum Are there any C# formatting styles you'd like the code to follow?   If so, i can add the                                            │
+│ <a href="https://github.com/monocodus[bot]">monocodus[bot]</a>           │   26456 │   391 │  1595 │ ```suggestion     /// Draw a ellipse with the middle `(xm, ym)` and the radius a and b onto the `Can                                            │
+│ <a href="https://github.com/liggitt">liggitt</a>                  │   23509 │   131 │  5433 │ I'm surprised the bad extraction didn't fail something                                                                                          │
+│ <a href="https://github.com/vkurennov">vkurennov</a>                │   23266 │   665 │  3671 │ Да, и путь еще, т.е. для объекта класса Attachment, путь будет преобразован в attahcments/_attachmen                                            │
+│ <a href="https://github.com/i-date">i-date</a>                   │   22481 │  3749 │  6024 │ 今回はrootのみ設定してあれば問題ない（ルーティングが重複する）ので、2行目の`get 〜`は削除して構いません。                                       │
+│ <a href="https://github.com/sourcery-ai[bot]">sourcery-ai[bot]</a>         │   21502 │  1132 │  1509 │ Function `profile` refactored with the following changes: - Simplify conditional into switch-like fo                                            │
+│ <a href="https://github.com/sonarcloud[bot]">sonarcloud[bot]</a>          │   21452 │   275 │  1421 │ ![Code Smell](https://sonarsource.github.io/sonar-github/code_smell.png 'Code Smell') Code Smell: Re                                            │
+│ <a href="https://github.com/MartinHjelmare">MartinHjelmare</a>           │   21410 │    45 │  3891 │ This will update not only the instance attribute but also the class attribute. Is that intended? The                                            │
+│ <a href="https://github.com/shingoteshima">shingoteshima</a>            │   21116 │  3725 │  6964 │ テキスト, 画像は単体で投稿できますのでnull: falseは不要です。                                                                                   │
+│ <a href="https://github.com/balloob">balloob</a>                  │   19014 │    76 │  4903 │ This is incorrect.     https://github.com/home-assistant/core/blame/dev/homeassistant/components/mqt                                            │
+│ <a href="https://github.com/codeschool-kiddo">codeschool-kiddo</a>         │   18960 │  5876 │ 18303 │ Looks good! Could you also please mention your favorite Code School path in your introduction? This                                             │
+│ <a href="https://github.com/cloud-fan">cloud-fan</a>                │   18513 │    18 │  3521 │ should we add `cache` and `sample` for Dataset?                                                                                                 │
+│ <a href="https://github.com/yurii-litvinov">yurii-litvinov</a>           │   17745 │   525 │  3140 │ Лучше разбить на отдельные тесты.                                                                                                               │
+│ <a href="https://github.com/deads2k">deads2k</a>                  │   17652 │   129 │  4077 │ This should be generated in a future PR/.                                                                                                       │
+│ <a href="https://github.com/DoanVanToan">DoanVanToan</a>              │   17118 │   243 │  1979 │ hàm này nên để là trong package utils                                                                                                           │
+│ <a href="https://github.com/WikiaTech">WikiaTech</a>                │   16347 │     3 │  1594 │ ![MAJOR](https://sonarsource.github.io/sonar-github/severity-major.png 'Severity: MAJOR') This block                                            │
+│ <a href="https://github.com/Nitpick-CI">Nitpick-CI</a>               │   16066 │   323 │  1920 │ Spaces must be used to indent lines; tabs are not allowed                                                                                       │
+│ <a href="https://github.com/actcat-bot">actcat-bot</a>               │   15661 │     4 │   421 │ __[code_sniffer]__ * 行のインデントが正しくありません。期待するスペース数12個に対して現在は16個が含まれています  &lt;!-- Comment by [SideCI](https │
+│ <a href="https://github.com/jkotas">jkotas</a>                   │   15580 │    54 │  4280 │ Using `Marshal.SizeOf` and `Marshal.StructureToPtr` is orders of magnitude more expensive than `size                                            │
+│ <a href="https://github.com/codelingo[bot]">codelingo[bot]</a>           │   15479 │    34 │ 14400 │ Add `defer f.Close()` after opening the file `f`. . [as specified in Effective Go](https://golang.or                                            │
+│ <a href="https://github.com/rynowak">rynowak</a>                  │   15443 │   104 │  2762 │ I feel like these kinds of facades are usually better served as abstract classes. See `IAntiforgery`                                            │
+│ <a href="https://github.com/pedrobaeza">pedrobaeza</a>               │   15091 │   186 │  4232 │ Sorry, I remembered bad. It's correct to put this.                                                                                              │
+│ <a href="https://github.com/Hixie">Hixie</a>                    │   14999 │    51 │  2900 │ commented out code                                                                                                                              │
+│ <a href="https://github.com/hellovietnam93">hellovietnam93</a>           │   14919 │   257 │  2567 │ ident                                                                                                                                           │
+│ <a href="https://github.com/dev-dotcms">dev-dotcms</a>               │   14844 │     1 │   293 │ ![Codacy](https://app.codacy.com/assets/images/favicon.png) Issue found: [The String literal "Push P                                            │
+│ <a href="https://github.com/sindresorhus">sindresorhus</a>             │   14763 │   787 │  4107 │ ```suggestion                                    value = [...document.querySelectorAll(selector)].map(el => el.value).join('\u001               │
+│ <a href="https://github.com/sttts">sttts</a>                    │   14757 │   160 │  2848 │ "can be accessed using ..." still sounds odd.    How about    ```  The core group, often referred to                                            │
+│ <a href="https://github.com/SonarTech">SonarTech</a>                │   14622 │    71 │  2397 │ ![INFO](https://sonarsource.github.io/sonar-github/severity-info.png 'Severity: INFO') Complete the                                             │
+│ <a href="https://github.com/smarterclayton">smarterclayton</a>           │   14514 │   128 │  3884 │ Yes that's correct.  On Tue, Jan 19, 2016 at 1:19 AM, Eli Young &lt;notifications@github.com> wrote:  >                                            │
+│ <a href="https://github.com/boegel">boegel</a>                   │   14417 │    96 │  3722 │ Ugh, yes, I actually meant to use `$TMPDIR/${FONTCONFIG_EC}` here... Will fix.                                                                  │
+│ <a href="https://github.com/mattmoor">mattmoor</a>                 │   14397 │   103 │  2335 │ I need to fix this.                                                                                                                             │
+│ <a href="https://github.com/chriseth">chriseth</a>                 │   14148 │    58 │  2659 │ Missing `;`                                                                                                                                     │
+│ <a href="https://github.com/gitmate-bot">gitmate-bot</a>              │   14075 │    25 │  1285 │ Line contains following spacing inconsistencies: - Trailing whitespaces.  *SpaceConsistencyBear, sev                                            │
+│ <a href="https://github.com/AlekseyTs">AlekseyTs</a>                │   14026 │     8 │  1748 │ >Local&lt;int> [](start = 19, length = 10)    Consider also testing the form that explicitly invokes de                                            │
+└──────────────────────────┴─────────┴───────┴───────┴─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
 
-<p>Authors contributed to the most number of repositories.</p>
+50 rows in set. Elapsed: 1.025 sec. Processed 52.21 million rows, 11.22 GB (50.92 million rows/s., 10.94 GB/s.)
+</pre>
+
+<p>Most of the most active reviewers are robots that do style checking and static analysis. But there are real people: <a href="https://github.com/jreback">Jeff Reback</a>. You can also find teachers, who review code from students.</p>
+
+
+<h3>Top labels</h3>
+
+<p>What are the most popular labels for issues and pull requests?</p>
+
+<pre>
+SELECT
+    arrayJoin(labels) AS label,
+    count() AS c
+FROM github_events
+WHERE (event_type IN ('IssuesEvent', 'PullRequestEvent', 'IssueCommentEvent')) AND (action IN ('created', 'opened', 'labeled'))
+GROUP BY label
+ORDER BY c DESC
+LIMIT 50
+
+    ┌─label─────────────────────────┬────────c─┐
+ 1. │ bug                           │ 10992271 │
+ 2. │ enhancement                   │ 10731624 │
+ 3. │ dependencies                  │  7433767 │
+ 4. │ question                      │  3041730 │
+ 5. │ help wanted                   │  2253922 │
+ 6. │ greenkeeper                   │  2224952 │
+ 7. │ approved                      │  1821570 │
+ 8. │ cla: yes                      │  1776512 │
+ 9. │ cncf-cla: yes                 │  1522761 │
+10. │ lgtm                          │  1484795 │
+11. │ feature                       │  1170778 │
+12. │ Bug                           │  1151209 │
+13. │ in progress                   │  1046784 │
+14. │ size/XS                       │  1027330 │
+15. │ size/L                        │   902993 │
+16. │ good first issue              │   787753 │
+17. │ documentation                 │   726172 │
+18. │ size/M                        │   720944 │
+19. │ kind/bug                      │   696202 │
+20. │ release-note-none             │   677476 │
+21. │ size/S                        │   630301 │
+22. │ size/XXL                      │   480393 │
+23. │ Feature                       │   437556 │
+24. │ discussion                    │   432630 │
+25. │ Enhancement                   │   420678 │
+26. │ javascript                    │   418931 │
+27. │ feature request               │   418677 │
+28. │ orp-pending                   │   404857 │
+29. │ pending-signatures            │   363904 │
+30. │ CLA Signed                    │   359669 │
+31. │ type: bug                     │   339196 │
+32. │ release-note                  │   335504 │
+33. │ kind/feature                  │   329689 │
+34. │ do-not-merge/work-in-progress │   323644 │
+35. │ cla-already-signed            │   313824 │
+36. │ ok-to-test                    │   313759 │
+37. │ bugzilla/valid-bug            │   305813 │
+38. │ do-not-merge/hold             │   298282 │
+39. │ wontfix                       │   297116 │
+40. │ review                        │   294601 │
+41. │ comparison-pending            │   294365 │
+42. │ invalid                       │   288276 │
+43. │ triaged                       │   286775 │
+44. │ Gitalk                        │   282805 │
+45. │ needs-ok-to-test              │   271817 │
+46. │ duplicate                     │   270717 │
+47. │ size/XL                       │   265531 │
+48. │ ci:test:sf  - success         │   254579 │
+49. │ Type: Bug                     │   242597 │
+50. │ docs                          │   235317 │
+    └───────────────────────────────┴──────────┘
+
+50 rows in set. Elapsed: 0.779 sec. Processed 484.76 million rows, 6.94 GB (621.92 million rows/s., 8.90 GB/s.)
+</pre>
+
+<p>There are more bugs than enhancements. Fortunately only by a little. "Javascript" is the only programming-language related label in top.</p>
+
+<p>The diversity of bugs and features is overwhelming:</p>
+
+<pre>
+SELECT
+    arrayJoin(labels) AS label,
+    count() AS c
+FROM github_events
+WHERE (event_type IN ('IssuesEvent', 'PullRequestEvent', 'IssueCommentEvent')) AND (action IN ('created', 'opened', 'labeled')) AND ((label ILIKE '%bug%') OR (label ILIKE '%feature%'))
+GROUP BY label
+ORDER BY c DESC
+LIMIT 50
+
+    ┌─label──────────────────────┬────────c─┐
+ 1. │ bug                        │ 10992271 │
+ 2. │ feature                    │  1170778 │
+ 3. │ Bug                        │  1151209 │
+ 4. │ kind/bug                   │   696202 │
+ 5. │ Feature                    │   437556 │
+ 6. │ feature request            │   418677 │
+ 7. │ type: bug                  │   339196 │
+ 8. │ kind/feature               │   329689 │
+ 9. │ bugzilla/valid-bug         │   305813 │
+10. │ Type: Bug                  │   242597 │
+11. │ feature-request            │   217767 │
+12. │ Feature Request            │   199124 │
+13. │ type:bug                   │   168725 │
+14. │ new feature                │   143308 │
+15. │ [Type] Bug                 │    95402 │
+16. │ type: feature              │    91805 │
+17. │ bugzilla/invalid-bug       │    84820 │
+18. │ type/bug                   │    84594 │
+19. │ bugzilla/severity-medium   │    80276 │
+20. │ bugzilla/severity-high     │    77852 │
+21. │ type-bug                   │    62602 │
+22. │ Feature request            │    61314 │
+23. │ bugfix                     │    59627 │
+24. │ type: feature request      │    59540 │
+25. │ Type: Feature              │    59141 │
+26. │ type:feature               │    58060 │
+27. │ bug fix                    │    54868 │
+28. │ C-bug                      │    52267 │
+29. │ BUG                        │    52080 │
+30. │ bug_report                 │    50704 │
+31. │ New Feature                │    50199 │
+32. │ doc-bug                    │    46626 │
+33. │ T: bug                     │    45589 │
+34. │ bug report                 │    43367 │
+35. │ 🐞 bug                      │    37091 │
+36. │ debug                      │    34392 │
+37. │ dummy import from bugzilla │    33362 │
+38. │ Type: bug                  │    32668 │
+39. │ type: bug/fix              │    32590 │
+40. │ t/bug :bug:                │    30144 │
+41. │ Type:Bug                   │    29625 │
+42. │ Type: Feature Request      │    28261 │
+43. │ BZ-BUG-STATUS: RESOLVED    │    27735 │
+44. │ 0.kind: bug                │    26955 │
+45. │ feature_request            │    26923 │
+46. │ bugzilla/severity-low      │    25850 │
+47. │ Issue-Bug                  │    24655 │
+48. │ feature_pull_request       │    24408 │
+49. │ feature proposal           │    23913 │
+50. │ new-feature                │    23613 │
+    └────────────────────────────┴──────────┘
+
+50 rows in set. Elapsed: 0.653 sec. Processed 484.76 million rows, 6.94 GB (742.45 million rows/s., 10.63 GB/s.)
+</pre>
+
+<p>Actually "bugzilla" label is not only about bugs.</p>
+
+<pre>
+WITH arrayJoin(labels) AS label
+SELECT
+    sum(label ILIKE '%bug%') AS bugs,
+    sum(label ILIKE '%feature%') AS features,
+    bugs / features AS ratio
+FROM github_events
+WHERE (event_type IN ('IssuesEvent', 'PullRequestEvent', 'IssueCommentEvent')) AND (action IN ('created', 'opened', 'labeled')) AND ((label ILIKE '%bug%') OR (label ILIKE '%feature%'))
+
+   ┌─────bugs─┬─features─┬──────────────ratio─┐
+1. │ 17066125 │  4689235 │ 3.6394262603601653 │
+   └──────────┴──────────┴────────────────────┘
+
+1 rows in set. Elapsed: 0.624 sec. Processed 484.76 million rows, 6.94 GB (776.68 million rows/s., 11.12 GB/s.)
+</pre>
+
+<p>Every feature generates 3.64 bugs on average.</p>
 
 
 <h3>The longest repository names</h3>
 
 <pre>
-:) SELECT repo_name, count() FROM github_events WHERE event_type = 'WatchEvent' GROUP BY repo_name ORDER BY length(repo_name) DESC LIMIT 50
+:) SELECT count(), repo_name FROM github_events WHERE event_type = 'WatchEvent' GROUP BY repo_name ORDER BY length(repo_name) DESC LIMIT 50
 
-┌─repo_name────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┬─count()─┐
-│ <a href="https://github.com/accounts-inheritance-finders-of-america/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee">accounts-inheritance-finders-of-america/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee</a> │       1 │
-│ <a href="https://github.com/fkdjfkdkfjskfjsldkfjvndkslakfjgkdlskfjg/fksfekgkslgkkdjfkdlskfjkfkdlslakdjfkekjlklfkjdkslkjfojksjdfaskdjfsalkdfj-laskfjls-kdajfoasjfpoawefjk">fkdjfkdkfjskfjsldkfjvndkslakfjgkdlskfjg/fksfekgkslgkkdjfkdlskfjkfkdlslakdjfkekjlklfkjdkslkjfojksjdfaskdjfsalkdfj-laskfjls-kdajfoasjfpoawefjk</a> │      15 │
-│ <a href="https://github.com/joooooooooooooooooooooooooooooooooooooj/jooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo">joooooooooooooooooooooooooooooooooooooj/jooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo</a> │       1 │
-│ <a href="https://github.com/UDtUf4aRyjv7nU3YTg056xCJw1ghAJYXgad7oB5/hJJRB7rpa3IXwX8HRsA1B4jCDmlZBY9fAzXZWNPyhrsXYG5kCeC4RPFqKQ4I9sAu1aNzX2G6wAkBjm8BjPfKjdubEqkmeAIkIwgu">UDtUf4aRyjv7nU3YTg056xCJw1ghAJYXgad7oB5/hJJRB7rpa3IXwX8HRsA1B4jCDmlZBY9fAzXZWNPyhrsXYG5kCeC4RPFqKQ4I9sAu1aNzX2G6wAkBjm8BjPfKjdubEqkmeAIkIwgu</a> │       1 │
-│ <a href="https://github.com/a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a/a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-">a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a/a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-</a> │       1 │
-│ <a href="https://github.com/JonathanJonathanJonathanJonathanJonatha/JonathanJonathanJonathanJonathanJonathanJonathanJonathanJonathanJonathanJonathanJonathanJonathanJona">JonathanJonathanJonathanJonathanJonatha/JonathanJonathanJonathanJonathanJonathanJonathanJonathanJonathanJonathanJonathanJonathanJonathanJona</a> │       1 │
-│ <a href="https://github.com/uwuwuwuwuwuwuwuwuwuwuwuwuwuwuwuwuwuwuwu/uwuwuwuwuwuwuwuwuwuwuwuwuwuwuwuwuwuwuwuuwuwuwuwuwuwuwuwuwuwuwuwuwuwuwuwuwuwuwuuwuwuwuwuwuwuwuwuwuwuw">uwuwuwuwuwuwuwuwuwuwuwuwuwuwuwuwuwuwuwu/uwuwuwuwuwuwuwuwuwuwuwuwuwuwuwuwuwuwuwuuwuwuwuwuwuwuwuwuwuwuwuwuwuwuwuwuwuwuwuuwuwuwuwuwuwuwuwuwuwuw</a> │       3 │
-│ <a href="https://github.com/joooooooooooooooooooooooooooooooooooooj/jooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooj">joooooooooooooooooooooooooooooooooooooj/jooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooj</a> │       4 │
-│ <a href="https://github.com/dldadnasjndfsjafajnsdfadnfadfkoafasdklk/fjkdasifjasdiofasiodfasjdogasdgajsdpgasdpgasjkdgo-askdpgspkdgvjaspgpasjidpgjiajisdgpjioasdpigasgpjia">dldadnasjndfsjafajnsdfadnfadfkoafasdklk/fjkdasifjasdiofasiodfasjdogasdgajsdpgasdpgasjkdgo-askdpgspkdgvjaspgpasjidpgjiajisdgpjioasdpigasgpjia</a> │       1 │
-│ <a href="https://github.com/yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy/yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy">yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy/yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy</a>  │       2 │
-│ <a href="https://github.com/yingyingyingyingyingyingyingyingying/yingyingyingyingyingyingyingyingyingyingyingyingyingyingyingyingyingyingyingyingyingyingyingyingying">yingyingyingyingyingyingyingyingying/yingyingyingyingyingyingyingyingyingyingyingyingyingyingyingyingyingyingyingyingyingyingyingyingying</a>    │      11 │
-│ <a href="https://github.com/Gremling-Machine-Learning-Study-Group/A-Simple-Deep-Neural-Network-Approach-to-Estimate-the-Reproduction-Number-for-Pandemic-Influenza-R0">Gremling-Machine-Learning-Study-Group/A-Simple-Deep-Neural-Network-Approach-to-Estimate-the-Reproduction-Number-for-Pandemic-Influenza-R0</a>    │       2 │
-│ <a href="https://github.com/reeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee/reeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee">reeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee/reeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee</a>     │       1 │
-│ <a href="https://github.com/Artificial-Intelligence-Big-Data-Lab/A-Multi-Layer-and-Multi-Ensembled-Stock-Trader-Using-Deep-Learning-and-Deep-Reinforcement-Learning">Artificial-Intelligence-Big-Data-Lab/A-Multi-Layer-and-Multi-Ensembled-Stock-Trader-Using-Deep-Learning-and-Deep-Reinforcement-Learning</a>      │       2 │
-│ <a href="https://github.com/Gremling-Machine-Learning-Study-Group/Extracting-the-Ideality-Factor-of-a-Diode-on-the-Single-Diode-Solar-Cell-Model-with-Deep-Learning">Gremling-Machine-Learning-Study-Group/Extracting-the-Ideality-Factor-of-a-Diode-on-the-Single-Diode-Solar-Cell-Model-with-Deep-Learning</a>      │       1 │
-│ <a href="https://github.com/1b3634f6-9166-46d7-a43a-51d575159cf0/Name-INDIVIDUAL-ENTREPRENEURSAPRYGIN-SERGEY-ALEXANDROVICH-Legal-address-152300-RUSSIA-YAROSLAVSKAY">1b3634f6-9166-46d7-a43a-51d575159cf0/Name-INDIVIDUAL-ENTREPRENEURSAPRYGIN-SERGEY-ALEXANDROVICH-Legal-address-152300-RUSSIA-YAROSLAVSKAY</a>      │       1 │
-│ <a href="https://github.com/uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu/uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu">uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu/uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu</a>        │      89 │
-│ <a href="https://github.com/bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb/bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb">bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb/bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb</a>        │      14 │
-│ <a href="https://github.com/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee">eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee</a>        │    8450 │
-│ <a href="https://github.com/kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk/kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk">kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk/kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk</a>         │       3 │
-│ <a href="https://github.com/1b3634f6-9166-46d7-a43a-51d575159cf0/Correspondent-account-30101810945250000297-TIN-KPP-of-the-bank-7706092528-770543003-BIC-0445252">1b3634f6-9166-46d7-a43a-51d575159cf0/Correspondent-account-30101810945250000297-TIN-KPP-of-the-bank-7706092528-770543003-BIC-0445252</a>         │       1 │
-│ <a href="https://github.com/abortionpillsforsaleintembisa/0734408121-Abortion-Pills-For-Sale-In-Tembisa-Mamelodi-Ssoshanguve-Mabopane-Witbank-Rustenburg-Mafik">abortionpillsforsaleintembisa/0734408121-Abortion-Pills-For-Sale-In-Tembisa-Mamelodi-Ssoshanguve-Mabopane-Witbank-Rustenburg-Mafik</a>           │       1 │
-│ <a href="https://github.com/hmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm/hmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm">hmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm/hmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm</a>             │       2 │
-│ <a href="https://github.com/reeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee/reeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee">reeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee/reeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee</a>             │     563 │
-│ <a href="https://github.com/Artificial-Intelligence-for-NLP/Source-Code-of-Pragmatic-Artificial-Intelligence-Algorithms-Based-on-Natrual-Language-Processing">Artificial-Intelligence-for-NLP/Source-Code-of-Pragmatic-Artificial-Intelligence-Algorithms-Based-on-Natrual-Language-Processing</a>             │       1 │
-│ <a href="https://github.com/Gremling-Machine-Learning-Study-Group/Deep-Learning-na-analise-de-imagens-de-raio-x-para-auxilio-na-decis-o-clinica-de-COVID-19">Gremling-Machine-Learning-Study-Group/Deep-Learning-na-analise-de-imagens-de-raio-x-para-auxilio-na-decis-o-clinica-de-COVID-19</a>              │       1 │
-│ <a href="https://github.com/1b3634f6-9166-46d7-a43a-51d575159cf0/t.1FqJlUEmmyCmGBMs1HHLszGztmmESHtJfcGQQN0V4Abbj-KUGfc4s8hX2ID89sfAlR9ogNwxscREeDrfkiqzZA">1b3634f6-9166-46d7-a43a-51d575159cf0/t.1FqJlUEmmyCmGBMs1HHLszGztmmESHtJfcGQQN0V4Abbj-KUGfc4s8hX2ID89sfAlR9ogNwxscREeDrfkiqzZA</a>                │       3 │
-│ <a href="https://github.com/HCIT-Computing-Intelligence/Source-Code-of-Pragmatic-Artificial-Intelligence-Algorithms-Based-on-Natrual-Language-Processing">HCIT-Computing-Intelligence/Source-Code-of-Pragmatic-Artificial-Intelligence-Algorithms-Based-on-Natrual-Language-Processing</a>                 │       4 │
-│ <a href="https://github.com/EduardoMartinezEnriquez/Optimized-Update-Prediction-Assignment-for-Lifting-Transforms-on-Graphs-III-Multiresolution-example">EduardoMartinezEnriquez/Optimized-Update-Prediction-Assignment-for-Lifting-Transforms-on-Graphs-III-Multiresolution-example</a>                  │       1 │
-│ <a href="https://github.com/Data-Science-and-Data-Analytics-Courses/MITx---Machine-Learning-with-Python-From-Linear-Models-to-Deep-Learning-Jun-11-2019">Data-Science-and-Data-Analytics-Courses/MITx---Machine-Learning-with-Python-From-Linear-Models-to-Deep-Learning-Jun-11-2019</a>                  │       4 │
-│ <a href="https://github.com/deepakrajpurushothaman/Solution-to-Trajectory-planning-problem-using-dynamic-optimization-method-and-meta-heuristic-solver-">deepakrajpurushothaman/Solution-to-Trajectory-planning-problem-using-dynamic-optimization-method-and-meta-heuristic-solver-</a>                  │       1 │
-│ <a href="https://github.com/ArthurEmanuelRodriguesCosta/PIBITI-2015-2016-VISUALIZA-O-DO-GRAFO-DE-CORRELA-O-ENTRE-DISCIPLINAS-NO-CURSO-DE-COMPUTA-O-UFCG">ArthurEmanuelRodriguesCosta/PIBITI-2015-2016-VISUALIZA-O-DO-GRAFO-DE-CORRELA-O-ENTRE-DISCIPLINAS-NO-CURSO-DE-COMPUTA-O-UFCG</a>                  │       1 │
-│ <a href="https://github.com/globalmigrateimmigration/The-Australia-working-holiday-visa-subclass-417-is-a-visa-in-a-perfect-world-appropriate-for-young">globalmigrateimmigration/The-Australia-working-holiday-visa-subclass-417-is-a-visa-in-a-perfect-world-appropriate-for-young</a>                  │       1 │
-│ <a href="https://github.com/BurakKahramanHacettepe/Drug-Sensitivity-Prediction-for-Cancer-Cell-lines-with-Pairwise-Input-Graph-Convolutional-Neural-Net">BurakKahramanHacettepe/Drug-Sensitivity-Prediction-for-Cancer-Cell-lines-with-Pairwise-Input-Graph-Convolutional-Neural-Net</a>                  │       1 │
-│ <a href="https://github.com/DeligenceTechnologies/Home-Automation-to-monitor-heat-fire-smoke-CO-and-room-by-room-movement-of-people-using-Raspberry-Pi">DeligenceTechnologies/Home-Automation-to-monitor-heat-fire-smoke-CO-and-room-by-room-movement-of-people-using-Raspberry-Pi</a>                   │       4 │
-│ <a href="https://github.com/Md-Samiul-Abid-Chowdhury/inputting-from-and-outputting-in-any-positive-integer-in-dos-console-using-assembly-language-8086">Md-Samiul-Abid-Chowdhury/inputting-from-and-outputting-in-any-positive-integer-in-dos-console-using-assembly-language-8086</a>                   │       1 │
-│ <a href="https://github.com/todo-sobre-el-universo/todo-sobre-el-universo.github.io-Te-presentamos-todo-acerca-del-universo-El-Sistema-Solar-Agujeros">todo-sobre-el-universo/todo-sobre-el-universo.github.io-Te-presentamos-todo-acerca-del-universo-El-Sistema-Solar-Agujeros</a>                    │       1 │
-│ <a href="https://github.com/during-master-degree/M.E-Energy-Efficient-Power-and-Subcarrier-Allocation-for-OFDMA-Systems-with-Value-Function-Approxima">during-master-degree/M.E-Energy-Efficient-Power-and-Subcarrier-Allocation-for-OFDMA-Systems-with-Value-Function-Approxima</a>                    │       2 │
-│ <a href="https://github.com/Money-Maker-Research/commmodity-tipsCommodities-are-leveraged-products-where-one-needs-to-pay-initial-margin-to-take-posi">Money-Maker-Research/commmodity-tipsCommodities-are-leveraged-products-where-one-needs-to-pay-initial-margin-to-take-posi</a>                    │       1 │
-│ <a href="https://github.com/nirmalsenthilnathan/Open-Set-Domain-Adaptation-for-Hyperspectral-Image-Classification-Using-Generative-Adversarial-Netwo">nirmalsenthilnathan/Open-Set-Domain-Adaptation-for-Hyperspectral-Image-Classification-Using-Generative-Adversarial-Netwo</a>                     │       6 │
-│ <a href="https://github.com/SmartPracticeschool/llSPS-INT-3437-Predicting-the-Energy-Output-of-Wind-Turbine-Based-on-Weather-Conditions-Watson-Auto-">SmartPracticeschool/llSPS-INT-3437-Predicting-the-Energy-Output-of-Wind-Turbine-Based-on-Weather-Conditions-Watson-Auto-</a>                     │       1 │
-│ <a href="https://github.com/InternetofThings2017/is-open-is-pr-author-Eskimo2016-comments-50-user-InternetofThings2017-sort-updated-desc-is-private-">InternetofThings2017/is-open-is-pr-author-Eskimo2016-comments-50-user-InternetofThings2017-sort-updated-desc-is-private-</a>                     │       1 │
-│ <a href="https://github.com/thomasrussellmurphy/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee">thomasrussellmurphy/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee</a>                     │       1 │
-│ <a href="https://github.com/Esmaeili-Najafabadi/Designing-Sequence-With-Minimum-PSL-Using-Chebyshev-Distance-and-its-Application-for-Chaotic-MIMO-Ra">Esmaeili-Najafabadi/Designing-Sequence-With-Minimum-PSL-Using-Chebyshev-Distance-and-its-Application-for-Chaotic-MIMO-Ra</a>                     │       5 │
-│ <a href="https://github.com/DevExpress-Examples/Reporting_aspxreportdesigner-how-to-create-an-aspnet-end-user-reporting-application-with-the-t227679">DevExpress-Examples/Reporting_aspxreportdesigner-how-to-create-an-aspnet-end-user-reporting-application-with-the-t227679</a>                     │       1 │
-│ <a href="https://github.com/SmartPracticeschool/SBSPS-Challenge-4528-Creating-The-Twitter-Sentiment-Analysis-Program-in-Python-with-Naive-Bayes-Clas">SmartPracticeschool/SBSPS-Challenge-4528-Creating-The-Twitter-Sentiment-Analysis-Program-in-Python-with-Naive-Bayes-Clas</a>                     │       3 │
-│ <a href="https://github.com/DevExpress-Examples/XAF_how-to-use-google-facebook-and-microsoft-accounts-in-aspnet-xaf-applications-oauth2-demo-t535280">DevExpress-Examples/XAF_how-to-use-google-facebook-and-microsoft-accounts-in-aspnet-xaf-applications-oauth2-demo-t535280</a>                     │       2 │
-│ <a href="https://github.com/DevExpress-Examples/how-to-generate-a-sequential-number-for-a-persistent-object-within-a-database-transaction-xaf-e2829">DevExpress-Examples/how-to-generate-a-sequential-number-for-a-persistent-object-within-a-database-transaction-xaf-e2829</a>                      │       3 │
-│ <a href="https://github.com/Computing-Intelligence/Source-Code-of-Pragmatic-Artificial-Intelligence-Algorithms-Based-on-Natrual-Language-Processing">Computing-Intelligence/Source-Code-of-Pragmatic-Artificial-Intelligence-Algorithms-Based-on-Natrual-Language-Processing</a>                      │       6 │
-│ <a href="https://github.com/DevExpress-Examples/XPO_how-to-create-an-xpclassinfo-descendant-to-dynamically-build-a-persistent-class-structure-e1729">DevExpress-Examples/XPO_how-to-create-an-xpclassinfo-descendant-to-dynamically-build-a-persistent-class-structure-e1729</a>                      │       1 │
-└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┴─────────┘
+┌─count()─┬─repo_name────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+│       1 │ <a href="https://github.com/accounts-inheritance-finders-of-america/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee">accounts-inheritance-finders-of-america/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee</a> │
+│      15 │ <a href="https://github.com/fkdjfkdkfjskfjsldkfjvndkslakfjgkdlskfjg/fksfekgkslgkkdjfkdlskfjkfkdlslakdjfkekjlklfkjdkslkjfojksjdfaskdjfsalkdfj-laskfjls-kdajfoasjfpoawefjk">fkdjfkdkfjskfjsldkfjvndkslakfjgkdlskfjg/fksfekgkslgkkdjfkdlskfjkfkdlslakdjfkekjlklfkjdkslkjfojksjdfaskdjfsalkdfj-laskfjls-kdajfoasjfpoawefjk</a> │
+│       1 │ <a href="https://github.com/joooooooooooooooooooooooooooooooooooooj/jooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo">joooooooooooooooooooooooooooooooooooooj/jooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo</a> │
+│       1 │ <a href="https://github.com/UDtUf4aRyjv7nU3YTg056xCJw1ghAJYXgad7oB5/hJJRB7rpa3IXwX8HRsA1B4jCDmlZBY9fAzXZWNPyhrsXYG5kCeC4RPFqKQ4I9sAu1aNzX2G6wAkBjm8BjPfKjdubEqkmeAIkIwgu">UDtUf4aRyjv7nU3YTg056xCJw1ghAJYXgad7oB5/hJJRB7rpa3IXwX8HRsA1B4jCDmlZBY9fAzXZWNPyhrsXYG5kCeC4RPFqKQ4I9sAu1aNzX2G6wAkBjm8BjPfKjdubEqkmeAIkIwgu</a> │
+│       1 │ <a href="https://github.com/a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a/a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-">a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a/a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-a-</a> │
+│       1 │ <a href="https://github.com/JonathanJonathanJonathanJonathanJonatha/JonathanJonathanJonathanJonathanJonathanJonathanJonathanJonathanJonathanJonathanJonathanJonathanJona">JonathanJonathanJonathanJonathanJonatha/JonathanJonathanJonathanJonathanJonathanJonathanJonathanJonathanJonathanJonathanJonathanJonathanJona</a> │
+│       3 │ <a href="https://github.com/uwuwuwuwuwuwuwuwuwuwuwuwuwuwuwuwuwuwuwu/uwuwuwuwuwuwuwuwuwuwuwuwuwuwuwuwuwuwuwuuwuwuwuwuwuwuwuwuwuwuwuwuwuwuwuwuwuwuwuuwuwuwuwuwuwuwuwuwuwuw">uwuwuwuwuwuwuwuwuwuwuwuwuwuwuwuwuwuwuwu/uwuwuwuwuwuwuwuwuwuwuwuwuwuwuwuwuwuwuwuuwuwuwuwuwuwuwuwuwuwuwuwuwuwuwuwuwuwuwuuwuwuwuwuwuwuwuwuwuwuw</a> │
+│       4 │ <a href="https://github.com/joooooooooooooooooooooooooooooooooooooj/jooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooj">joooooooooooooooooooooooooooooooooooooj/jooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooj</a> │
+│       1 │ <a href="https://github.com/dldadnasjndfsjafajnsdfadnfadfkoafasdklk/fjkdasifjasdiofasiodfasjdogasdgajsdpgasdpgasjkdgo-askdpgspkdgvjaspgpasjidpgjiajisdgpjioasdpigasgpjia">dldadnasjndfsjafajnsdfadnfadfkoafasdklk/fjkdasifjasdiofasiodfasjdogasdgajsdpgasdpgasjkdgo-askdpgspkdgvjaspgpasjidpgjiajisdgpjioasdpigasgpjia</a> │
+│       2 │ <a href="https://github.com/yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy/yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy">yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy/yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy</a>  │
+│      11 │ <a href="https://github.com/yingyingyingyingyingyingyingyingying/yingyingyingyingyingyingyingyingyingyingyingyingyingyingyingyingyingyingyingyingyingyingyingyingying">yingyingyingyingyingyingyingyingying/yingyingyingyingyingyingyingyingyingyingyingyingyingyingyingyingyingyingyingyingyingyingyingyingying</a>    │
+│       2 │ <a href="https://github.com/Gremling-Machine-Learning-Study-Group/A-Simple-Deep-Neural-Network-Approach-to-Estimate-the-Reproduction-Number-for-Pandemic-Influenza-R0">Gremling-Machine-Learning-Study-Group/A-Simple-Deep-Neural-Network-Approach-to-Estimate-the-Reproduction-Number-for-Pandemic-Influenza-R0</a>    │
+│       1 │ <a href="https://github.com/reeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee/reeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee">reeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee/reeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee</a>     │
+│       2 │ <a href="https://github.com/Artificial-Intelligence-Big-Data-Lab/A-Multi-Layer-and-Multi-Ensembled-Stock-Trader-Using-Deep-Learning-and-Deep-Reinforcement-Learning">Artificial-Intelligence-Big-Data-Lab/A-Multi-Layer-and-Multi-Ensembled-Stock-Trader-Using-Deep-Learning-and-Deep-Reinforcement-Learning</a>      │
+│       1 │ <a href="https://github.com/Gremling-Machine-Learning-Study-Group/Extracting-the-Ideality-Factor-of-a-Diode-on-the-Single-Diode-Solar-Cell-Model-with-Deep-Learning">Gremling-Machine-Learning-Study-Group/Extracting-the-Ideality-Factor-of-a-Diode-on-the-Single-Diode-Solar-Cell-Model-with-Deep-Learning</a>      │
+│       1 │ <a href="https://github.com/1b3634f6-9166-46d7-a43a-51d575159cf0/Name-INDIVIDUAL-ENTREPRENEURSAPRYGIN-SERGEY-ALEXANDROVICH-Legal-address-152300-RUSSIA-YAROSLAVSKAY">1b3634f6-9166-46d7-a43a-51d575159cf0/Name-INDIVIDUAL-ENTREPRENEURSAPRYGIN-SERGEY-ALEXANDROVICH-Legal-address-152300-RUSSIA-YAROSLAVSKAY</a>      │
+│      89 │ <a href="https://github.com/uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu/uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu">uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu/uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu</a>        │
+│      14 │ <a href="https://github.com/bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb/bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb">bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb/bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb</a>        │
+│    8450 │ <a href="https://github.com/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee">eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee</a>        │
+│       3 │ <a href="https://github.com/kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk/kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk">kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk/kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk</a>         │
+│       1 │ <a href="https://github.com/1b3634f6-9166-46d7-a43a-51d575159cf0/Correspondent-account-30101810945250000297-TIN-KPP-of-the-bank-7706092528-770543003-BIC-0445252">1b3634f6-9166-46d7-a43a-51d575159cf0/Correspondent-account-30101810945250000297-TIN-KPP-of-the-bank-7706092528-770543003-BIC-0445252</a>         │
+│       1 │ <a href="https://github.com/abortionpillsforsaleintembisa/0734408121-Abortion-Pills-For-Sale-In-Tembisa-Mamelodi-Ssoshanguve-Mabopane-Witbank-Rustenburg-Mafik">abortionpillsforsaleintembisa/0734408121-Abortion-Pills-For-Sale-In-Tembisa-Mamelodi-Ssoshanguve-Mabopane-Witbank-Rustenburg-Mafik</a>           │
+│       2 │ <a href="https://github.com/hmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm/hmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm">hmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm/hmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm</a>             │
+│     563 │ <a href="https://github.com/reeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee/reeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee">reeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee/reeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee</a>             │
+│       1 │ <a href="https://github.com/Artificial-Intelligence-for-NLP/Source-Code-of-Pragmatic-Artificial-Intelligence-Algorithms-Based-on-Natrual-Language-Processing">Artificial-Intelligence-for-NLP/Source-Code-of-Pragmatic-Artificial-Intelligence-Algorithms-Based-on-Natrual-Language-Processing</a>             │
+│       1 │ <a href="https://github.com/Gremling-Machine-Learning-Study-Group/Deep-Learning-na-analise-de-imagens-de-raio-x-para-auxilio-na-decis-o-clinica-de-COVID-19">Gremling-Machine-Learning-Study-Group/Deep-Learning-na-analise-de-imagens-de-raio-x-para-auxilio-na-decis-o-clinica-de-COVID-19</a>              │
+│       3 │ <a href="https://github.com/1b3634f6-9166-46d7-a43a-51d575159cf0/t.1FqJlUEmmyCmGBMs1HHLszGztmmESHtJfcGQQN0V4Abbj-KUGfc4s8hX2ID89sfAlR9ogNwxscREeDrfkiqzZA">1b3634f6-9166-46d7-a43a-51d575159cf0/t.1FqJlUEmmyCmGBMs1HHLszGztmmESHtJfcGQQN0V4Abbj-KUGfc4s8hX2ID89sfAlR9ogNwxscREeDrfkiqzZA</a>                │
+│       4 │ <a href="https://github.com/HCIT-Computing-Intelligence/Source-Code-of-Pragmatic-Artificial-Intelligence-Algorithms-Based-on-Natrual-Language-Processing">HCIT-Computing-Intelligence/Source-Code-of-Pragmatic-Artificial-Intelligence-Algorithms-Based-on-Natrual-Language-Processing</a>                 │
+│       1 │ <a href="https://github.com/EduardoMartinezEnriquez/Optimized-Update-Prediction-Assignment-for-Lifting-Transforms-on-Graphs-III-Multiresolution-example">EduardoMartinezEnriquez/Optimized-Update-Prediction-Assignment-for-Lifting-Transforms-on-Graphs-III-Multiresolution-example</a>                  │
+│       4 │ <a href="https://github.com/Data-Science-and-Data-Analytics-Courses/MITx---Machine-Learning-with-Python-From-Linear-Models-to-Deep-Learning-Jun-11-2019">Data-Science-and-Data-Analytics-Courses/MITx---Machine-Learning-with-Python-From-Linear-Models-to-Deep-Learning-Jun-11-2019</a>                  │
+│       1 │ <a href="https://github.com/deepakrajpurushothaman/Solution-to-Trajectory-planning-problem-using-dynamic-optimization-method-and-meta-heuristic-solver-">deepakrajpurushothaman/Solution-to-Trajectory-planning-problem-using-dynamic-optimization-method-and-meta-heuristic-solver-</a>                  │
+│       1 │ <a href="https://github.com/ArthurEmanuelRodriguesCosta/PIBITI-2015-2016-VISUALIZA-O-DO-GRAFO-DE-CORRELA-O-ENTRE-DISCIPLINAS-NO-CURSO-DE-COMPUTA-O-UFCG">ArthurEmanuelRodriguesCosta/PIBITI-2015-2016-VISUALIZA-O-DO-GRAFO-DE-CORRELA-O-ENTRE-DISCIPLINAS-NO-CURSO-DE-COMPUTA-O-UFCG</a>                  │
+│       1 │ <a href="https://github.com/globalmigrateimmigration/The-Australia-working-holiday-visa-subclass-417-is-a-visa-in-a-perfect-world-appropriate-for-young">globalmigrateimmigration/The-Australia-working-holiday-visa-subclass-417-is-a-visa-in-a-perfect-world-appropriate-for-young</a>                  │
+│       1 │ <a href="https://github.com/BurakKahramanHacettepe/Drug-Sensitivity-Prediction-for-Cancer-Cell-lines-with-Pairwise-Input-Graph-Convolutional-Neural-Net">BurakKahramanHacettepe/Drug-Sensitivity-Prediction-for-Cancer-Cell-lines-with-Pairwise-Input-Graph-Convolutional-Neural-Net</a>                  │
+│       4 │ <a href="https://github.com/DeligenceTechnologies/Home-Automation-to-monitor-heat-fire-smoke-CO-and-room-by-room-movement-of-people-using-Raspberry-Pi">DeligenceTechnologies/Home-Automation-to-monitor-heat-fire-smoke-CO-and-room-by-room-movement-of-people-using-Raspberry-Pi</a>                   │
+│       1 │ <a href="https://github.com/Md-Samiul-Abid-Chowdhury/inputting-from-and-outputting-in-any-positive-integer-in-dos-console-using-assembly-language-8086">Md-Samiul-Abid-Chowdhury/inputting-from-and-outputting-in-any-positive-integer-in-dos-console-using-assembly-language-8086</a>                   │
+│       1 │ <a href="https://github.com/todo-sobre-el-universo/todo-sobre-el-universo.github.io-Te-presentamos-todo-acerca-del-universo-El-Sistema-Solar-Agujeros">todo-sobre-el-universo/todo-sobre-el-universo.github.io-Te-presentamos-todo-acerca-del-universo-El-Sistema-Solar-Agujeros</a>                    │
+│       2 │ <a href="https://github.com/during-master-degree/M.E-Energy-Efficient-Power-and-Subcarrier-Allocation-for-OFDMA-Systems-with-Value-Function-Approxima">during-master-degree/M.E-Energy-Efficient-Power-and-Subcarrier-Allocation-for-OFDMA-Systems-with-Value-Function-Approxima</a>                    │
+│       1 │ <a href="https://github.com/Money-Maker-Research/commmodity-tipsCommodities-are-leveraged-products-where-one-needs-to-pay-initial-margin-to-take-posi">Money-Maker-Research/commmodity-tipsCommodities-are-leveraged-products-where-one-needs-to-pay-initial-margin-to-take-posi</a>                    │
+│       6 │ <a href="https://github.com/nirmalsenthilnathan/Open-Set-Domain-Adaptation-for-Hyperspectral-Image-Classification-Using-Generative-Adversarial-Netwo">nirmalsenthilnathan/Open-Set-Domain-Adaptation-for-Hyperspectral-Image-Classification-Using-Generative-Adversarial-Netwo</a>                     │
+│       1 │ <a href="https://github.com/SmartPracticeschool/llSPS-INT-3437-Predicting-the-Energy-Output-of-Wind-Turbine-Based-on-Weather-Conditions-Watson-Auto-">SmartPracticeschool/llSPS-INT-3437-Predicting-the-Energy-Output-of-Wind-Turbine-Based-on-Weather-Conditions-Watson-Auto-</a>                     │
+│       1 │ <a href="https://github.com/InternetofThings2017/is-open-is-pr-author-Eskimo2016-comments-50-user-InternetofThings2017-sort-updated-desc-is-private-">InternetofThings2017/is-open-is-pr-author-Eskimo2016-comments-50-user-InternetofThings2017-sort-updated-desc-is-private-</a>                     │
+│       1 │ <a href="https://github.com/thomasrussellmurphy/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee">thomasrussellmurphy/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee</a>                     │
+│       5 │ <a href="https://github.com/Esmaeili-Najafabadi/Designing-Sequence-With-Minimum-PSL-Using-Chebyshev-Distance-and-its-Application-for-Chaotic-MIMO-Ra">Esmaeili-Najafabadi/Designing-Sequence-With-Minimum-PSL-Using-Chebyshev-Distance-and-its-Application-for-Chaotic-MIMO-Ra</a>                     │
+│       1 │ <a href="https://github.com/DevExpress-Examples/Reporting_aspxreportdesigner-how-to-create-an-aspnet-end-user-reporting-application-with-the-t227679">DevExpress-Examples/Reporting_aspxreportdesigner-how-to-create-an-aspnet-end-user-reporting-application-with-the-t227679</a>                     │
+│       3 │ <a href="https://github.com/SmartPracticeschool/SBSPS-Challenge-4528-Creating-The-Twitter-Sentiment-Analysis-Program-in-Python-with-Naive-Bayes-Clas">SmartPracticeschool/SBSPS-Challenge-4528-Creating-The-Twitter-Sentiment-Analysis-Program-in-Python-with-Naive-Bayes-Clas</a>                     │
+│       2 │ <a href="https://github.com/DevExpress-Examples/XAF_how-to-use-google-facebook-and-microsoft-accounts-in-aspnet-xaf-applications-oauth2-demo-t535280">DevExpress-Examples/XAF_how-to-use-google-facebook-and-microsoft-accounts-in-aspnet-xaf-applications-oauth2-demo-t535280</a>                     │
+│       3 │ <a href="https://github.com/DevExpress-Examples/how-to-generate-a-sequential-number-for-a-persistent-object-within-a-database-transaction-xaf-e2829">DevExpress-Examples/how-to-generate-a-sequential-number-for-a-persistent-object-within-a-database-transaction-xaf-e2829</a>                      │
+│       6 │ <a href="https://github.com/Computing-Intelligence/Source-Code-of-Pragmatic-Artificial-Intelligence-Algorithms-Based-on-Natrual-Language-Processing">Computing-Intelligence/Source-Code-of-Pragmatic-Artificial-Intelligence-Algorithms-Based-on-Natrual-Language-Processing</a>                      │
+│       1 │ <a href="https://github.com/DevExpress-Examples/XPO_how-to-create-an-xpclassinfo-descendant-to-dynamically-build-a-persistent-class-structure-e1729">DevExpress-Examples/XPO_how-to-create-an-xpclassinfo-descendant-to-dynamically-build-a-persistent-class-structure-e1729</a>                      │
+└─────────┴──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
 
-50 rows in set. Elapsed: 1.097 sec. Processed 204.18 million rows, 1.64 GB (186.14 million rows/s., 1.49 GB/s.)
+50 rows in set. Elapsed: 0.841 sec. Processed 204.18 million rows, 1.64 GB (242.72 million rows/s., 1.95 GB/s.)
 </pre>
 
 <p>The most favorite of the insane is the "132 e's". Did you miss the <a href="https://linuxwit.ch/blog/2018/12/e98e/">story</a>?</p>
@@ -5435,6 +5957,8 @@ clickhouse-client --progress --max_threads 1 --query "SELECT * FROM github_event
 <span class="code">"Milovidov A., 2020. Everything You Would Like To Know About GitHub But Afraid To Ask, https://TODO"</span></p>
 
 <p>The authors don't own any rights on the dataset. The dataset includes material that may be subject to third party rights. The query results from the dataset are published under the section 107 of the Copyright Act of 1976, allowance is made for "fair use" for purposes such as criticism, comment, news reporting, teaching, scholarship, education and research. Fair use is a use permitted by copyright statute that might otherwise be infringing.</p>
+
+<p>This website does not use cookies. Discuss at <a href="TODO">Hacker News</a>.</p>
 
 <p class="copyright">© 2020 Alexey Milovidov</p>
 </body>
