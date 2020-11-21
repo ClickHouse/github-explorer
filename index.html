@@ -141,11 +141,6 @@
             color: #000;
         }
 
-        #repos2019,#repos2018,#repos2017,#repos2016,#repos2015
-        {
-            display: none;
-        }
-
         .copyright
         {
             text-align: center;
@@ -341,12 +336,12 @@ ORDER BY stars ASC
 <h3>How the list of top repositories changed over years?</h3>
 
 <p>
-  <a class="button">2015</a>
-| <a class="button">2016</a>
-| <a class="button">2017</a>
-| <a class="button">2018</a>
-| <a class="button">2019</a>
-| <a class="button_selected">2020</a></p>
+  <a data-div-id-prefix="repos" class="button">2015</a>
+| <a data-div-id-prefix="repos" class="button">2016</a>
+| <a data-div-id-prefix="repos" class="button">2017</a>
+| <a data-div-id-prefix="repos" class="button">2018</a>
+| <a data-div-id-prefix="repos" class="button">2019</a>
+| <a data-div-id-prefix="repos" class="button_selected">2020</a></p>
 
 <div id="repos2020">
 <pre>
@@ -822,13 +817,8 @@ WHERE (event_type = 'WatchEvent') AND (toYear(created_at) >= 2015) AND (repo IN
     SELECT lower(repo_name) AS repo
     FROM github_events
     WHERE (event_type = 'WatchEvent') AND (year >= 2015)
-    GROUP BY
-        repo,
-        toYear(created_at) AS year
-    ORDER BY
-        year ASC,
-        count() DESC
-    LIMIT 10 BY year
+    GROUP BY repo
+    LIMIT 10
 ))
 GROUP BY
     repo,
@@ -1087,8 +1077,13 @@ LIMIT 50
 
 <p>It's Tensorflow... and TiDB. Yes, I knew, that we are the friends with TiDB (they are using ClickHouse engine under the hood for analytical queries). Then golang, prometheus and kubernetes. The overall list is slightly biased towards data-intensive applications: database engines, distributed filesystems, data orchestration, etc...</p>
 
-<p>Let's calculate the affinity index: the ratio of stars to repositories that were given by users that gave a star to ClickHouse. Don't worry, the query is pretty simple.</p>
+<p>Let's calculate the affinity index: the ratio of stars to repositories that were given by users that gave a star to
+  <a data-div-id-prefix="affinity_" class="button_selected">ClickHouse</a>
+| <a data-div-id-prefix="affinity_" class="button">Linux</a>
+| <a data-div-id-prefix="affinity_" class="button">LLVM</a>.
+Don't worry, the query is pretty simple.</p>
 
+<div id="affinity_ClickHouse">
 <pre>
 SELECT
     repo_name,
@@ -1166,9 +1161,9 @@ LIMIT 50
 <p>This is the perfect exploration tool for related repositories!</p>
 
 <p>I also added a threshold on the number of stars and I'm counting stars from unique authors instead of just star events, because otherwise I face some data anomalities.</p>
+</div>
 
-<p>Let's try with Linux:</p>
-
+<div id="affinity_Linux">
 <pre>
 SELECT
     repo_name,
@@ -1242,9 +1237,9 @@ LIMIT 50
 
 50 rows in set. Elapsed: 2.521 sec. Processed 204.31 million rows, 5.18 GB (81.06 million rows/s., 2.06 GB/s.)
 </pre>
+</div>
 
-<p>And with LLVM:</p>
-
+<div id="affinity_LLVM">
 <pre>
 SELECT
     repo_name,
@@ -1318,6 +1313,7 @@ LIMIT 50
 
 50 rows in set. Elapsed: 2.318 sec. Processed 204.23 million rows, 5.18 GB (88.09 million rows/s., 2.24 GB/s.)
 </pre>
+</div>
 
 <p>Surprisingly this simple heuristic works so good!</p>
 
@@ -4022,14 +4018,6 @@ ORDER BY c DESC
 LIMIT 50
 </pre>
 
-<h3>Authors with the most opened issues</h3>
-
-<p>TODO</p>
-
-<h3>Authors with the most pull request comments</h3>
-
-<p>TODO</p>
-
 
 <h3>Organizations by the number of stars</h3>
 
@@ -4330,9 +4318,6 @@ LIMIT 50
 50 rows in set. Elapsed: 1.783 sec. Processed 77.63 million rows, 675.13 MB (43.53 million rows/s., 378.57 MB/s.)
 </pre>
 
-<h3>TODO</h3>
-
-<p>Stars over time for your favorite repositories.</p>
 
 <h3>Authors with the most code reviews</h3>
 
@@ -4766,7 +4751,7 @@ WHERE (event_type IN ('IssuesEvent', 'PullRequestEvent', 'IssueCommentEvent')) A
 
 <p>There are 1430 of those. The most popular is Sentry Snuba, then ClickHouse Kubernetes Operator, ClickHouse Grafana, then Python, Go, ODBC, JDBC drivers.</p>
 
-<h3>Repositories with ClickHouse-related comments, sorted by stars</h3>
+<p>Repositories with ClickHouse-related comments, sorted by stars:</p>
 
 <pre>
 SELECT
@@ -5991,17 +5976,21 @@ document.querySelectorAll('h2,h3').forEach(elem => {
     toc.appendChild(document.createElement('br'));
 });
 
-/// Buttons for top repos per year.
+/// Toggles.
 
 document.querySelectorAll('.button,.button_selected').forEach(elem => {
+    if (elem.className == 'button') {
+        document.getElementById(elem.getAttribute('data-div-id-prefix') + elem.innerText).style.display = 'none';
+    }
+
     elem.onclick = event => {
         document.querySelectorAll('.button_selected').forEach(elem => {
             elem.className = 'button';
-            document.getElementById('repos' + elem.innerText).style.display = 'none';
+            document.getElementById(elem.getAttribute('data-div-id-prefix') + elem.innerText).style.display = 'none';
         });
 
         elem.className = "button_selected";
-        document.getElementById('repos' + elem.innerText).style.display = 'block';
+        document.getElementById(elem.getAttribute('data-div-id-prefix') + elem.innerText).style.display = 'block';
     };
 });
 
