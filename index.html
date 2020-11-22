@@ -4087,7 +4087,7 @@ LIMIT 50
 50 rows in set. Elapsed: 0.541 sec. Processed 204.18 million rows, 1.64 GB (377.68 million rows/s., 3.03 GB/s.)
 </pre>
 
-<p>You may notice that Microsoft is slightly ahead of Google. Actually it depends on how do you count. Maybe you should sum up Tensorflow, Kubernetes, Flutter, Chrome for Google; GitHub and DotNet for Microsoft.</p>
+<p>You may notice that Microsoft is slightly ahead of Google. Actually it depends on how do you count. Maybe you should sum up Tensorflow, Kubernetes, Flutter, Golang, Chrome for Google; GitHub and DotNet for Microsoft; Facebook Research and React for Facebook.</p>
 
 <h3>Organizations by the number of repositories</h3>
 
@@ -4164,6 +4164,86 @@ LIMIT 50
 </pre>
 
 <p>To avoid showing users with a huge number of forked repositories or users with some GitHub misuse, we added a threshold of 10 stars. Microsoft wins by a huge margin. <a href="https://github.com/packtpublishing">Packt Publishing</a> is quite interesting &mdash; they have repositories for articles and books. <a href="https://github.com/sindresorhus">Sindre Sorhus</a> is also very notable open-source contributor, mostly for the list of <a href="https://github.com/sindresorhus/awesome">awesome awesomeness</a>.</p>
+
+
+<h3>Organizations by the size of community</h3>
+
+<p>The size of community that is visible on GitHub.</p>
+
+<pre>
+SELECT
+    lower(substring(repo_name, 1, position(repo_name, '/'))) AS org,
+    uniq(actor_login) AS authors,
+    uniqIf(actor_login, event_type = 'PullRequestEvent') AS pr_authors,
+    uniqIf(actor_login, event_type = 'IssuesEvent') AS issue_authors,
+    uniqIf(actor_login, event_type = 'IssueCommentEvent') AS comment_authors,
+    uniqIf(actor_login, event_type = 'PullRequestReviewCommentEvent') AS review_authors,
+    uniqIf(actor_login, event_type = 'PushEvent') AS push_authors
+FROM github_events
+WHERE event_type IN ('PullRequestEvent', 'IssuesEvent', 'IssueCommentEvent', 'PullRequestReviewCommentEvent', 'PushEvent')
+GROUP BY org
+ORDER BY authors DESC
+LIMIT 50
+
+┌─org─────────────────────┬─authors─┬─pr_authors─┬─issue_authors─┬─comment_authors─┬─review_authors─┬─push_authors─┐
+│ <a href="https://github.com/microsoft/">microsoft/</a>              │  <b>237967</b> │      30971 │        <b>141313</b> │          <b>180346</b> │          10568 │         <b>6936</b> │
+│ <a href="https://github.com/facebook/">facebook/</a>               │  106561 │      16893 │         45610 │           87668 │           4636 │          916 │
+│ <a href="https://github.com/google/">google/</a>                 │   95158 │      27608 │         47469 │           67018 │           6480 │         2980 │
+│ <a href="https://github.com/microsoftdocs/">microsoftdocs/</a>          │   90159 │      19170 │         60047 │           48859 │           1612 │         1314 │
+│ <a href="https://github.com/docker/">docker/</a>                 │   76755 │       6450 │         34391 │           59061 │           1709 │          254 │
+│ <a href="https://github.com/angular/">angular/</a>                │   70177 │       7060 │         30362 │           60070 │           1848 │          177 │
+│ <a href="https://github.com/apache/">apache/</a>                 │   64275 │      30588 │         22069 │           46666 │          <b>13624</b> │         1997 │
+│ <a href="https://github.com/azure/">azure/</a>                  │   57235 │      12874 │         33131 │           43770 │           5556 │         2987 │
+│ <a href="https://github.com/tensorflow/">tensorflow/</a>             │   53951 │       7765 │         26251 │           45700 │           2540 │          513 │
+│ <a href="https://github.com/dotnet/">dotnet/</a>                 │   46542 │       7328 │         27190 │           35924 │           3107 │          865 │
+│ <a href="https://github.com/kubernetes/">kubernetes/</a>             │   45193 │      11592 │         21647 │           38217 │           5357 │          336 │
+│ <a href="https://github.com/aws/">aws/</a>                    │   43025 │       6008 │         21773 │           35226 │           1930 │          866 │
+│ <a href="https://github.com/learn-co-students/">learn-co-students/</a>      │   40228 │      <b>40082</b> │           856 │            1774 │            179 │          592 │
+│ <a href="https://github.com/elastic/">elastic/</a>                │   38108 │       6492 │         18588 │           30702 │           1724 │          719 │
+│ <a href="https://github.com/alibaba/">alibaba/</a>                │   37393 │       4094 │         24271 │           25623 │            726 │          705 │
+│ <a href="https://github.com/flutter/">flutter/</a>                │   36703 │       2786 │         17583 │           31004 │           1097 │          257 │
+│ <a href="https://github.com/hashicorp/">hashicorp/</a>              │   36437 │       7039 │         18581 │           28669 │           1771 │          476 │
+│ <a href="https://github.com/fortawesome/">fortawesome/</a>            │   34991 │        436 │          9788 │           29695 │             42 │           13 │
+│ <a href="https://github.com/atom/">atom/</a>                   │   34918 │       2964 │         16238 │           26573 │            592 │           95 │
+│ <a href="https://github.com/vuejs/">vuejs/</a>                  │   34007 │       7199 │         16548 │           25028 │           1031 │           81 │
+│ <a href="https://github.com/jlord/">jlord/</a>                  │   31040 │      30574 │           370 │            2044 │             18 │            4 │
+│ <a href="https://github.com/ansible/">ansible/</a>                │   30477 │       8017 │         15092 │           24319 │           2665 │          180 │
+│ <a href="https://github.com/npm/">npm/</a>                    │   29996 │       3704 │         12544 │           22277 │            347 │           96 │
+│ <a href="https://github.com/aspnet/">aspnet/</a>                 │   29684 │       3783 │         16995 │           23716 │            984 │          213 │
+│ <a href="https://github.com/mozilla/">mozilla/</a>                │   29294 │       6376 │         16116 │           21557 │           2330 │         1083 │
+│ <a href="https://github.com/laravel/">laravel/</a>                │   27040 │       8117 │         12169 │           21602 │           1307 │           20 │
+│ <a href="https://github.com/udacity/">udacity/</a>                │   26339 │      20733 │          4039 │            8651 │            409 │          340 │
+│ <a href="https://github.com/freecodecamp/">freecodecamp/</a>           │   25803 │      10650 │         10098 │           14149 │            779 │          192 │
+│ <a href="https://github.com/homebrew/">homebrew/</a>               │   25370 │      11832 │          9049 │           18078 │           3469 │           87 │
+│ <a href="https://github.com/nextcloud/">nextcloud/</a>              │   25171 │       2334 │         14199 │           20649 │            609 │          268 │
+│ <a href="https://github.com/firstcontributions/">firstcontributions/</a>     │   24987 │      24731 │           138 │            2176 │             59 │            5 │
+│ <a href="https://github.com/firebase/">firebase/</a>               │   24777 │       1931 │         10974 │           20699 │            569 │          266 │
+│ <a href="https://github.com/terraform-providers/">terraform-providers/</a>    │   24377 │       5016 │         11330 │           19838 │           1861 │          350 │
+│ <a href="https://github.com/awslabs/">awslabs/</a>                │   23877 │       5823 │         12502 │           17127 │           1602 │         1186 │
+│ <a href="https://github.com/nodejs/">nodejs/</a>                 │   23626 │       4712 │         10600 │           19027 │           2111 │          436 │
+│ <a href="https://github.com/react-native-community/">react-native-community/</a> │   23423 │       2606 │          8745 │           19903 │            648 │          153 │
+│ <a href="https://github.com/ant-design/">ant-design/</a>             │   22783 │       2560 │         14035 │           16339 │            569 │          127 │
+│ <a href="https://github.com/googlecloudplatform/">googlecloudplatform/</a>    │   22222 │       6589 │         12291 │           16688 │           2746 │         1396 │
+│ <a href="https://github.com/home-assistant/">home-assistant/</a>         │   22076 │       5615 │         10042 │           18786 │           2219 │          124 │
+│ <a href="https://github.com/definitelytyped/">definitelytyped/</a>        │   21417 │      13773 │          4677 │           13491 │           4068 │           59 │
+│ <a href="https://github.com/spring-projects/">spring-projects/</a>        │   21094 │       4997 │         11434 │           15115 │            863 │          111 │
+│ <a href="https://github.com/jenkinsci/">jenkinsci/</a>              │   20989 │       7888 │          6703 │           15522 │           2428 │         1763 │
+│ <a href="https://github.com/valvesoftware/">valvesoftware/</a>          │   20941 │        458 │          9121 │           18363 │             53 │           37 │
+│ <a href="https://github.com/github/">github/</a>                 │   20925 │       7990 │          7621 │           13989 │           1741 │          582 │
+│ <a href="https://github.com/golang/">golang/</a>                 │   20841 │       2369 │         12799 │           16257 │            287 │           50 │
+│ <a href="https://github.com/zeit/">zeit/</a>                   │   20786 │       3474 │          8894 │           16852 │            865 │           77 │
+│ <a href="https://github.com/grafana/">grafana/</a>                │   20435 │       2644 │          9199 │           16863 │            667 │          139 │
+│ <a href="https://github.com/webpack/">webpack/</a>                │   20138 │       3083 │          7459 │           16950 │            814 │           72 │
+│ <a href="https://github.com/airbnb/">airbnb/</a>                 │   19931 │       3639 │          9125 │           15481 │           1065 │          307 │
+│ <a href="https://github.com/996icu/">996icu/</a>                 │   19927 │       1164 │         12826 │           10426 │             86 │            2 │
+└─────────────────────────┴─────────┴────────────┴───────────────┴─────────────────┴────────────────┴──────────────┘
+
+50 rows in set. Elapsed: 10.041 sec. Processed 1.97 billion rows, 25.09 GB (196.63 million rows/s., 2.50 GB/s.)
+</pre>
+
+<p>Microsoft wins in 4 out of 6 categories. Apache wins by the number of code reviewers (I thought they are using JIRA, but actually it's not always the case). <a href="https://github.com/learn-co-students/">Learn-co-students</a> wins by a number of PR authors. By the way, they also have 250 000 repositories!</p>
+
+<p>Please take it with a grain of salt. Not every team is using GitHub as issue tracker or code review system. Linux and Postgres are using maillists. LLVM is using Bugzilla and Phabricator.</p>
 
 
 <h3>Repositories by amount of modified code</h3>
@@ -4389,7 +4469,7 @@ LIMIT 50
 50 rows in set. Elapsed: 1.025 sec. Processed 52.21 million rows, 11.22 GB (50.92 million rows/s., 10.94 GB/s.)
 </pre>
 
-<p>Most of the most active reviewers are robots that do style checking and static analysis. But there are real people: <a href="https://github.com/jreback">Jeff Reback</a>. You can also find teachers, who review code from students.</p>
+<p>Most of the most active reviewers are robots that do style checking and static analysis. But there are real people: <a href="https://github.com/jreback">Jeff&nbsp;Reback</a>. You can also find teachers, who review code from students.</p>
 
 
 <h3>Top labels</h3>
