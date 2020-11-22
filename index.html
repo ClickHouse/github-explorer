@@ -149,6 +149,12 @@
             margin-top: 5rem;
             margin-bottom: -3rem;
         }
+
+        .chart
+        {
+            margin-top: 2rem;
+            box-shadow: 0 0 1rem #EEE;
+        }
     </style>
 </head>
 <body>
@@ -179,10 +185,10 @@
 :) SELECT count() FROM github_events WHERE event_type = 'WatchEvent'
 
 ┌───count()─┐
-│ 192095507 │
+│ 204140309 │
 └───────────┘
 
-1 rows in set. Elapsed: 0.150 sec.
+1 rows in set. Elapsed: 0.036 sec. Processed 204.18 million rows, 204.18 MB (5.63 billion rows/s., 5.63 GB/s.)
 </pre>
 
 <p>There is no event when someone removes the star. So, star removal is invisible. It should be rare nevertheless, so we can calculate the approximate number of stars from these events.</p>
@@ -191,13 +197,13 @@
 :) SELECT action, count() FROM github_events WHERE event_type = 'WatchEvent' GROUP BY action
 
 ┌─action──┬───count()─┐
-│ started │ 192095507 │
+│ started │ 204140309 │
 └─────────┴───────────┘
 
-1 rows in set. Elapsed: 0.327 sec.
+1 rows in set. Elapsed: 0.050 sec. Processed 204.18 million rows, 408.36 MB (4.08 billion rows/s., 8.16 GB/s.)
 </pre>
 
-<p>There are almost 200 million stars on GitHub!</p>
+<p>There are over 200 million stars on GitHub!</p>
 
 <p>Let's validate the star count by comparing it for my favorite repository:</p>
 
@@ -205,10 +211,10 @@
 :) SELECT count() FROM github_events WHERE event_type = 'WatchEvent' AND repo_name IN ('ClickHouse/ClickHouse', 'yandex/ClickHouse') GROUP BY action
 
 ┌─count()─┐
-│   12206 │
+│   13617 │
 └─────────┘
 
-1 rows in set. Elapsed: 0.013 sec. Processed 23.47 thousand rows, 115.75 KB (1.87 million rows/s., 9.21 MB/s.)
+1 rows in set. Elapsed: 0.011 sec. Processed 94.78 thousand rows, 1.56 MB (8.40 million rows/s., 138.32 MB/s.)
 </pre>
 
 <p>The number looks consistent with the real star count.</p>
@@ -224,62 +230,62 @@
 :) SELECT repo_name, count() AS stars FROM github_events WHERE event_type = 'WatchEvent' GROUP BY repo_name ORDER BY stars DESC LIMIT 50
 
     ┌─repo_name──────────────────────────────┬──stars─┐
- 1. │ <a href="https://github.com/996icu/996.ICU">996icu/996.ICU</a>                         │ 351588 │
- 2. │ <a href="https://github.com/FreeCodeCamp/FreeCodeCamp">FreeCodeCamp/FreeCodeCamp</a>              │ 225330 │
- 3. │ <a href="https://github.com/vuejs/vue">vuejs/vue</a>                              │ 192011 │
- 4. │ <a href="https://github.com/tensorflow/tensorflow">tensorflow/tensorflow</a>                  │ 168879 │
- 5. │ <a href="https://github.com/facebook/react">facebook/react</a>                         │ 167964 │
- 6. │ <a href="https://github.com/sindresorhus/awesome">sindresorhus/awesome</a>                   │ 147925 │
- 7. │ <a href="https://github.com/freeCodeCamp/freeCodeCamp">freeCodeCamp/freeCodeCamp</a>              │ 134747 │
- 8. │ <a href="https://github.com/getify/You-Dont-Know-JS">getify/You-Dont-Know-JS</a>                │ 129369 │
- 9. │ <a href="https://github.com/kamranahmedse/developer-roadmap">kamranahmedse/developer-roadmap</a>        │ 127474 │
-10. │ <a href="https://github.com/donnemartin/system-design-primer">donnemartin/system-design-primer</a>       │ 107916 │
-11. │ <a href="https://github.com/flutter/flutter">flutter/flutter</a>                        │ 104236 │
-12. │ <a href="https://github.com/jwasham/coding-interview-university">jwasham/coding-interview-university</a>    │ 103701 │
-13. │ <a href="https://github.com/jackfrued/Python-100-Days">jackfrued/Python-100-Days</a>              │ 102579 │
-14. │ <a href="https://github.com/facebook/react-native">facebook/react-native</a>                  │ 102083 │
-15. │ <a href="https://github.com/airbnb/javascript">airbnb/javascript</a>                      │  99206 │
-16. │ <a href="https://github.com/twbs/bootstrap">twbs/bootstrap</a>                         │  95446 │
-17. │ <a href="https://github.com/torvalds/linux">torvalds/linux</a>                         │  94183 │
-18. │ <a href="https://github.com/github/gitignore">github/gitignore</a>                       │  94028 │
-19. │ <a href="https://github.com/Snailclimb/JavaGuide">Snailclimb/JavaGuide</a>                   │  89870 │
-20. │ <a href="https://github.com/TheAlgorithms/Python">TheAlgorithms/Python</a>                   │  88217 │
-21. │ <a href="https://github.com/robbyrussell/oh-my-zsh">robbyrussell/oh-my-zsh</a>                 │  86786 │
-22. │ <a href="https://github.com/vinta/awesome-python">vinta/awesome-python</a>                   │  84867 │
-23. │ <a href="https://github.com/CyC2018/CS-Notes">CyC2018/CS-Notes</a>                       │  84714 │
-24. │ <a href="https://github.com/jlevy/the-art-of-command-line">jlevy/the-art-of-command-line</a>          │  84663 │
-25. │ <a href="https://github.com/golang/go">golang/go</a>                              │  82188 │
-26. │ <a href="https://github.com/Microsoft/vscode">Microsoft/vscode</a>                       │  82033 │
-27. │ <a href="https://github.com/trekhleb/javascript-algorithms">trekhleb/javascript-algorithms</a>         │  80223 │
-28. │ <a href="https://github.com/EbookFoundation/free-programming-books">EbookFoundation/free-programming-books</a> │  79803 │
-29. │ <a href="https://github.com/danistefanovic/build-your-own-x">danistefanovic/build-your-own-x</a>        │  79713 │
-30. │ <a href="https://github.com/angular/angular">angular/angular</a>                        │  75458 │
-31. │ <a href="https://github.com/tensorflow/models">tensorflow/models</a>                      │  72794 │
-32. │ <a href="https://github.com/nodejs/node">nodejs/node</a>                            │  72049 │
-33. │ <a href="https://github.com/M4cs/BabySploit">M4cs/BabySploit</a>                        │  71546 │
-34. │ <a href="https://github.com/justjavac/free-programming-books-zh_CN">justjavac/free-programming-books-zh_CN</a> │  69975 │
-35. │ <a href="https://github.com/ant-design/ant-design">ant-design/ant-design</a>                  │  68451 │
-36. │ <a href="https://github.com/electron/electron">electron/electron</a>                      │  67965 │
-37. │ <a href="https://github.com/kubernetes/kubernetes">kubernetes/kubernetes</a>                  │  64892 │
-38. │ <a href="https://github.com/apple/swift">apple/swift</a>                            │  64506 │
-39. │ <a href="https://github.com/iluwatar/java-design-patterns">iluwatar/java-design-patterns</a>          │  63074 │
-40. │ <a href="https://github.com/PanJiaChen/vue-element-admin">PanJiaChen/vue-element-admin</a>           │  63055 │
-41. │ <a href="https://github.com/vhf/free-programming-books">vhf/free-programming-books</a>             │  60038 │
-42. │ <a href="https://github.com/MisterBooo/LeetCodeAnimation">MisterBooo/LeetCodeAnimation</a>           │  59997 │
-43. │ <a href="https://github.com/vuejs/awesome-vue">vuejs/awesome-vue</a>                      │  59835 │
-44. │ <a href="https://github.com/webpack/webpack">webpack/webpack</a>                        │  59463 │
-45. │ <a href="https://github.com/nvbn/thefuck">nvbn/thefuck</a>                           │  59313 │
-46. │ <a href="https://github.com/toddmotto/public-apis">toddmotto/public-apis</a>                  │  59307 │
-47. │ <a href="https://github.com/getlantern/lantern">getlantern/lantern</a>                     │  59057 │
-48. │ <a href="https://github.com/labuladong/fucking-algorithm">labuladong/fucking-algorithm</a>           │  58375 │
-49. │ <a href="https://github.com/GoogleChrome/puppeteer">GoogleChrome/puppeteer</a>                 │  57292 │
-50. │ <a href="https://github.com/laravel/laravel">laravel/laravel</a>                        │  56805 │
+ 1. │ <a href="https://github.com/996icu/996.ICU">996icu/996.ICU</a>                         │ 354327 │
+ 2. │ <a href="https://github.com/FreeCodeCamp/FreeCodeCamp">FreeCodeCamp/FreeCodeCamp</a>              │ 225390 │
+ 3. │ <a href="https://github.com/vuejs/vue">vuejs/vue</a>                              │ 198399 │
+ 4. │ <a href="https://github.com/facebook/react">facebook/react</a>                         │ 174118 │
+ 5. │ <a href="https://github.com/tensorflow/tensorflow">tensorflow/tensorflow</a>                  │ 172465 │
+ 6. │ <a href="https://github.com/sindresorhus/awesome">sindresorhus/awesome</a>                   │ 155714 │
+ 7. │ <a href="https://github.com/kamranahmedse/developer-roadmap">kamranahmedse/developer-roadmap</a>        │ 144253 │
+ 8. │ <a href="https://github.com/freeCodeCamp/freeCodeCamp">freeCodeCamp/freeCodeCamp</a>              │ 139197 │
+ 9. │ <a href="https://github.com/getify/You-Dont-Know-JS">getify/You-Dont-Know-JS</a>                │ 133561 │
+10. │ <a href="https://github.com/jwasham/coding-interview-university">jwasham/coding-interview-university</a>    │ 117617 │
+11. │ <a href="https://github.com/donnemartin/system-design-primer">donnemartin/system-design-primer</a>       │ 116836 │
+12. │ <a href="https://github.com/flutter/flutter">flutter/flutter</a>                        │ 114389 │
+13. │ <a href="https://github.com/jackfrued/Python-100-Days">jackfrued/Python-100-Days</a>              │ 107542 │
+14. │ <a href="https://github.com/facebook/react-native">facebook/react-native</a>                  │ 104453 │
+15. │ <a href="https://github.com/airbnb/javascript">airbnb/javascript</a>                      │ 102386 │
+16. │ <a href="https://github.com/torvalds/linux">torvalds/linux</a>                         │  99978 │
+17. │ <a href="https://github.com/TheAlgorithms/Python">TheAlgorithms/Python</a>                   │  99095 │
+18. │ <a href="https://github.com/github/gitignore">github/gitignore</a>                       │  98438 │
+19. │ <a href="https://github.com/twbs/bootstrap">twbs/bootstrap</a>                         │  97982 │
+20. │ <a href="https://github.com/Snailclimb/JavaGuide">Snailclimb/JavaGuide</a>                   │  96318 │
+21. │ <a href="https://github.com/CyC2018/CS-Notes">CyC2018/CS-Notes</a>                       │  91511 │
+22. │ <a href="https://github.com/EbookFoundation/free-programming-books">EbookFoundation/free-programming-books</a> │  89974 │
+23. │ <a href="https://github.com/vinta/awesome-python">vinta/awesome-python</a>                   │  88588 │
+24. │ <a href="https://github.com/danistefanovic/build-your-own-x">danistefanovic/build-your-own-x</a>        │  87927 │
+25. │ <a href="https://github.com/jlevy/the-art-of-command-line">jlevy/the-art-of-command-line</a>          │  87286 │
+26. │ <a href="https://github.com/trekhleb/javascript-algorithms">trekhleb/javascript-algorithms</a>         │  87199 │
+27. │ <a href="https://github.com/robbyrussell/oh-my-zsh">robbyrussell/oh-my-zsh</a>                 │  86864 │
+28. │ <a href="https://github.com/golang/go">golang/go</a>                              │  86059 │
+29. │ <a href="https://github.com/Microsoft/vscode">Microsoft/vscode</a>                       │  82037 │
+30. │ <a href="https://github.com/angular/angular">angular/angular</a>                        │  79074 │
+31. │ <a href="https://github.com/nodejs/node">nodejs/node</a>                            │  74979 │
+32. │ <a href="https://github.com/tensorflow/models">tensorflow/models</a>                      │  74750 │
+33. │ <a href="https://github.com/labuladong/fucking-algorithm">labuladong/fucking-algorithm</a>           │  74159 │
+34. │ <a href="https://github.com/justjavac/free-programming-books-zh_CN">justjavac/free-programming-books-zh_CN</a> │  72368 │
+35. │ <a href="https://github.com/M4cs/BabySploit">M4cs/BabySploit</a>                        │  71568 │
+36. │ <a href="https://github.com/ant-design/ant-design">ant-design/ant-design</a>                  │  71014 │
+37. │ <a href="https://github.com/electron/electron">electron/electron</a>                      │  70281 │
+38. │ <a href="https://github.com/kubernetes/kubernetes">kubernetes/kubernetes</a>                  │  67848 │
+39. │ <a href="https://github.com/PanJiaChen/vue-element-admin">PanJiaChen/vue-element-admin</a>           │  66740 │
+40. │ <a href="https://github.com/apple/swift">apple/swift</a>                            │  66051 │
+41. │ <a href="https://github.com/iluwatar/java-design-patterns">iluwatar/java-design-patterns</a>          │  65456 │
+42. │ <a href="https://github.com/MisterBooo/LeetCodeAnimation">MisterBooo/LeetCodeAnimation</a>           │  63364 │
+43. │ <a href="https://github.com/nvbn/thefuck">nvbn/thefuck</a>                           │  61956 │
+44. │ <a href="https://github.com/vuejs/awesome-vue">vuejs/awesome-vue</a>                      │  61597 │
+45. │ <a href="https://github.com/webpack/webpack">webpack/webpack</a>                        │  60838 │
+46. │ <a href="https://github.com/getlantern/lantern">getlantern/lantern</a>                     │  60321 │
+47. │ <a href="https://github.com/vhf/free-programming-books">vhf/free-programming-books</a>             │  60074 │
+48. │ <a href="https://github.com/toddmotto/public-apis">toddmotto/public-apis</a>                  │  59306 │
+49. │ <a href="https://github.com/avelino/awesome-go">avelino/awesome-go</a>                     │  59153 │
+50. │ <a href="https://github.com/laravel/laravel">laravel/laravel</a>                        │  58987 │
     └────────────────────────────────────────┴────────┘
 
-50 rows in set. Elapsed: 2.571 sec. Processed 192.10 million rows, 1.43 GB (74.72 million rows/s., 556.08 MB/s.)
+50 rows in set. Elapsed: 0.583 sec. Processed 204.18 million rows, 1.64 GB (350.31 million rows/s., 2.81 GB/s.)
 </pre>
 
-<p>The top repository ever is "996.ICU" &mdash; it's not a software, but more like a project to improve awareness about work schedule in different Chinese companies. But wait... it's not the top repo. We see two copies of "FreeCodeCamp": <span class="code">FreeCodeCamp/FreeCodeCamp</span> and <span class="code">freeCodeCamp/freeCodeCamp</span>. If we sum up the stars it will be <span class="code">225330 + 134747 = 360077</span> &mdash; slightly more than "996.ICU". So, the top repository on GitHub is an educational resource.</p>
+<p>The top repository ever is "996.ICU" &mdash; it's not a software, but more like a project to improve awareness about work schedule in different Chinese companies. But wait... it's not the top repo. We see two copies of "FreeCodeCamp": <span class="code">FreeCodeCamp/FreeCodeCamp</span> and <span class="code">freeCodeCamp/freeCodeCamp</span>. If we sum up the stars it will be <span class="code">225390 + 139197 = 360137</span> &mdash; slightly more than "996.ICU". So, the top repository on GitHub is an educational resource.</p>
 
 <p>Next we see: JavaScript framework, then Machine Learning framework, then another JavaScript framework, then the list of Awesome Awesomeness, then the JavaScript education resources, then another education project, another education project, UI framework, education, education, UI framework, JS something, CSS framework and finally on 17th place there is Linux. Let's stop at this point.</p>
 
@@ -306,15 +312,15 @@ GROUP BY stars
 ORDER BY stars ASC
 
 ┌──stars─┬──uniq(k)─┐
-│      1 │ 12645719 │
-│     10 │  1003945 │
-│    100 │   177786 │
-│   1000 │    24050 │
-│  10000 │     1472 │
-│ 100000 │       14 │
+│      1 │ 13615219 │
+│     10 │  1060114 │
+│    100 │   188461 │
+│   1000 │    25408 │
+│  10000 │     1581 │
+│ 100000 │       15 │
 └────────┴──────────┘
 
-6 rows in set. Elapsed: 4.389 sec. Processed 192.10 million rows, 1.43 GB (43.77 million rows/s., 325.78 MB/s.)
+6 rows in set. Elapsed: 1.254 sec. Processed 204.18 million rows, 1.64 GB (162.87 million rows/s., 1.31 GB/s.)
 </pre>
 
 <p>There are only 13 million repositories that has at least one star. There are only 1.2 million repositories with 10+ stars. Just 200 000 repositories have over 100 stars, 25 000 have over 1k stars, 1500 have over 10k stars and there are only 14 repositories with more than 100k stars.</p>
@@ -348,59 +354,59 @@ ORDER BY stars ASC
 :) SELECT repo_name, count() AS stars FROM github_events WHERE event_type = 'WatchEvent' AND toYear(created_at) = '2020' GROUP BY repo_name ORDER BY stars DESC LIMIT 50
 
     ┌─repo_name────────────────────────────────────┬─stars─┐
- 1. │ <a href="https://github.com/labuladong/fucking-algorithm">labuladong/fucking-algorithm</a>                 │ 58375 │
- 2. │ <a href="https://github.com/jwasham/coding-interview-university">jwasham/coding-interview-university</a>          │ 38502 │
- 3. │ <a href="https://github.com/kamranahmedse/developer-roadmap">kamranahmedse/developer-roadmap</a>              │ 30859 │
- 4. │ <a href="https://github.com/denoland/deno">denoland/deno</a>                                │ 27729 │
- 5. │ <a href="https://github.com/donnemartin/system-design-primer">donnemartin/system-design-primer</a>             │ 26914 │
- 6. │ <a href="https://github.com/public-apis/public-apis">public-apis/public-apis</a>                      │ 26812 │
- 7. │ <a href="https://github.com/CSSEGISandData/COVID-19">CSSEGISandData/COVID-19</a>                      │ 25009 │
- 8. │ <a href="https://github.com/CyC2018/CS-Notes">CyC2018/CS-Notes</a>                             │ 24911 │
- 9. │ <a href="https://github.com/EbookFoundation/free-programming-books">EbookFoundation/free-programming-books</a>       │ 24483 │
-10. │ <a href="https://github.com/danistefanovic/build-your-own-x">danistefanovic/build-your-own-x</a>              │ 23745 │
-11. │ <a href="https://github.com/Snailclimb/JavaGuide">Snailclimb/JavaGuide</a>                         │ 23180 │
-12. │ <a href="https://github.com/florinpop17/app-ideas">florinpop17/app-ideas</a>                        │ 21727 │
-13. │ <a href="https://github.com/trekhleb/javascript-algorithms">trekhleb/javascript-algorithms</a>               │ 21514 │
-14. │ <a href="https://github.com/microsoft/PowerToys">microsoft/PowerToys</a>                          │ 21136 │
-15. │ <a href="https://github.com/jackfrued/Python-100-Days">jackfrued/Python-100-Days</a>                    │ 20520 │
-16. │ <a href="https://github.com/TheAlgorithms/Python">TheAlgorithms/Python</a>                         │ 19988 │
-17. │ <a href="https://github.com/vuejs/vue">vuejs/vue</a>                                    │ 19770 │
-18. │ <a href="https://github.com/flutter/flutter">flutter/flutter</a>                              │ 19259 │
-19. │ <a href="https://github.com/sindresorhus/awesome">sindresorhus/awesome</a>                         │ 18445 │
-20. │ <a href="https://github.com/bradtraversy/design-resources-for-developers">bradtraversy/design-resources-for-developers</a> │ 18254 │
-21. │ <a href="https://github.com/facebook/react">facebook/react</a>                               │ 16627 │
-22. │ <a href="https://github.com/microsoft/playwright">microsoft/playwright</a>                         │ 16135 │
-23. │ <a href="https://github.com/ohmyzsh/ohmyzsh">ohmyzsh/ohmyzsh</a>                              │ 15626 │
-24. │ <a href="https://github.com/microsoft/vscode">microsoft/vscode</a>                             │ 14955 │
-25. │ <a href="https://github.com/github/gitignore">github/gitignore</a>                             │ 14527 │
-26. │ <a href="https://github.com/getify/You-Dont-Know-JS">getify/You-Dont-Know-JS</a>                      │ 14522 │
-27. │ <a href="https://github.com/electronicarts/CnC_Remastered_Collection">electronicarts/CnC_Remastered_Collection</a>     │ 14320 │
-28. │ <a href="https://github.com/jlevy/the-art-of-command-line">jlevy/the-art-of-command-line</a>                │ 14062 │
-29. │ <a href="https://github.com/AobingJava/JavaFamily">AobingJava/JavaFamily</a>                        │ 13939 │
-30. │ <a href="https://github.com/torvalds/linux">torvalds/linux</a>                               │ 13744 │
-31. │ <a href="https://github.com/tiangolo/fastapi">tiangolo/fastapi</a>                             │ 13723 │
-32. │ <a href="https://github.com/huggingface/transformers">huggingface/transformers</a>                     │ 13626 │
-33. │ <a href="https://github.com/goldbergyoni/nodebestpractices">goldbergyoni/nodebestpractices</a>               │ 13479 │
-34. │ <a href="https://github.com/macrozheng/mall">macrozheng/mall</a>                              │ 13353 │
-35. │ <a href="https://github.com/Genymobile/scrcpy">Genymobile/scrcpy</a>                            │ 13183 │
-36. │ <a href="https://github.com/microsoft/terminal">microsoft/terminal</a>                           │ 13167 │
-37. │ <a href="https://github.com/kon9chunkit/GitHub-Chinese-Top-Charts">kon9chunkit/GitHub-Chinese-Top-Charts</a>        │ 13077 │
-38. │ <a href="https://github.com/PanJiaChen/vue-element-admin">PanJiaChen/vue-element-admin</a>                 │ 12764 │
-39. │ <a href="https://github.com/ossu/computer-science">ossu/computer-science</a>                        │ 12630 │
-40. │ <a href="https://github.com/willmcgugan/rich">willmcgugan/rich</a>                             │ 12235 │
-41. │ <a href="https://github.com/azl397985856/leetcode">azl397985856/leetcode</a>                        │ 12089 │
-42. │ <a href="https://github.com/gothinkster/realworld">gothinkster/realworld</a>                        │ 11960 │
-43. │ <a href="https://github.com/MisterBooo/LeetCodeAnimation">MisterBooo/LeetCodeAnimation</a>                 │ 11859 │
-44. │ <a href="https://github.com/evanw/esbuild">evanw/esbuild</a>                                │ 11814 │
-45. │ <a href="https://github.com/cli/cli">cli/cli</a>                                      │ 11546 │
-46. │ <a href="https://github.com/ytdl-org/youtube-dl">ytdl-org/youtube-dl</a>                          │ 11512 │
-47. │ <a href="https://github.com/tensorflow/tensorflow">tensorflow/tensorflow</a>                        │ 11338 │
-48. │ <a href="https://github.com/angular/angular">angular/angular</a>                              │ 11335 │
-49. │ <a href="https://github.com/ryanmcdermott/clean-code-javascript">ryanmcdermott/clean-code-javascript</a>          │ 10929 │
-50. │ <a href="https://github.com/doocs/advanced-java">doocs/advanced-java</a>                          │ 10876 │
+ 1. │ <a href="https://github.com/labuladong/fucking-algorithm">labuladong/fucking-algorithm</a>                 │ 74159 │
+ 2. │ <a href="https://github.com/jwasham/coding-interview-university">jwasham/coding-interview-university</a>          │ 52415 │
+ 3. │ <a href="https://github.com/kamranahmedse/developer-roadmap">kamranahmedse/developer-roadmap</a>              │ 47638 │
+ 4. │ <a href="https://github.com/donnemartin/system-design-primer">donnemartin/system-design-primer</a>             │ 35827 │
+ 5. │ <a href="https://github.com/EbookFoundation/free-programming-books">EbookFoundation/free-programming-books</a>       │ 34646 │
+ 6. │ <a href="https://github.com/public-apis/public-apis">public-apis/public-apis</a>                      │ 34641 │
+ 7. │ <a href="https://github.com/danistefanovic/build-your-own-x">danistefanovic/build-your-own-x</a>              │ 31957 │
+ 8. │ <a href="https://github.com/CyC2018/CS-Notes">CyC2018/CS-Notes</a>                             │ 31708 │
+ 9. │ <a href="https://github.com/denoland/deno">denoland/deno</a>                                │ 30868 │
+10. │ <a href="https://github.com/TheAlgorithms/Python">TheAlgorithms/Python</a>                         │ 30866 │
+11. │ <a href="https://github.com/microsoft/PowerToys">microsoft/PowerToys</a>                          │ 30462 │
+12. │ <a href="https://github.com/Snailclimb/JavaGuide">Snailclimb/JavaGuide</a>                         │ 29628 │
+13. │ <a href="https://github.com/flutter/flutter">flutter/flutter</a>                              │ 29407 │
+14. │ <a href="https://github.com/trekhleb/javascript-algorithms">trekhleb/javascript-algorithms</a>               │ 28490 │
+15. │ <a href="https://github.com/florinpop17/app-ideas">florinpop17/app-ideas</a>                        │ 27362 │
+16. │ <a href="https://github.com/CSSEGISandData/COVID-19">CSSEGISandData/COVID-19</a>                      │ 26325 │
+17. │ <a href="https://github.com/sindresorhus/awesome">sindresorhus/awesome</a>                         │ 26146 │
+18. │ <a href="https://github.com/vuejs/vue">vuejs/vue</a>                                    │ 26137 │
+19. │ <a href="https://github.com/jackfrued/Python-100-Days">jackfrued/Python-100-Days</a>                    │ 25481 │
+20. │ <a href="https://github.com/bradtraversy/design-resources-for-developers">bradtraversy/design-resources-for-developers</a> │ 22810 │
+21. │ <a href="https://github.com/facebook/react">facebook/react</a>                               │ 22738 │
+22. │ <a href="https://github.com/geekxh/hello-algorithm">geekxh/hello-algorithm</a>                       │ 22002 │
+23. │ <a href="https://github.com/cli/cli">cli/cli</a>                                      │ 21019 │
+24. │ <a href="https://github.com/microsoft/vscode">microsoft/vscode</a>                             │ 20478 │
+25. │ <a href="https://github.com/ohmyzsh/ohmyzsh">ohmyzsh/ohmyzsh</a>                              │ 20463 │
+26. │ <a href="https://github.com/torvalds/linux">torvalds/linux</a>                               │ 19499 │
+27. │ <a href="https://github.com/github/gitignore">github/gitignore</a>                             │ 18886 │
+28. │ <a href="https://github.com/ytdl-org/youtube-dl">ytdl-org/youtube-dl</a>                          │ 18658 │
+29. │ <a href="https://github.com/getify/You-Dont-Know-JS">getify/You-Dont-Know-JS</a>                      │ 18634 │
+30. │ <a href="https://github.com/goldbergyoni/nodebestpractices">goldbergyoni/nodebestpractices</a>               │ 18374 │
+31. │ <a href="https://github.com/microsoft/playwright">microsoft/playwright</a>                         │ 18368 │
+32. │ <a href="https://github.com/huggingface/transformers">huggingface/transformers</a>                     │ 18181 │
+33. │ <a href="https://github.com/Genymobile/scrcpy">Genymobile/scrcpy</a>                            │ 17618 │
+34. │ <a href="https://github.com/macrozheng/mall">macrozheng/mall</a>                              │ 17464 │
+35. │ <a href="https://github.com/ossu/computer-science">ossu/computer-science</a>                        │ 17414 │
+36. │ <a href="https://github.com/tiangolo/fastapi">tiangolo/fastapi</a>                             │ 17226 │
+37. │ <a href="https://github.com/AobingJava/JavaFamily">AobingJava/JavaFamily</a>                        │ 16912 │
+38. │ <a href="https://github.com/PanJiaChen/vue-element-admin">PanJiaChen/vue-element-admin</a>                 │ 16445 │
+39. │ <a href="https://github.com/gothinkster/realworld">gothinkster/realworld</a>                        │ 16288 │
+40. │ <a href="https://github.com/microsoft/terminal">microsoft/terminal</a>                           │ 16086 │
+41. │ <a href="https://github.com/evanw/esbuild">evanw/esbuild</a>                                │ 15992 │
+42. │ <a href="https://github.com/jlevy/the-art-of-command-line">jlevy/the-art-of-command-line</a>                │ 15891 │
+43. │ <a href="https://github.com/MisterBooo/LeetCodeAnimation">MisterBooo/LeetCodeAnimation</a>                 │ 15223 │
+44. │ <a href="https://github.com/kon9chunkit/GitHub-Chinese-Top-Charts">kon9chunkit/GitHub-Chinese-Top-Charts</a>        │ 15015 │
+45. │ <a href="https://github.com/angular/angular">angular/angular</a>                              │ 14926 │
+46. │ <a href="https://github.com/tensorflow/tensorflow">tensorflow/tensorflow</a>                        │ 14912 │
+47. │ <a href="https://github.com/freeCodeCamp/freeCodeCamp">freeCodeCamp/freeCodeCamp</a>                    │ 14888 │
+48. │ <a href="https://github.com/azl397985856/leetcode">azl397985856/leetcode</a>                        │ 14773 │
+49. │ <a href="https://github.com/electronicarts/CnC_Remastered_Collection">electronicarts/CnC_Remastered_Collection</a>     │ 14771 │
+50. │ <a href="https://github.com/willmcgugan/rich">willmcgugan/rich</a>                             │ 14631 │
     └──────────────────────────────────────────────┴───────┘
 
-50 rows in set. Elapsed: 3.935 sec. Processed 171.28 million rows, 1.88 GB (43.52 million rows/s., 477.29 MB/s.)
+50 rows in set. Elapsed: 0.420 sec. Processed 188.98 million rows, 2.14 GB (449.89 million rows/s., 5.10 GB/s.)
 </pre>
 
 <p>The top repo is Chinese educational resource to prepare for algorithms interview. Actually amost all from top 10 is about education. The only exceptions are: <span class="code">Deno</span> &mdash; a JS runtime and <span class="code">CSSEGISandData/COVID-19</span> &mdash; a repo for COVID-19 data. Yes, I expected that 2020 is about COVID-19 but happily enough not only about COVID-19.</p>
@@ -412,58 +418,58 @@ ORDER BY stars ASC
 
     ┌─repo_name──────────────────────────────────┬──stars─┐
  1. │ <a href="https://github.com/996icu/996.ICU">996icu/996.ICU</a>                             │ 344825 │
- 2. │ <a href="https://github.com/jackfrued/Python-100-Days">jackfrued/Python-100-Days</a>                  │  76843 │
+ 2. │ <a href="https://github.com/jackfrued/Python-100-Days">jackfrued/Python-100-Days</a>                  │  76845 │
  3. │ <a href="https://github.com/M4cs/BabySploit">M4cs/BabySploit</a>                            │  71013 │
  4. │ <a href="https://github.com/Snailclimb/JavaGuide">Snailclimb/JavaGuide</a>                       │  53444 │
- 5. │ <a href="https://github.com/TheAlgorithms/Python">TheAlgorithms/Python</a>                       │  48860 │
+ 5. │ <a href="https://github.com/TheAlgorithms/Python">TheAlgorithms/Python</a>                       │  48859 │
  6. │ <a href="https://github.com/CyC2018/CS-Notes">CyC2018/CS-Notes</a>                           │  46609 │
- 7. │ <a href="https://github.com/MisterBooo/LeetCodeAnimation">MisterBooo/LeetCodeAnimation</a>               │  41525 │
- 8. │ <a href="https://github.com/vuejs/vue">vuejs/vue</a>                                  │  39158 │
- 9. │ <a href="https://github.com/flutter/flutter">flutter/flutter</a>                            │  38732 │
-10. │ <a href="https://github.com/doocs/advanced-java">doocs/advanced-java</a>                        │  35340 │
+ 7. │ <a href="https://github.com/MisterBooo/LeetCodeAnimation">MisterBooo/LeetCodeAnimation</a>               │  41526 │
+ 8. │ <a href="https://github.com/vuejs/vue">vuejs/vue</a>                                  │  39159 │
+ 9. │ <a href="https://github.com/flutter/flutter">flutter/flutter</a>                            │  38733 │
+10. │ <a href="https://github.com/doocs/advanced-java">doocs/advanced-java</a>                        │  35338 │
 11. │ <a href="https://github.com/microsoft/Terminal">microsoft/Terminal</a>                         │  34359 │
-12. │ <a href="https://github.com/jlevy/the-art-of-command-line">jlevy/the-art-of-command-line</a>              │  30849 │
-13. │ <a href="https://github.com/kamranahmedse/developer-roadmap">kamranahmedse/developer-roadmap</a>            │  30846 │
-14. │ <a href="https://github.com/facebook/react">facebook/react</a>                             │  29042 │
-15. │ <a href="https://github.com/donnemartin/system-design-primer">donnemartin/system-design-primer</a>           │  27036 │
-16. │ <a href="https://github.com/tensorflow/tensorflow">tensorflow/tensorflow</a>                      │  27031 │
+12. │ <a href="https://github.com/jlevy/the-art-of-command-line">jlevy/the-art-of-command-line</a>              │  30852 │
+13. │ <a href="https://github.com/kamranahmedse/developer-roadmap">kamranahmedse/developer-roadmap</a>            │  30842 │
+14. │ <a href="https://github.com/facebook/react">facebook/react</a>                             │  29040 │
+15. │ <a href="https://github.com/donnemartin/system-design-primer">donnemartin/system-design-primer</a>           │  27042 │
+16. │ <a href="https://github.com/tensorflow/tensorflow">tensorflow/tensorflow</a>                      │  27032 │
 17. │ <a href="https://github.com/macrozheng/mall">macrozheng/mall</a>                            │  26520 │
 18. │ <a href="https://github.com/testerSunshine/12306">testerSunshine/12306</a>                       │  26414 │
-19. │ <a href="https://github.com/sindresorhus/awesome">sindresorhus/awesome</a>                       │  26291 │
-20. │ <a href="https://github.com/azl397985856/leetcode">azl397985856/leetcode</a>                      │  25763 │
-21. │ <a href="https://github.com/jwasham/coding-interview-university">jwasham/coding-interview-university</a>        │  25557 │
-22. │ <a href="https://github.com/PanJiaChen/vue-element-admin">PanJiaChen/vue-element-admin</a>               │  25100 │
+19. │ <a href="https://github.com/sindresorhus/awesome">sindresorhus/awesome</a>                       │  26286 │
+20. │ <a href="https://github.com/azl397985856/leetcode">azl397985856/leetcode</a>                      │  25765 │
+21. │ <a href="https://github.com/jwasham/coding-interview-university">jwasham/coding-interview-university</a>        │  25556 │
+22. │ <a href="https://github.com/PanJiaChen/vue-element-admin">PanJiaChen/vue-element-admin</a>               │  25101 │
 23. │ <a href="https://github.com/0voice/interview_internal_reference">0voice/interview_internal_reference</a>        │  24557 │
 24. │ <a href="https://github.com/lib-pku/libpku">lib-pku/libpku</a>                             │  23015 │
-25. │ <a href="https://github.com/getify/You-Dont-Know-JS">getify/You-Dont-Know-JS</a>                    │  22651 │
+25. │ <a href="https://github.com/getify/You-Dont-Know-JS">getify/You-Dont-Know-JS</a>                    │  22647 │
 26. │ <a href="https://github.com/EbookFoundation/free-programming-books">EbookFoundation/free-programming-books</a>     │  21884 │
-27. │ <a href="https://github.com/microsoft/terminal">microsoft/terminal</a>                         │  21876 │
+27. │ <a href="https://github.com/microsoft/terminal">microsoft/terminal</a>                         │  21878 │
 28. │ <a href="https://github.com/scutan90/DeepLearning-500-questions">scutan90/DeepLearning-500-questions</a>        │  21784 │
-29. │ <a href="https://github.com/deepfakes/faceswap">deepfakes/faceswap</a>                         │  21238 │
-30. │ <a href="https://github.com/sveltejs/svelte">sveltejs/svelte</a>                            │  20966 │
-31. │ <a href="https://github.com/torvalds/linux">torvalds/linux</a>                             │  20453 │
-32. │ <a href="https://github.com/vinta/awesome-python">vinta/awesome-python</a>                       │  20214 │
-33. │ <a href="https://github.com/justjavac/free-programming-books-zh_CN">justjavac/free-programming-books-zh_CN</a>     │  20138 │
-34. │ <a href="https://github.com/30-seconds/30-seconds-of-code">30-seconds/30-seconds-of-code</a>              │  19786 │
-35. │ <a href="https://github.com/formulahendry/955.WLB">formulahendry/955.WLB</a>                      │  19771 │
-36. │ <a href="https://github.com/NationalSecurityAgency/ghidra">NationalSecurityAgency/ghidra</a>              │  19650 │
-37. │ <a href="https://github.com/robbyrussell/oh-my-zsh">robbyrussell/oh-my-zsh</a>                     │  19604 │
+29. │ <a href="https://github.com/deepfakes/faceswap">deepfakes/faceswap</a>                         │  21237 │
+30. │ <a href="https://github.com/sveltejs/svelte">sveltejs/svelte</a>                            │  20969 │
+31. │ <a href="https://github.com/torvalds/linux">torvalds/linux</a>                             │  20455 │
+32. │ <a href="https://github.com/vinta/awesome-python">vinta/awesome-python</a>                       │  20217 │
+33. │ <a href="https://github.com/justjavac/free-programming-books-zh_CN">justjavac/free-programming-books-zh_CN</a>     │  20137 │
+34. │ <a href="https://github.com/30-seconds/30-seconds-of-code">30-seconds/30-seconds-of-code</a>              │  19784 │
+35. │ <a href="https://github.com/formulahendry/955.WLB">formulahendry/955.WLB</a>                      │  19772 │
+36. │ <a href="https://github.com/NationalSecurityAgency/ghidra">NationalSecurityAgency/ghidra</a>              │  19651 │
+37. │ <a href="https://github.com/robbyrussell/oh-my-zsh">robbyrussell/oh-my-zsh</a>                     │  19602 │
 38. │ <a href="https://github.com/imhuay/Algorithm_Interview_Notes-Chinese">imhuay/Algorithm_Interview_Notes-Chinese</a>   │  19508 │
-39. │ <a href="https://github.com/trekhleb/javascript-algorithms">trekhleb/javascript-algorithms</a>             │  19461 │
-40. │ <a href="https://github.com/LisaDziuba/Awesome-Design-Tools">LisaDziuba/Awesome-Design-Tools</a>            │  19140 │
-41. │ <a href="https://github.com/freeCodeCamp/freeCodeCamp">freeCodeCamp/freeCodeCamp</a>                  │  18954 │
-42. │ <a href="https://github.com/golang/go">golang/go</a>                                  │  18841 │
-43. │ <a href="https://github.com/alibaba/flutter-go">alibaba/flutter-go</a>                         │  18380 │
+39. │ <a href="https://github.com/trekhleb/javascript-algorithms">trekhleb/javascript-algorithms</a>             │  19460 │
+40. │ <a href="https://github.com/LisaDziuba/Awesome-Design-Tools">LisaDziuba/Awesome-Design-Tools</a>            │  19142 │
+41. │ <a href="https://github.com/freeCodeCamp/freeCodeCamp">freeCodeCamp/freeCodeCamp</a>                  │  18955 │
+42. │ <a href="https://github.com/golang/go">golang/go</a>                                  │  18842 │
+43. │ <a href="https://github.com/alibaba/flutter-go">alibaba/flutter-go</a>                         │  18382 │
 44. │ <a href="https://github.com/ziishaned/learn-regex">ziishaned/learn-regex</a>                      │  18352 │
-45. │ <a href="https://github.com/github/gitignore">github/gitignore</a>                           │  18227 │
-46. │ <a href="https://github.com/danistefanovic/build-your-own-x">danistefanovic/build-your-own-x</a>            │  18156 │
+45. │ <a href="https://github.com/github/gitignore">github/gitignore</a>                           │  18228 │
+46. │ <a href="https://github.com/danistefanovic/build-your-own-x">danistefanovic/build-your-own-x</a>            │  18155 │
 47. │ <a href="https://github.com/Advanced-Frontend/Daily-Interview-Question">Advanced-Frontend/Daily-Interview-Question</a> │  17797 │
 48. │ <a href="https://github.com/ossu/computer-science">ossu/computer-science</a>                      │  17794 │
-49. │ <a href="https://github.com/dcloudio/uni-app">dcloudio/uni-app</a>                           │  17758 │
+49. │ <a href="https://github.com/dcloudio/uni-app">dcloudio/uni-app</a>                           │  17759 │
 50. │ <a href="https://github.com/codercom/code-server">codercom/code-server</a>                       │  17702 │
     └────────────────────────────────────────────┴────────┘
 
-50 rows in set. Elapsed: 0.907 sec. Processed 178.45 million rows, 1.95 GB (196.65 million rows/s., 2.15 GB/s.)
+50 rows in set. Elapsed: 0.370 sec. Processed 194.13 million rows, 2.22 GB (524.99 million rows/s., 5.99 GB/s.)
 </pre>
 
 <p>996.ICU, education and pentesting framework. MS Terminal is worth noting. Also a Chinese e-commerce product sits next to Tensorflow.</p>
@@ -474,59 +480,59 @@ ORDER BY stars ASC
 :) SELECT repo_name, count() AS stars FROM github_events WHERE event_type = 'WatchEvent' AND toYear(created_at) = '2018' GROUP BY repo_name ORDER BY stars DESC LIMIT 50
 
     ┌─repo_name──────────────────────────────┬─stars─┐
- 1. │ <a href="https://github.com/vuejs/vue">vuejs/vue</a>                              │ 51522 │
- 2. │ <a href="https://github.com/trekhleb/javascript-algorithms">trekhleb/javascript-algorithms</a>         │ 39248 │
- 3. │ <a href="https://github.com/facebook/react">facebook/react</a>                         │ 38820 │
- 4. │ <a href="https://github.com/flutter/flutter">flutter/flutter</a>                        │ 38353 │
- 5. │ <a href="https://github.com/danistefanovic/build-your-own-x">danistefanovic/build-your-own-x</a>        │ 37812 │
- 6. │ <a href="https://github.com/tensorflow/tensorflow">tensorflow/tensorflow</a>                  │ 36980 │
- 7. │ <a href="https://github.com/kamranahmedse/developer-roadmap">kamranahmedse/developer-roadmap</a>        │ 35273 │
+ 1. │ <a href="https://github.com/vuejs/vue">vuejs/vue</a>                              │ 51515 │
+ 2. │ <a href="https://github.com/trekhleb/javascript-algorithms">trekhleb/javascript-algorithms</a>         │ 39249 │
+ 3. │ <a href="https://github.com/facebook/react">facebook/react</a>                         │ 38817 │
+ 4. │ <a href="https://github.com/flutter/flutter">flutter/flutter</a>                        │ 38357 │
+ 5. │ <a href="https://github.com/danistefanovic/build-your-own-x">danistefanovic/build-your-own-x</a>        │ 37815 │
+ 6. │ <a href="https://github.com/tensorflow/tensorflow">tensorflow/tensorflow</a>                  │ 36976 │
+ 7. │ <a href="https://github.com/kamranahmedse/developer-roadmap">kamranahmedse/developer-roadmap</a>        │ 35278 │
  8. │ <a href="https://github.com/x64dbg/x64dbg">x64dbg/x64dbg</a>                          │ 32381 │
  9. │ <a href="https://github.com/donnemartin/system-design-primer">donnemartin/system-design-primer</a>       │ 31384 │
 10. │ <a href="https://github.com/CyC2018/Interview-Notebook">CyC2018/Interview-Notebook</a>             │ 29941 │
-11. │ <a href="https://github.com/kelseyhightower/nocode">kelseyhightower/nocode</a>                 │ 26324 │
-12. │ <a href="https://github.com/Microsoft/vscode">Microsoft/vscode</a>                       │ 26213 │
+11. │ <a href="https://github.com/kelseyhightower/nocode">kelseyhightower/nocode</a>                 │ 26326 │
+12. │ <a href="https://github.com/Microsoft/vscode">Microsoft/vscode</a>                       │ 26211 │
 13. │ <a href="https://github.com/xingshaocheng/architect-awesome">xingshaocheng/architect-awesome</a>        │ 25750 │
-14. │ <a href="https://github.com/sindresorhus/awesome">sindresorhus/awesome</a>                   │ 24975 │
+14. │ <a href="https://github.com/sindresorhus/awesome">sindresorhus/awesome</a>                   │ 24977 │
 15. │ <a href="https://github.com/ry/deno">ry/deno</a>                                │ 22798 │
 16. │ <a href="https://github.com/getify/You-Dont-Know-JS">getify/You-Dont-Know-JS</a>                │ 22014 │
 17. │ <a href="https://github.com/tensorflow/models">tensorflow/models</a>                      │ 21511 │
-18. │ <a href="https://github.com/GoogleChrome/puppeteer">GoogleChrome/puppeteer</a>                 │ 21140 │
-19. │ <a href="https://github.com/leonardomso/33-js-concepts">leonardomso/33-js-concepts</a>             │ 21028 │
-20. │ <a href="https://github.com/facebook/create-react-app">facebook/create-react-app</a>              │ 20298 │
-21. │ <a href="https://github.com/axios/axios">axios/axios</a>                            │ 20105 │
+18. │ <a href="https://github.com/GoogleChrome/puppeteer">GoogleChrome/puppeteer</a>                 │ 21137 │
+19. │ <a href="https://github.com/leonardomso/33-js-concepts">leonardomso/33-js-concepts</a>             │ 21033 │
+20. │ <a href="https://github.com/facebook/create-react-app">facebook/create-react-app</a>              │ 20300 │
+21. │ <a href="https://github.com/axios/axios">axios/axios</a>                            │ 20102 │
 22. │ <a href="https://github.com/houshanren/hangzhou_house_knowledge">houshanren/hangzhou_house_knowledge</a>    │ 19227 │
-23. │ <a href="https://github.com/ant-design/ant-design">ant-design/ant-design</a>                  │ 19157 │
+23. │ <a href="https://github.com/ant-design/ant-design">ant-design/ant-design</a>                  │ 19162 │
 24. │ <a href="https://github.com/facebookresearch/Detectron">facebookresearch/Detectron</a>             │ 18611 │
 25. │ <a href="https://github.com/jwasham/coding-interview-university">jwasham/coding-interview-university</a>    │ 18255 │
-26. │ <a href="https://github.com/robbyrussell/oh-my-zsh">robbyrussell/oh-my-zsh</a>                 │ 18253 │
+26. │ <a href="https://github.com/robbyrussell/oh-my-zsh">robbyrussell/oh-my-zsh</a>                 │ 18254 │
 27. │ <a href="https://github.com/EbookFoundation/free-programming-books">EbookFoundation/free-programming-books</a> │ 18127 │
-28. │ <a href="https://github.com/github/gitignore">github/gitignore</a>                       │ 17870 │
-29. │ <a href="https://github.com/airbnb/javascript">airbnb/javascript</a>                      │ 17618 │
-30. │ <a href="https://github.com/justjavac/free-programming-books-zh_CN">justjavac/free-programming-books-zh_CN</a> │ 17294 │
+28. │ <a href="https://github.com/github/gitignore">github/gitignore</a>                       │ 17872 │
+29. │ <a href="https://github.com/airbnb/javascript">airbnb/javascript</a>                      │ 17616 │
+30. │ <a href="https://github.com/justjavac/free-programming-books-zh_CN">justjavac/free-programming-books-zh_CN</a> │ 17293 │
 31. │ <a href="https://github.com/PanJiaChen/vue-element-admin">PanJiaChen/vue-element-admin</a>           │ 17256 │
-32. │ <a href="https://github.com/yangshun/front-end-interview-handbook">yangshun/front-end-interview-handbook</a>  │ 17136 │
-33. │ <a href="https://github.com/vinta/awesome-python">vinta/awesome-python</a>                   │ 16798 │
-34. │ <a href="https://github.com/golang/go">golang/go</a>                              │ 16426 │
-35. │ <a href="https://github.com/facebook/react-native">facebook/react-native</a>                  │ 16038 │
-36. │ <a href="https://github.com/torvalds/linux">torvalds/linux</a>                         │ 15937 │
+32. │ <a href="https://github.com/yangshun/front-end-interview-handbook">yangshun/front-end-interview-handbook</a>  │ 17138 │
+33. │ <a href="https://github.com/vinta/awesome-python">vinta/awesome-python</a>                   │ 16797 │
+34. │ <a href="https://github.com/golang/go">golang/go</a>                              │ 16424 │
+35. │ <a href="https://github.com/facebook/react-native">facebook/react-native</a>                  │ 16039 │
+36. │ <a href="https://github.com/torvalds/linux">torvalds/linux</a>                         │ 15936 │
 37. │ <a href="https://github.com/TheAlgorithms/Python">TheAlgorithms/Python</a>                   │ 15914 │
 38. │ <a href="https://github.com/tabler/tabler">tabler/tabler</a>                          │ 15849 │
 39. │ <a href="https://github.com/kubernetes/kubernetes">kubernetes/kubernetes</a>                  │ 15800 │
 40. │ <a href="https://github.com/Avik-Jain/100-Days-Of-ML-Code">Avik-Jain/100-Days-Of-ML-Code</a>          │ 15777 │
-41. │ <a href="https://github.com/iluwatar/java-design-patterns">iluwatar/java-design-patterns</a>          │ 15367 │
-42. │ <a href="https://github.com/parcel-bundler/parcel">parcel-bundler/parcel</a>                  │ 15266 │
+41. │ <a href="https://github.com/iluwatar/java-design-patterns">iluwatar/java-design-patterns</a>          │ 15370 │
+42. │ <a href="https://github.com/parcel-bundler/parcel">parcel-bundler/parcel</a>                  │ 15257 │
 43. │ <a href="https://github.com/Meituan-Dianping/mpvue">Meituan-Dianping/mpvue</a>                 │ 15017 │
-44. │ <a href="https://github.com/storybooks/storybook">storybooks/storybook</a>                   │ 14837 │
+44. │ <a href="https://github.com/storybooks/storybook">storybooks/storybook</a>                   │ 14835 │
 45. │ <a href="https://github.com/dawnlabs/carbon">dawnlabs/carbon</a>                        │ 14807 │
 46. │ <a href="https://github.com/toddmotto/public-apis">toddmotto/public-apis</a>                  │ 14781 │
-47. │ <a href="https://github.com/electron/electron">electron/electron</a>                      │ 14749 │
+47. │ <a href="https://github.com/electron/electron">electron/electron</a>                      │ 14750 │
 48. │ <a href="https://github.com/shadowsocks/shadowsocks-windows">shadowsocks/shadowsocks-windows</a>        │ 14619 │
-49. │ <a href="https://github.com/kdn251/interviews">kdn251/interviews</a>                      │ 14585 │
+49. │ <a href="https://github.com/kdn251/interviews">kdn251/interviews</a>                      │ 14586 │
 50. │ <a href="https://github.com/scutan90/DeepLearning-500-questions">scutan90/DeepLearning-500-questions</a>    │ 14497 │
     └────────────────────────────────────────┴───────┘
 
-50 rows in set. Elapsed: 1.251 sec. Processed 178.95 million rows, 1.98 GB (143.09 million rows/s., 1.59 GB/s.)
+50 rows in set. Elapsed: 0.308 sec. Processed 194.22 million rows, 2.34 GB (629.64 million rows/s., 7.58 GB/s.)
 </pre>
 <p>JavaScript frameworks and education.</p>
 </div>
@@ -536,59 +542,59 @@ ORDER BY stars ASC
 :) SELECT repo_name, count() AS stars FROM github_events WHERE event_type = 'WatchEvent' AND toYear(created_at) = '2017' GROUP BY repo_name ORDER BY stars DESC LIMIT 50
 
     ┌─repo_name──────────────────────────────────────┬─stars─┐
- 1. │ <a href="https://github.com/freeCodeCamp/freeCodeCamp">freeCodeCamp/freeCodeCamp</a>                      │ 90966 │
- 2. │ <a href="https://github.com/tensorflow/tensorflow">tensorflow/tensorflow</a>                          │ 49269 │
- 3. │ <a href="https://github.com/vuejs/vue">vuejs/vue</a>                                      │ 48171 │
- 4. │ <a href="https://github.com/facebook/react">facebook/react</a>                                 │ 34511 │
+ 1. │ <a href="https://github.com/freeCodeCamp/freeCodeCamp">freeCodeCamp/freeCodeCamp</a>                      │ 90972 │
+ 2. │ <a href="https://github.com/tensorflow/tensorflow">tensorflow/tensorflow</a>                          │ 49267 │
+ 3. │ <a href="https://github.com/vuejs/vue">vuejs/vue</a>                                      │ 48182 │
+ 4. │ <a href="https://github.com/facebook/react">facebook/react</a>                                 │ 34515 │
  5. │ <a href="https://github.com/mr-mig/every-programmer-should-know">mr-mig/every-programmer-should-know</a>            │ 30991 │
- 6. │ <a href="https://github.com/kamranahmedse/developer-roadmap">kamranahmedse/developer-roadmap</a>                │ 30496 │
- 7. │ <a href="https://github.com/sindresorhus/awesome">sindresorhus/awesome</a>                           │ 29076 │
- 8. │ <a href="https://github.com/getify/You-Dont-Know-JS">getify/You-Dont-Know-JS</a>                        │ 28899 │
- 9. │ <a href="https://github.com/thedaviddias/Front-End-Checklist">thedaviddias/Front-End-Checklist</a>               │ 24726 │
-10. │ <a href="https://github.com/facebookincubator/create-react-app">facebookincubator/create-react-app</a>             │ 24481 │
-11. │ <a href="https://github.com/Microsoft/vscode">Microsoft/vscode</a>                               │ 23499 │
-12. │ <a href="https://github.com/donnemartin/system-design-primer">donnemartin/system-design-primer</a>               │ 22582 │
-13. │ <a href="https://github.com/GoogleChrome/puppeteer">GoogleChrome/puppeteer</a>                         │ 22402 │
+ 6. │ <a href="https://github.com/kamranahmedse/developer-roadmap">kamranahmedse/developer-roadmap</a>                │ 30495 │
+ 7. │ <a href="https://github.com/sindresorhus/awesome">sindresorhus/awesome</a>                           │ 29073 │
+ 8. │ <a href="https://github.com/getify/You-Dont-Know-JS">getify/You-Dont-Know-JS</a>                        │ 28898 │
+ 9. │ <a href="https://github.com/thedaviddias/Front-End-Checklist">thedaviddias/Front-End-Checklist</a>               │ 24745 │
+10. │ <a href="https://github.com/facebookincubator/create-react-app">facebookincubator/create-react-app</a>             │ 24468 │
+11. │ <a href="https://github.com/Microsoft/vscode">Microsoft/vscode</a>                               │ 23502 │
+12. │ <a href="https://github.com/donnemartin/system-design-primer">donnemartin/system-design-primer</a>               │ 22583 │
+13. │ <a href="https://github.com/GoogleChrome/puppeteer">GoogleChrome/puppeteer</a>                         │ 22408 │
 14. │ <a href="https://github.com/airbnb/javascript">airbnb/javascript</a>                              │ 22117 │
-15. │ <a href="https://github.com/sdmg15/Best-websites-a-programmer-should-visit">sdmg15/Best-websites-a-programmer-should-visit</a> │ 21750 │
-16. │ <a href="https://github.com/jwasham/coding-interview-university">jwasham/coding-interview-university</a>            │ 21387 │
-17. │ <a href="https://github.com/twbs/bootstrap">twbs/bootstrap</a>                                 │ 21155 │
-18. │ <a href="https://github.com/toddmotto/public-apis">toddmotto/public-apis</a>                          │ 20881 │
-19. │ <a href="https://github.com/kamranahmedse/design-patterns-for-humans">kamranahmedse/design-patterns-for-humans</a>       │ 19418 │
-20. │ <a href="https://github.com/robbyrussell/oh-my-zsh">robbyrussell/oh-my-zsh</a>                         │ 19319 │
-21. │ <a href="https://github.com/airbnb/lottie-android">airbnb/lottie-android</a>                          │ 18699 │
+15. │ <a href="https://github.com/sdmg15/Best-websites-a-programmer-should-visit">sdmg15/Best-websites-a-programmer-should-visit</a> │ 21753 │
+16. │ <a href="https://github.com/jwasham/coding-interview-university">jwasham/coding-interview-university</a>            │ 21391 │
+17. │ <a href="https://github.com/twbs/bootstrap">twbs/bootstrap</a>                                 │ 21153 │
+18. │ <a href="https://github.com/toddmotto/public-apis">toddmotto/public-apis</a>                          │ 20879 │
+19. │ <a href="https://github.com/kamranahmedse/design-patterns-for-humans">kamranahmedse/design-patterns-for-humans</a>       │ 19420 │
+20. │ <a href="https://github.com/robbyrussell/oh-my-zsh">robbyrussell/oh-my-zsh</a>                         │ 19321 │
+21. │ <a href="https://github.com/airbnb/lottie-android">airbnb/lottie-android</a>                          │ 18700 │
 22. │ <a href="https://github.com/facebook/react-native">facebook/react-native</a>                          │ 18693 │
-23. │ <a href="https://github.com/vuejs/awesome-vue">vuejs/awesome-vue</a>                              │ 18491 │
-24. │ <a href="https://github.com/tipsy/github-profile-summary">tipsy/github-profile-summary</a>                   │ 17826 │
+23. │ <a href="https://github.com/vuejs/awesome-vue">vuejs/awesome-vue</a>                              │ 18498 │
+24. │ <a href="https://github.com/tipsy/github-profile-summary">tipsy/github-profile-summary</a>                   │ 17847 │
 25. │ <a href="https://github.com/FreeCodeCampChina/freecodecamp.cn">FreeCodeCampChina/freecodecamp.cn</a>              │ 17794 │
-26. │ <a href="https://github.com/electron/electron">electron/electron</a>                              │ 17489 │
-27. │ <a href="https://github.com/kdn251/interviews">kdn251/interviews</a>                              │ 17470 │
-28. │ <a href="https://github.com/ryanmcdermott/clean-code-javascript">ryanmcdermott/clean-code-javascript</a>            │ 17432 │
+26. │ <a href="https://github.com/electron/electron">electron/electron</a>                              │ 17488 │
+27. │ <a href="https://github.com/kdn251/interviews">kdn251/interviews</a>                              │ 17468 │
+28. │ <a href="https://github.com/ryanmcdermott/clean-code-javascript">ryanmcdermott/clean-code-javascript</a>            │ 17433 │
 29. │ <a href="https://github.com/mzabriskie/axios">mzabriskie/axios</a>                               │ 17413 │
-30. │ <a href="https://github.com/vinta/awesome-python">vinta/awesome-python</a>                           │ 17249 │
-31. │ <a href="https://github.com/torvalds/linux">torvalds/linux</a>                                 │ 17197 │
-32. │ <a href="https://github.com/nodejs/node">nodejs/node</a>                                    │ 17063 │
-33. │ <a href="https://github.com/tensorflow/models">tensorflow/models</a>                              │ 17057 │
-34. │ <a href="https://github.com/github/gitignore">github/gitignore</a>                               │ 16873 │
-35. │ <a href="https://github.com/python/cpython">python/cpython</a>                                 │ 16621 │
-36. │ <a href="https://github.com/yangshun/tech-interview-handbook">yangshun/tech-interview-handbook</a>               │ 16386 │
+30. │ <a href="https://github.com/vinta/awesome-python">vinta/awesome-python</a>                           │ 17253 │
+31. │ <a href="https://github.com/torvalds/linux">torvalds/linux</a>                                 │ 17198 │
+32. │ <a href="https://github.com/tensorflow/models">tensorflow/models</a>                              │ 17062 │
+33. │ <a href="https://github.com/nodejs/node">nodejs/node</a>                                    │ 17061 │
+34. │ <a href="https://github.com/github/gitignore">github/gitignore</a>                               │ 16870 │
+35. │ <a href="https://github.com/python/cpython">python/cpython</a>                                 │ 16624 │
+36. │ <a href="https://github.com/yangshun/tech-interview-handbook">yangshun/tech-interview-handbook</a>               │ 16388 │
 37. │ <a href="https://github.com/ElemeFE/element">ElemeFE/element</a>                                │ 16317 │
-38. │ <a href="https://github.com/bailicangdu/vue2-elm">bailicangdu/vue2-elm</a>                           │ 16246 │
-39. │ <a href="https://github.com/d3/d3">d3/d3</a>                                          │ 16166 │
-40. │ <a href="https://github.com/Hack-with-Github/Awesome-Hacking">Hack-with-Github/Awesome-Hacking</a>               │ 16152 │
-41. │ <a href="https://github.com/golang/go">golang/go</a>                                      │ 16093 │
-42. │ <a href="https://github.com/k88hudson/git-flight-rules">k88hudson/git-flight-rules</a>                     │ 15945 │
-43. │ <a href="https://github.com/webpack/webpack">webpack/webpack</a>                                │ 15866 │
-44. │ <a href="https://github.com/mbeaudru/modern-js-cheatsheet">mbeaudru/modern-js-cheatsheet</a>                  │ 15316 │
-45. │ <a href="https://github.com/EbookFoundation/free-programming-books">EbookFoundation/free-programming-books</a>         │ 15309 │
-46. │ <a href="https://github.com/angular/angular">angular/angular</a>                                │ 14387 │
-47. │ <a href="https://github.com/prettier/prettier">prettier/prettier</a>                              │ 14340 │
-48. │ <a href="https://github.com/vhf/free-programming-books">vhf/free-programming-books</a>                     │ 14317 │
-49. │ <a href="https://github.com/JetBrains/kotlin">JetBrains/kotlin</a>                               │ 14209 │
-50. │ <a href="https://github.com/parcel-bundler/parcel">parcel-bundler/parcel</a>                          │ 14181 │
+38. │ <a href="https://github.com/bailicangdu/vue2-elm">bailicangdu/vue2-elm</a>                           │ 16248 │
+39. │ <a href="https://github.com/d3/d3">d3/d3</a>                                          │ 16165 │
+40. │ <a href="https://github.com/Hack-with-Github/Awesome-Hacking">Hack-with-Github/Awesome-Hacking</a>               │ 16151 │
+41. │ <a href="https://github.com/golang/go">golang/go</a>                                      │ 16095 │
+42. │ <a href="https://github.com/k88hudson/git-flight-rules">k88hudson/git-flight-rules</a>                     │ 15950 │
+43. │ <a href="https://github.com/webpack/webpack">webpack/webpack</a>                                │ 15868 │
+44. │ <a href="https://github.com/mbeaudru/modern-js-cheatsheet">mbeaudru/modern-js-cheatsheet</a>                  │ 15321 │
+45. │ <a href="https://github.com/EbookFoundation/free-programming-books">EbookFoundation/free-programming-books</a>         │ 15317 │
+46. │ <a href="https://github.com/angular/angular">angular/angular</a>                                │ 14391 │
+47. │ <a href="https://github.com/prettier/prettier">prettier/prettier</a>                              │ 14341 │
+48. │ <a href="https://github.com/vhf/free-programming-books">vhf/free-programming-books</a>                     │ 14304 │
+49. │ <a href="https://github.com/JetBrains/kotlin">JetBrains/kotlin</a>                               │ 14210 │
+50. │ <a href="https://github.com/parcel-bundler/parcel">parcel-bundler/parcel</a>                          │ 14190 │
     └────────────────────────────────────────────────┴───────┘
 
-50 rows in set. Elapsed: 1.593 sec. Processed 177.69 million rows, 2.01 GB (111.53 million rows/s., 1.26 GB/s.)
+50 rows in set. Elapsed: 0.311 sec. Processed 193.13 million rows, 2.40 GB (621.53 million rows/s., 7.73 GB/s.)
 </pre>
 </div>
 
@@ -597,120 +603,118 @@ ORDER BY stars ASC
 :) SELECT repo_name, count() AS stars FROM github_events WHERE event_type = 'WatchEvent' AND toYear(created_at) = '2016' GROUP BY repo_name ORDER BY stars DESC LIMIT 50
 
     ┌─repo_name───────────────────────────────────────┬──stars─┐
- 1. │ <a href="https://github.com/FreeCodeCamp/FreeCodeCamp">FreeCodeCamp/FreeCodeCamp</a>                       │ 182068 │
- 2. │ <a href="https://github.com/jwasham/google-interview-university">jwasham/google-interview-university</a>             │  31494 │
- 3. │ <a href="https://github.com/vhf/free-programming-books">vhf/free-programming-books</a>                      │  28839 │
- 4. │ <a href="https://github.com/vuejs/vue">vuejs/vue</a>                                       │  28809 │
- 5. │ <a href="https://github.com/tensorflow/tensorflow">tensorflow/tensorflow</a>                           │  28255 │
- 6. │ <a href="https://github.com/facebook/react">facebook/react</a>                                  │  26032 │
- 7. │ <a href="https://github.com/getify/You-Dont-Know-JS">getify/You-Dont-Know-JS</a>                         │  24949 │
- 8. │ <a href="https://github.com/sindresorhus/awesome">sindresorhus/awesome</a>                            │  24804 │
- 9. │ <a href="https://github.com/chrislgarry/Apollo-11">chrislgarry/Apollo-11</a>                           │  23479 │
-10. │ <a href="https://github.com/yarnpkg/yarn">yarnpkg/yarn</a>                                    │  21488 │
-11. │ <a href="https://github.com/facebook/react-native">facebook/react-native</a>                           │  19757 │
-12. │ <a href="https://github.com/twbs/bootstrap">twbs/bootstrap</a>                                  │  19384 │
-13. │ <a href="https://github.com/airbnb/javascript">airbnb/javascript</a>                               │  19048 │
-14. │ <a href="https://github.com/joshbuchea/HEAD">joshbuchea/HEAD</a>                                 │  18433 │
-15. │ <a href="https://github.com/facebookincubator/create-react-app">facebookincubator/create-react-app</a>              │  18144 │
-16. │ <a href="https://github.com/firehol/netdata">firehol/netdata</a>                                 │  17904 │
-17. │ <a href="https://github.com/robbyrussell/oh-my-zsh">robbyrussell/oh-my-zsh</a>                          │  17350 │
-18. │ <a href="https://github.com/FallibleInc/security-guide-for-developers">FallibleInc/security-guide-for-developers</a>       │  15878 │
-19. │ <a href="https://github.com/open-guides/og-aws">open-guides/og-aws</a>                              │  15593 │
-20. │ <a href="https://github.com/github/gitignore">github/gitignore</a>                                │  15196 │
-21. │ <a href="https://github.com/electron/electron">electron/electron</a>                               │  15126 │
-22. │ <a href="https://github.com/googlesamples/android-architecture">googlesamples/android-architecture</a>              │  14640 │
-23. │ <a href="https://github.com/torvalds/linux">torvalds/linux</a>                                  │  14427 │
-24. │ <a href="https://github.com/getlantern/lantern">getlantern/lantern</a>                              │  14177 │
-25. │ <a href="https://github.com/reactjs/redux">reactjs/redux</a>                                   │  13984 │
-26. │ <a href="https://github.com/nodejs/node">nodejs/node</a>                                     │  13592 │
-27. │ <a href="https://github.com/Microsoft/vscode">Microsoft/vscode</a>                                │  13278 │
-28. │ <a href="https://github.com/angular/angular">angular/angular</a>                                 │  13199 │
+ 1. │ <a href="https://github.com/FreeCodeCamp/FreeCodeCamp">FreeCodeCamp/FreeCodeCamp</a>                       │ 182110 │
+ 2. │ <a href="https://github.com/jwasham/google-interview-university">jwasham/google-interview-university</a>             │  31514 │
+ 3. │ <a href="https://github.com/vhf/free-programming-books">vhf/free-programming-books</a>                      │  28858 │
+ 4. │ <a href="https://github.com/vuejs/vue">vuejs/vue</a>                                       │  28823 │
+ 5. │ <a href="https://github.com/tensorflow/tensorflow">tensorflow/tensorflow</a>                           │  28269 │
+ 6. │ <a href="https://github.com/facebook/react">facebook/react</a>                                  │  26042 │
+ 7. │ <a href="https://github.com/getify/You-Dont-Know-JS">getify/You-Dont-Know-JS</a>                         │  24967 │
+ 8. │ <a href="https://github.com/sindresorhus/awesome">sindresorhus/awesome</a>                            │  24817 │
+ 9. │ <a href="https://github.com/chrislgarry/Apollo-11">chrislgarry/Apollo-11</a>                           │  23483 │
+10. │ <a href="https://github.com/yarnpkg/yarn">yarnpkg/yarn</a>                                    │  21495 │
+11. │ <a href="https://github.com/facebook/react-native">facebook/react-native</a>                           │  19773 │
+12. │ <a href="https://github.com/twbs/bootstrap">twbs/bootstrap</a>                                  │  19389 │
+13. │ <a href="https://github.com/airbnb/javascript">airbnb/javascript</a>                               │  19057 │
+14. │ <a href="https://github.com/joshbuchea/HEAD">joshbuchea/HEAD</a>                                 │  18437 │
+15. │ <a href="https://github.com/facebookincubator/create-react-app">facebookincubator/create-react-app</a>              │  18185 │
+16. │ <a href="https://github.com/firehol/netdata">firehol/netdata</a>                                 │  17908 │
+17. │ <a href="https://github.com/robbyrussell/oh-my-zsh">robbyrussell/oh-my-zsh</a>                          │  17357 │
+18. │ <a href="https://github.com/FallibleInc/security-guide-for-developers">FallibleInc/security-guide-for-developers</a>       │  15895 │
+19. │ <a href="https://github.com/open-guides/og-aws">open-guides/og-aws</a>                              │  15607 │
+20. │ <a href="https://github.com/github/gitignore">github/gitignore</a>                                │  15198 │
+21. │ <a href="https://github.com/electron/electron">electron/electron</a>                               │  15133 │
+22. │ <a href="https://github.com/googlesamples/android-architecture">googlesamples/android-architecture</a>              │  14644 │
+23. │ <a href="https://github.com/torvalds/linux">torvalds/linux</a>                                  │  14425 │
+24. │ <a href="https://github.com/getlantern/lantern">getlantern/lantern</a>                              │  14185 │
+25. │ <a href="https://github.com/reactjs/redux">reactjs/redux</a>                                   │  13990 │
+26. │ <a href="https://github.com/nodejs/node">nodejs/node</a>                                     │  13598 │
+27. │ <a href="https://github.com/Microsoft/vscode">Microsoft/vscode</a>                                │  13280 │
+28. │ <a href="https://github.com/angular/angular">angular/angular</a>                                 │  13198 │
 29. │ <a href="https://github.com/apple/swift">apple/swift</a>                                     │  13056 │
-30. │ <a href="https://github.com/ParsePlatform/parse-server">ParsePlatform/parse-server</a>                      │  12834 │
-31. │ <a href="https://github.com/braydie/HowToBeAProgrammer">braydie/HowToBeAProgrammer</a>                      │  12574 │
-32. │ <a href="https://github.com/docker/docker">docker/docker</a>                                   │  12477 │
+30. │ <a href="https://github.com/ParsePlatform/parse-server">ParsePlatform/parse-server</a>                      │  12835 │
+31. │ <a href="https://github.com/braydie/HowToBeAProgrammer">braydie/HowToBeAProgrammer</a>                      │  12573 │
+32. │ <a href="https://github.com/docker/docker">docker/docker</a>                                   │  12479 │
 33. │ <a href="https://github.com/atom/atom">atom/atom</a>                                       │  12465 │
-34. │ <a href="https://github.com/webpack/webpack">webpack/webpack</a>                                 │  12174 │
-35. │ <a href="https://github.com/ZuzooVn/machine-learning-for-software-engineers">ZuzooVn/machine-learning-for-software-engineers</a> │  11893 │
-36. │ <a href="https://github.com/jgthms/bulma">jgthms/bulma</a>                                    │  11678 │
-37. │ <a href="https://github.com/vinta/awesome-python">vinta/awesome-python</a>                            │  11620 │
-38. │ <a href="https://github.com/angular/angular.js">angular/angular.js</a>                              │  11442 │
-39. │ <a href="https://github.com/golang/go">golang/go</a>                                       │  11327 │
-40. │ <a href="https://github.com/toddmotto/public-apis">toddmotto/public-apis</a>                           │  11262 │
-41. │ <a href="https://github.com/ReactiveX/RxJava">ReactiveX/RxJava</a>                                │  11237 │
-42. │ <a href="https://github.com/daneden/animate.css">daneden/animate.css</a>                             │  11099 │
-43. │ <a href="https://github.com/naptha/tesseract.js">naptha/tesseract.js</a>                             │  10934 │
-44. │ <a href="https://github.com/tensorflow/models">tensorflow/models</a>                               │  10868 │
-45. │ <a href="https://github.com/josephmisiti/awesome-machine-learning">josephmisiti/awesome-machine-learning</a>           │  10541 │
-46. │ <a href="https://github.com/FortAwesome/Font-Awesome">FortAwesome/Font-Awesome</a>                        │  10491 │
-47. │ <a href="https://github.com/juliangarnier/anime">juliangarnier/anime</a>                             │  10457 │
-48. │ <a href="https://github.com/AHAAAAAAA/PokemonGo-Map">AHAAAAAAA/PokemonGo-Map</a>                         │  10438 │
-49. │ <a href="https://github.com/Microsoft/TypeScript">Microsoft/TypeScript</a>                            │  10329 │
-50. │ <a href="https://github.com/callemall/material-ui">callemall/material-ui</a>                           │  10325 │
+34. │ <a href="https://github.com/webpack/webpack">webpack/webpack</a>                                 │  12182 │
+35. │ <a href="https://github.com/ZuzooVn/machine-learning-for-software-engineers">ZuzooVn/machine-learning-for-software-engineers</a> │  11908 │
+36. │ <a href="https://github.com/jgthms/bulma">jgthms/bulma</a>                                    │  11683 │
+37. │ <a href="https://github.com/vinta/awesome-python">vinta/awesome-python</a>                            │  11621 │
+38. │ <a href="https://github.com/angular/angular.js">angular/angular.js</a>                              │  11443 │
+39. │ <a href="https://github.com/golang/go">golang/go</a>                                       │  11334 │
+40. │ <a href="https://github.com/toddmotto/public-apis">toddmotto/public-apis</a>                           │  11265 │
+41. │ <a href="https://github.com/ReactiveX/RxJava">ReactiveX/RxJava</a>                                │  11244 │
+42. │ <a href="https://github.com/daneden/animate.css">daneden/animate.css</a>                             │  11106 │
+43. │ <a href="https://github.com/naptha/tesseract.js">naptha/tesseract.js</a>                             │  10938 │
+44. │ <a href="https://github.com/tensorflow/models">tensorflow/models</a>                               │  10873 │
+45. │ <a href="https://github.com/josephmisiti/awesome-machine-learning">josephmisiti/awesome-machine-learning</a>           │  10545 │
+46. │ <a href="https://github.com/FortAwesome/Font-Awesome">FortAwesome/Font-Awesome</a>                        │  10488 │
+47. │ <a href="https://github.com/juliangarnier/anime">juliangarnier/anime</a>                             │  10461 │
+48. │ <a href="https://github.com/AHAAAAAAA/PokemonGo-Map">AHAAAAAAA/PokemonGo-Map</a>                         │  10447 │
+49. │ <a href="https://github.com/Microsoft/TypeScript">Microsoft/TypeScript</a>                            │  10337 │
+50. │ <a href="https://github.com/caesar0301/awesome-public-datasets">caesar0301/awesome-public-datasets</a>              │  10330 │
     └─────────────────────────────────────────────────┴────────┘
 
-50 rows in set. Elapsed: 1.837 sec. Processed 173.80 million rows, 1.99 GB (94.61 million rows/s., 1.08 GB/s.)
+50 rows in set. Elapsed: 0.281 sec. Processed 190.01 million rows, 2.44 GB (675.76 million rows/s., 8.67 GB/s.)
 </pre>
 </div>
 
 <div id="repos2015">
 <pre>
-:) SELECT repo_name, count() AS stars FROM github_events WHERE event_type = 'WatchEvent' AND toYear(created_at) = '2015' GROUP BY repo_name ORDER BY stars DESC LIMIT 50
-
     ┌─repo_name────────────────────────────────────┬─stars─┐
- 1. │ <a href="https://github.com/FreeCodeCamp/FreeCodeCamp">FreeCodeCamp/FreeCodeCamp</a>                    │ 38430 │
- 2. │ <a href="https://github.com/facebook/react-native">facebook/react-native</a>                        │ 25869 │
- 3. │ <a href="https://github.com/apple/swift">apple/swift</a>                                  │ 25830 │
- 4. │ <a href="https://github.com/sindresorhus/awesome">sindresorhus/awesome</a>                         │ 24334 │
- 5. │ <a href="https://github.com/facebook/react">facebook/react</a>                               │ 22932 │
- 6. │ <a href="https://github.com/jlevy/the-art-of-command-line">jlevy/the-art-of-command-line</a>                │ 21304 │
- 7. │ <a href="https://github.com/NARKOZ/hacker-scripts">NARKOZ/hacker-scripts</a>                        │ 20443 │
- 8. │ <a href="https://github.com/twbs/bootstrap">twbs/bootstrap</a>                               │ 19732 │
- 9. │ <a href="https://github.com/google/material-design-lite">google/material-design-lite</a>                  │ 17894 │
-10. │ <a href="https://github.com/airbnb/javascript">airbnb/javascript</a>                            │ 17559 │
-11. │ <a href="https://github.com/nvbn/thefuck">nvbn/thefuck</a>                                 │ 17101 │
-12. │ <a href="https://github.com/vhf/free-programming-books">vhf/free-programming-books</a>                   │ 16882 │
-13. │ <a href="https://github.com/getify/You-Dont-Know-JS">getify/You-Dont-Know-JS</a>                      │ 16334 │
-14. │ <a href="https://github.com/atom/electron">atom/electron</a>                                │ 16135 │
-15. │ <a href="https://github.com/tensorflow/tensorflow">tensorflow/tensorflow</a>                        │ 16006 │
-16. │ <a href="https://github.com/FreeCodeCamp/freecodecamp">FreeCodeCamp/freecodecamp</a>                    │ 15316 │
-17. │ <a href="https://github.com/nylas/N1">nylas/N1</a>                                     │ 14922 │
-18. │ <a href="https://github.com/angular/angular.js">angular/angular.js</a>                           │ 14790 │
-19. │ <a href="https://github.com/atom/atom">atom/atom</a>                                    │ 13702 │
-20. │ <a href="https://github.com/mbostock/d3">mbostock/d3</a>                                  │ 13469 │
-21. │ <a href="https://github.com/Dogfalo/materialize">Dogfalo/materialize</a>                          │ 13124 │
-22. │ <a href="https://github.com/ripienaar/free-for-dev">ripienaar/free-for-dev</a>                       │ 12834 │
-23. │ <a href="https://github.com/torvalds/linux">torvalds/linux</a>                               │ 12425 │
-24. │ <a href="https://github.com/robbyrussell/oh-my-zsh">robbyrussell/oh-my-zsh</a>                       │ 12260 │
-25. │ <a href="https://github.com/github/gitignore">github/gitignore</a>                             │ 11335 │
-26. │ <a href="https://github.com/bevacqua/dragula">bevacqua/dragula</a>                             │ 11046 │
-27. │ <a href="https://github.com/meteor/meteor">meteor/meteor</a>                                │ 10931 │
-28. │ <a href="https://github.com/FortAwesome/Font-Awesome">FortAwesome/Font-Awesome</a>                     │ 10828 │
-29. │ <a href="https://github.com/docker/docker">docker/docker</a>                                │ 10822 │
-30. │ <a href="https://github.com/daneden/animate.css">daneden/animate.css</a>                          │ 10711 │
+ 1. │ <a href="https://github.com/FreeCodeCamp/FreeCodeCamp">FreeCodeCamp/FreeCodeCamp</a>                    │ 38478 │
+ 2. │ <a href="https://github.com/facebook/react-native">facebook/react-native</a>                        │ 25884 │
+ 3. │ <a href="https://github.com/apple/swift">apple/swift</a>                                  │ 25834 │
+ 4. │ <a href="https://github.com/sindresorhus/awesome">sindresorhus/awesome</a>                         │ 24415 │
+ 5. │ <a href="https://github.com/facebook/react">facebook/react</a>                               │ 22966 │
+ 6. │ <a href="https://github.com/jlevy/the-art-of-command-line">jlevy/the-art-of-command-line</a>                │ 22102 │
+ 7. │ <a href="https://github.com/NARKOZ/hacker-scripts">NARKOZ/hacker-scripts</a>                        │ 20450 │
+ 8. │ <a href="https://github.com/twbs/bootstrap">twbs/bootstrap</a>                               │ 19765 │
+ 9. │ <a href="https://github.com/google/material-design-lite">google/material-design-lite</a>                  │ 17902 │
+10. │ <a href="https://github.com/airbnb/javascript">airbnb/javascript</a>                            │ 17581 │
+11. │ <a href="https://github.com/nvbn/thefuck">nvbn/thefuck</a>                                 │ 17166 │
+12. │ <a href="https://github.com/vhf/free-programming-books">vhf/free-programming-books</a>                   │ 16912 │
+13. │ <a href="https://github.com/getify/You-Dont-Know-JS">getify/You-Dont-Know-JS</a>                      │ 16401 │
+14. │ <a href="https://github.com/atom/electron">atom/electron</a>                                │ 16167 │
+15. │ <a href="https://github.com/tensorflow/tensorflow">tensorflow/tensorflow</a>                        │ 16009 │
+16. │ <a href="https://github.com/FreeCodeCamp/freecodecamp">FreeCodeCamp/freecodecamp</a>                    │ 15317 │
+17. │ <a href="https://github.com/nylas/N1">nylas/N1</a>                                     │ 14923 │
+18. │ <a href="https://github.com/angular/angular.js">angular/angular.js</a>                           │ 14817 │
+19. │ <a href="https://github.com/atom/atom">atom/atom</a>                                    │ 13727 │
+20. │ <a href="https://github.com/mbostock/d3">mbostock/d3</a>                                  │ 13489 │
+21. │ <a href="https://github.com/Dogfalo/materialize">Dogfalo/materialize</a>                          │ 13146 │
+22. │ <a href="https://github.com/ripienaar/free-for-dev">ripienaar/free-for-dev</a>                       │ 12847 │
+23. │ <a href="https://github.com/torvalds/linux">torvalds/linux</a>                               │ 12451 │
+24. │ <a href="https://github.com/robbyrussell/oh-my-zsh">robbyrussell/oh-my-zsh</a>                       │ 12276 │
+25. │ <a href="https://github.com/github/gitignore">github/gitignore</a>                             │ 11353 │
+26. │ <a href="https://github.com/bevacqua/dragula">bevacqua/dragula</a>                             │ 11060 │
+27. │ <a href="https://github.com/meteor/meteor">meteor/meteor</a>                                │ 10958 │
+28. │ <a href="https://github.com/FortAwesome/Font-Awesome">FortAwesome/Font-Awesome</a>                     │ 10845 │
+29. │ <a href="https://github.com/docker/docker">docker/docker</a>                                │ 10838 │
+30. │ <a href="https://github.com/daneden/animate.css">daneden/animate.css</a>                          │ 10732 │
 31. │ <a href="https://github.com/zenorocha/clipboard.js">zenorocha/clipboard.js</a>                       │ 10470 │
-32. │ <a href="https://github.com/0xAX/linux-insides">0xAX/linux-insides</a>                           │ 10449 │
-33. │ <a href="https://github.com/typicode/json-server">typicode/json-server</a>                         │ 10217 │
-34. │ <a href="https://github.com/babel/babel">babel/babel</a>                                  │ 10128 │
-35. │ <a href="https://github.com/wasabeef/awesome-android-ui">wasabeef/awesome-android-ui</a>                  │ 10120 │
-36. │ <a href="https://github.com/h5bp/Front-end-Developer-Interview-Questions">h5bp/Front-end-Developer-Interview-Questions</a> │  9975 │
-37. │ <a href="https://github.com/prakhar1989/awesome-courses">prakhar1989/awesome-courses</a>                  │  9877 │
-38. │ <a href="https://github.com/lukehoban/es6features">lukehoban/es6features</a>                        │  9864 │
-39. │ <a href="https://github.com/driftyco/ionic">driftyco/ionic</a>                               │  9756 │
-40. │ <a href="https://github.com/gorhill/uBlock">gorhill/uBlock</a>                               │  9732 │
-41. │ <a href="https://github.com/Semantic-Org/Semantic-UI">Semantic-Org/Semantic-UI</a>                     │  9528 │
-42. │ <a href="https://github.com/minimaxir/big-list-of-naughty-strings">minimaxir/big-list-of-naughty-strings</a>        │  9499 │
-43. │ <a href="https://github.com/Microsoft/vscode">Microsoft/vscode</a>                             │  9487 │
-44. │ <a href="https://github.com/alex/what-happens-when">alex/what-happens-when</a>                       │  9476 │
-45. │ <a href="https://github.com/vinta/awesome-python">vinta/awesome-python</a>                         │  9273 │
-46. │ <a href="https://github.com/golang/go">golang/go</a>                                    │  9237 │
-47. │ <a href="https://github.com/phanan/htaccess">phanan/htaccess</a>                              │  9237 │
-48. │ <a href="https://github.com/nwjs/nw.js">nwjs/nw.js</a>                                   │  9192 │
-49. │ <a href="https://github.com/johnpapa/angular-styleguide">johnpapa/angular-styleguide</a>                  │  9103 │
-50. │ <a href="https://github.com/google/material-design-icons">google/material-design-icons</a>                 │  9083 │
+32. │ <a href="https://github.com/0xAX/linux-insides">0xAX/linux-insides</a>                           │ 10458 │
+33. │ <a href="https://github.com/typicode/json-server">typicode/json-server</a>                         │ 10247 │
+34. │ <a href="https://github.com/babel/babel">babel/babel</a>                                  │ 10146 │
+35. │ <a href="https://github.com/wasabeef/awesome-android-ui">wasabeef/awesome-android-ui</a>                  │ 10127 │
+36. │ <a href="https://github.com/h5bp/Front-end-Developer-Interview-Questions">h5bp/Front-end-Developer-Interview-Questions</a> │  9990 │
+37. │ <a href="https://github.com/lukehoban/es6features">lukehoban/es6features</a>                        │  9890 │
+38. │ <a href="https://github.com/prakhar1989/awesome-courses">prakhar1989/awesome-courses</a>                  │  9881 │
+39. │ <a href="https://github.com/driftyco/ionic">driftyco/ionic</a>                               │  9768 │
+40. │ <a href="https://github.com/gorhill/uBlock">gorhill/uBlock</a>                               │  9742 │
+41. │ <a href="https://github.com/minimaxir/big-list-of-naughty-strings">minimaxir/big-list-of-naughty-strings</a>        │  9550 │
+42. │ <a href="https://github.com/Semantic-Org/Semantic-UI">Semantic-Org/Semantic-UI</a>                     │  9539 │
+43. │ <a href="https://github.com/Microsoft/vscode">Microsoft/vscode</a>                             │  9489 │
+44. │ <a href="https://github.com/alex/what-happens-when">alex/what-happens-when</a>                       │  9478 │
+45. │ <a href="https://github.com/vinta/awesome-python">vinta/awesome-python</a>                         │  9286 │
+46. │ <a href="https://github.com/golang/go">golang/go</a>                                    │  9247 │
+47. │ <a href="https://github.com/phanan/htaccess">phanan/htaccess</a>                              │  9240 │
+48. │ <a href="https://github.com/nwjs/nw.js">nwjs/nw.js</a>                                   │  9202 │
+49. │ <a href="https://github.com/johnpapa/angular-styleguide">johnpapa/angular-styleguide</a>                  │  9129 │
+50. │ <a href="https://github.com/google/material-design-icons">google/material-design-icons</a>                 │  9093 │
     └──────────────────────────────────────────────┴───────┘
 
-50 rows in set. Elapsed: 1.493 sec. Processed 169.35 million rows, 1.96 GB (113.44 million rows/s., 1.31 GB/s.)
+50 rows in set. Elapsed: 0.265 sec. Processed 186.29 million rows, 2.62 GB (703.90 million rows/s., 9.89 GB/s.)
 </pre>
 </div>
 
@@ -805,32 +809,37 @@ LIMIT 10 BY year
 └──────┴────────────────────────────────────────┴─────────┘
 </pre>
 
-<p>And a steam graph:</p>
+<p>And a multi-line graph:</p>
 <pre>
 SELECT
-    lower(repo_name) AS repo,
-    toStartOfMonth(created_at) AS month,
-    count() AS stars
-FROM github_events
-WHERE (event_type = 'WatchEvent') AND (toYear(created_at) >= 2015) AND (repo IN
+    repo AS name,
+    groupArrayInsertAt(toUInt32(c), toUInt64(dateDiff('month', toDate('2015-01-01'), month))) AS data
+FROM
 (
-    SELECT lower(repo_name) AS repo
+    SELECT
+        lower(repo_name) AS repo,
+        toStartOfMonth(created_at) AS month,
+        count() AS c
     FROM github_events
-    WHERE (event_type = 'WatchEvent') AND (year >= 2015)
-    GROUP BY repo
-    LIMIT 10
-))
-GROUP BY
-    repo,
-    month
-ORDER BY
-    month ASC,
-    count() DESC
-INTO OUTFILE 'steam.csv'
-FORMAT CSV
+    WHERE (event_type = 'WatchEvent') AND (toYear(created_at) >= 2015) AND (repo IN
+    (
+        SELECT lower(repo_name) AS repo
+        FROM github_events
+        WHERE (event_type = 'WatchEvent') AND (toYear(created_at) >= 2015)
+        GROUP BY repo
+        ORDER BY count() DESC
+        LIMIT 10
+    ))
+    GROUP BY
+        repo,
+        month
+)
+GROUP BY repo
+ORDER BY repo ASC
+FORMAT JSON
 </pre>
 
-<p>TODO show the graph</p>
+<div class="chart" id="chart_top_repos"></div>
 
 <h3>How the total number of stars changed over years?</h3>
 
@@ -1938,7 +1947,7 @@ LIMIT 50
 <h3>The total number of users on GitHub</h3>
 
 <pre>
-:) SELECT uniqExact(actor_login) FROM github_events
+:) SELECT uniq(actor_login) FROM github_events
 
 ┌─uniqExact(actor_login)─┐
 │               31315252 │
@@ -1953,7 +1962,7 @@ LIMIT 50
 <p>Total number of users that gave at least one star:</p>
 
 <pre>
-:) SELECT uniqExact(actor_login) FROM github_events WHERE event_type = 'WatchEvent'
+:) SELECT uniq(actor_login) FROM github_events WHERE event_type = 'WatchEvent'
 
 ┌─uniqExact(actor_login)─┐
 │                9382849 │
@@ -1968,7 +1977,7 @@ LIMIT 50
 <p>Total number of users with at least one push:</p>
 
 <pre>
-:) SELECT uniqExact(actor_login) FROM github_events WHERE event_type = 'PushEvent'
+:) SELECT uniq(actor_login) FROM github_events WHERE event_type = 'PushEvent'
 
 ┌─uniqExact(actor_login)─┐
 │               17534952 │
@@ -1983,7 +1992,7 @@ LIMIT 50
 <p>Total number of users with at least one created PR:</p>
 
 <pre>
-:) SELECT uniqExact(actor_login) FROM github_events WHERE event_type = 'PullRequestEvent' AND action = 'opened'
+:) SELECT uniq(actor_login) FROM github_events WHERE event_type = 'PullRequestEvent' AND action = 'opened'
 
 ┌─uniqExact(actor_login)─┐
 │                6033955 │
@@ -6028,6 +6037,7 @@ clickhouse-client --progress --max_threads 1 --query "SELECT * FROM github_event
 <p class="copyright">© 2020 Alexey Milovidov</p>
 </body>
 
+<script src="https://code.highcharts.com/highcharts.js"></script>
 <script type="text/javascript">
 var toc = document.getElementById('toc');
 
@@ -6072,6 +6082,92 @@ document.querySelectorAll('.button,.button_selected').forEach(elem => {
         elem.className = "button_selected";
         document.getElementById(elem.getAttribute('data-div-id-prefix') + elem.innerText).style.display = 'block';
     };
+});
+
+/// Charts
+
+Highcharts.chart('chart_top_repos', {
+
+    title: {
+        text: ''
+    },
+
+    subtitle: {
+        text: ''
+    },
+
+    yAxis: {
+        visible: false
+    },
+
+    xAxis: {
+        type: 'datetime'
+    },
+
+    legend: {
+        layout: 'horizontal',
+        align: 'left',
+        verticalAlign: 'top'
+    },
+
+    plotOptions: {
+        series: {
+            animation: false,
+            lineWidth: 1,
+            label: {
+                connectorAllowed: false
+            },
+            marker: {
+                enabled: false
+            },
+            pointStart: Date.UTC(2015, 0, 1),
+            pointIntervalUnit: 'month'
+        },
+    },
+
+    series: [
+        {
+                visible: false,
+                "name": "996icu\/996.icu",
+                "data": [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,182752,143840,7373,2344,1992,1526,1128,1021,1356,1493,874,559,855,884,1044,721,1018,1147,1157,783,460]
+        },
+        {
+                "name": "facebook\/react",
+                "data": [1798,2785,2404,2059,1657,1493,1681,1578,1791,1944,1876,1900,2028,1688,2425,2206,1796,1818,2166,2076,2801,2521,2383,2134,3016,2833,2995,2658,2768,2713,2974,2677,3115,3271,2904,2591,3169,2429,3380,2744,2684,9092,2845,2711,2644,2376,2545,2198,2670,2618,3261,2917,2760,2144,2325,2132,2082,2130,2058,1943,1834,1819,2030,2281,2456,2122,2546,2288,2133,2131,1098]
+        },
+        {
+                "name": "freecodecamp\/freecodecamp",
+                "data": [55,37,36,29,59,1196,10700,6194,3748,7826,11140,12775,17333,19204,16711,16233,18109,20389,10388,10144,11362,13234,14436,14567,15461,14096,14661,15004,16828,13794,1195,1203,922,1194,1041,943,1034,928,1212,952,854,1062,1583,1271,1036,2424,1044,982,1155,1129,2922,3314,1609,1081,1234,1055,1186,1249,1787,1234,1136,1091,1191,1556,1621,1303,1604,1505,1486,1669,726]
+        },
+        {
+                "name": "getify\/you-dont-know-js",
+                "data": [824,2772,877,1218,987,1492,998,1123,1975,1420,1187,1528,1446,1375,1466,1528,1585,4378,2625,2232,2381,1801,2086,2064,3389,2464,3178,2969,2637,2518,2406,2223,1820,1646,1844,1804,2292,1921,2183,2360,1745,1667,1600,1861,1713,1621,1620,1431,1818,1649,2216,2119,1838,1853,1969,1960,1471,1891,1945,1918,2178,2669,1515,1442,2104,1874,1553,1590,1467,1634,608]
+        },
+        {
+                "name": "jwasham\/coding-interview-university",
+                "data": [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,54,3043,4460,1518,981,1123,1071,1036,1202,1043,5860,1835,1609,1532,2303,2344,1384,1085,1166,1334,1275,1014,1374,1103,1057,1457,1271,1412,1195,4281,5654,2275,1970,2430,1451,1988,3253,4507,6975,8344,4294,5540,6342,3860,5833,1479]
+        },
+        {
+                "name": "kamranahmedse\/developer-roadmap",
+                "data": [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,13979,5944,3246,1565,1074,1191,1114,961,777,644,9617,4919,2266,3231,1710,1684,2149,2038,1614,2802,1616,1632,6700,4052,2847,3153,2092,1812,2038,1879,1529,1379,1724,1637,2546,2093,2257,8178,4466,3037,5164,4933,5821,6674,2469]
+        },
+        {
+                "name": "microsoft\/vscode",
+                "data": [0,0,0,0,0,0,0,0,0,0,8199,1290,1047,892,1094,1959,1106,920,871,865,1041,1121,1201,1163,1767,1951,2028,1843,1704,1482,1619,1772,1779,2692,2852,2013,2179,1965,2175,1864,2312,3130,1994,2251,2300,2508,1855,1678,1875,1971,2918,2356,2973,1990,1918,1886,1856,1771,2712,2117,1700,1584,1895,2139,2276,1955,2285,1973,1800,1864,1007]
+        },
+        {
+                "name": "sindresorhus\/awesome",
+                "data": [421,263,297,360,6808,2689,1139,2882,2307,2867,2007,2375,2590,2508,2292,1637,1668,1624,2022,2340,2317,2027,1758,2034,3096,2993,2452,1963,1837,2058,1883,2131,1969,2181,4252,2258,2900,2008,2967,2143,1970,2261,1696,1838,1650,2000,1912,1632,2079,2011,2771,2526,2121,2137,2223,2099,1895,1985,1984,2455,2802,2250,3373,2281,2353,2097,1985,2173,2189,1994,2649]
+        },
+        {
+                "name": "tensorflow\/tensorflow",
+                "data": [0,0,0,0,0,0,0,0,0,0,14078,1931,2162,1492,1734,2290,2780,2206,1997,2036,2357,3027,2844,3344,3881,5164,4427,3633,3829,3521,3481,3588,3398,4318,5225,4802,4230,3359,4412,3592,3535,2829,2749,2404,2550,2596,2518,2202,2276,2081,3461,2820,2627,1910,2213,1853,2064,2010,2059,1658,1370,1281,1602,1636,1693,1407,1499,1292,1257,1214,661]
+        },
+        {
+                "name": "vuejs\/vue",
+                "data": [0,0,0,0,0,0,0,0,0,1374,1562,1647,1711,1039,1416,2165,2188,1860,2219,2453,3006,3975,3497,3294,4100,4480,4622,3757,3816,3703,4193,3969,4252,4084,3677,3529,4662,3327,4601,3959,3687,11164,4032,3775,3004,2859,3237,3208,3486,2957,5579,4306,3630,3180,3248,2805,2316,2829,2422,2401,1850,2288,3056,3256,2569,2427,2722,2456,2679,1870,964]
+        },
+    ],
 });
 
 </script>
