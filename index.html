@@ -661,6 +661,8 @@ ORDER BY stars ASC
 
 <div id="repos2015">
 <pre>
+:) SELECT repo_name, count() AS stars FROM github_events WHERE event_type = 'WatchEvent' AND toYear(created_at) = '2015' GROUP BY repo_name ORDER BY stars DESC LIMIT 50
+
     ┌─repo_name────────────────────────────────────┬─stars─┐
  1. │ <a href="https://github.com/FreeCodeCamp/FreeCodeCamp">FreeCodeCamp/FreeCodeCamp</a>                    │ 38478 │
  2. │ <a href="https://github.com/facebook/react-native">facebook/react-native</a>                        │ 25884 │
@@ -837,6 +839,8 @@ FROM
 GROUP BY repo
 ORDER BY repo ASC
 FORMAT JSON
+
+10 rows in set. Elapsed: 1.729 sec. Processed 204.18 million rows, 1.44 GB (118.08 million rows/s., 835.15 MB/s.)
 </pre>
 
 <div class="chart" id="chart_top_repos"></div>
@@ -846,18 +850,18 @@ FORMAT JSON
 <pre>
 :) SELECT toYear(created_at) AS year, count() AS stars, bar(stars, 0, 50000000, 10) AS bar FROM github_events WHERE event_type = 'WatchEvent' GROUP BY year ORDER BY year
 
-   ┌─year─┬────stars─┬─bar────────┐
-1. │ 2011 │       17 │            │
-2. │ 2012 │        3 │            │
-3. │ 2015 │ 18950198 │ ███▋       │
-4. │ 2016 │ 26145709 │ █████▏     │
-5. │ 2017 │ 32632236 │ ██████▌    │
-6. │ 2018 │ 37068374 │ ███████▍   │
-7. │ 2019 │ 46116411 │ █████████▏ │
-8. │ 2020 │ 31182559 │ ██████▏    │
-   └──────┴──────────┴────────────┘
+┌─year─┬────stars─┬─bar────────┐
+│ 2011 │    47390 │            │
+│ 2012 │      895 │            │
+│ 2015 │ 18985149 │ ███▋       │
+│ 2016 │ 26155971 │ █████▏     │
+│ 2017 │ 32634501 │ ██████▌    │
+│ 2018 │ 37068153 │ ███████▍   │
+│ 2019 │ 46118187 │ █████████▏ │
+│ 2020 │ 43130063 │ ████████▋  │
+└──────┴──────────┴────────────┘
 
-8 rows in set. Elapsed: 0.538 sec. Processed 192.10 million rows, 960.49 MB (356.82 million rows/s., 1.78 GB/s.)
+8 rows in set. Elapsed: 0.124 sec. Processed 204.18 million rows, 1.02 GB (1.65 billion rows/s., 8.25 GB/s.)
 </pre>
 
 <p>We see just steady linear growth with YoY rate about 25%. By the way, there is no archive data before 2015 and the 2011 and 2012 data points look like outliers.</p>
@@ -869,72 +873,72 @@ FORMAT JSON
 :) SELECT actor_login, count() AS stars FROM github_events WHERE event_type = 'WatchEvent' GROUP BY actor_login ORDER BY stars DESC LIMIT 50
 
     ┌─actor_login─────┬──stars─┐
- 1. │ <a href="https://github.com/4148">4148</a>            │ 232489 │
- 2. │ <a href="https://github.com/salifm">salifm</a>          │ 202533 │
- 3. │ <a href="https://github.com/x0rzkov">x0rzkov</a>         │  70055 │
+ 1. │ <a href="https://github.com/4148">4148</a>            │ 231859 │
+ 2. │ <a href="https://github.com/salifm">salifm</a>          │ 202534 │
+ 3. │ <a href="https://github.com/x0rzkov">x0rzkov</a>         │  73255 │
  4. │ <a href="https://github.com/PCOffline">PCOffline</a>       │  56725 │
- 5. │ <a href="https://github.com/fly51fly">fly51fly</a>        │  51830 │
+ 5. │ <a href="https://github.com/fly51fly">fly51fly</a>        │  56148 │
  6. │ <a href="https://github.com/baslr">baslr</a>           │  50278 │
  7. │ <a href="https://github.com/StarTheWorld">StarTheWorld</a>    │  45691 │
- 8. │ <a href="https://github.com/mcanthony">mcanthony</a>       │  44088 │
- 9. │ <a href="https://github.com/jenniemanphonsy">jenniemanphonsy</a> │  41784 │
-10. │ <a href="https://github.com/gkze">gkze</a>            │  41494 │
-11. │ <a href="https://github.com/madshansens">madshansens</a>     │  41045 │
-12. │ <a href="https://github.com/jorgemachucav">jorgemachucav</a>   │  39905 │
-13. │ <a href="https://github.com/korolr">korolr</a>          │  39693 │
-14. │ <a href="https://github.com/thanhtoan1196">thanhtoan1196</a>   │  39553 │
-15. │ <a href="https://github.com/gauravssnl">gauravssnl</a>      │  39444 │
-16. │ <a href="https://github.com/ik5">ik5</a>             │  38925 │
-17. │ <a href="https://github.com/denji">denji</a>           │  38444 │
-18. │ <a href="https://github.com/esneko">esneko</a>          │  36823 │
-19. │ <a href="https://github.com/roscopecoltran">roscopecoltran</a>  │  35728 │
-20. │ <a href="https://github.com/tdusty46">tdusty46</a>        │  34200 │
-21. │ <a href="https://github.com/5l1v3r1">5l1v3r1</a>         │  32492 │
-22. │ <a href="https://github.com/pranavlathigara">pranavlathigara</a> │  31903 │
+ 8. │ <a href="https://github.com/mcanthony">mcanthony</a>       │  44236 │
+ 9. │ <a href="https://github.com/thanhtoan1196">thanhtoan1196</a>   │  44059 │
+10. │ <a href="https://github.com/gkze">gkze</a>            │  43548 │
+11. │ <a href="https://github.com/ik5">ik5</a>             │  41841 │
+12. │ <a href="https://github.com/jenniemanphonsy">jenniemanphonsy</a> │  41784 │
+13. │ <a href="https://github.com/gauravssnl">gauravssnl</a>      │  41549 │
+14. │ <a href="https://github.com/madshansens">madshansens</a>     │  41045 │
+15. │ <a href="https://github.com/jorgemachucav">jorgemachucav</a>   │  39905 │
+16. │ <a href="https://github.com/korolr">korolr</a>          │  39717 │
+17. │ <a href="https://github.com/denji">denji</a>           │  39286 │
+18. │ <a href="https://github.com/esneko">esneko</a>          │  38927 │
+19. │ <a href="https://github.com/5l1v3r1">5l1v3r1</a>         │  37186 │
+20. │ <a href="https://github.com/roscopecoltran">roscopecoltran</a>  │  35734 │
+21. │ <a href="https://github.com/tdusty46">tdusty46</a>        │  34200 │
+22. │ <a href="https://github.com/pranavlathigara">pranavlathigara</a> │  32031 │
 23. │ <a href="https://github.com/StarsEverywhere">StarsEverywhere</a> │  31079 │
 24. │ <a href="https://github.com/maoabc1818">maoabc1818</a>      │  28857 │
-25. │ <a href="https://github.com/gaoypChina">gaoypChina</a>      │  28198 │
-26. │ <a href="https://github.com/CNXTEoE">CNXTEoE</a>         │  28045 │
-27. │ <a href="https://github.com/tdusty47">tdusty47</a>        │  27534 │
-28. │ <a href="https://github.com/vulcangz">vulcangz</a>        │  27348 │
-29. │ <a href="https://github.com/the-cc-dev">the-cc-dev</a>      │  22029 │
-30. │ <a href="https://github.com/nikolay">nikolay</a>         │  21807 │
-31. │ <a href="https://github.com/wangpengwen">wangpengwen</a>     │  20754 │
-32. │ <a href="https://github.com/lifa123">lifa123</a>         │  20726 │
-33. │ <a href="https://github.com/hartca">hartca</a>          │  20096 │
-34. │ <a href="https://github.com/MihalczGabor">MihalczGabor</a>    │  19907 │
-35. │ <a href="https://github.com/trietptm">trietptm</a>        │  19319 │
-36. │ <a href="https://github.com/ntilotta">ntilotta</a>        │  18969 │
-37. │ <a href="https://github.com/likaihere">likaihere</a>       │  18877 │
-38. │ <a href="https://github.com/Jerzerak">Jerzerak</a>        │  18842 │
-39. │ <a href="https://github.com/denisfitz57">denisfitz57</a>     │  18521 │
-40. │ <a href="https://github.com/bestwpw">bestwpw</a>         │  18311 │
-41. │ <a href="https://github.com/oudommeas">oudommeas</a>       │  18244 │
-42. │ <a href="https://github.com/neo355">neo355</a>          │  17727 │
-43. │ <a href="https://github.com/AlexxNica">AlexxNica</a>       │  17270 │
-44. │ <a href="https://github.com/mohsinalimat">mohsinalimat</a>    │  17190 │
-45. │ <a href="https://github.com/Jackneill">Jackneill</a>       │  16918 │
-46. │ <a href="https://github.com/nschlemm">nschlemm</a>        │  16554 │
-47. │ <a href="https://github.com/fabiodr">fabiodr</a>         │  16401 │
-48. │ <a href="https://github.com/theodesp">theodesp</a>        │  16326 │
-49. │ <a href="https://github.com/orakle">orakle</a>          │  16180 │
-50. │ <a href="https://github.com/modulexcite">modulexcite</a>     │  16143 │
+25. │ <a href="https://github.com/gaoypChina">gaoypChina</a>      │  28719 │
+26. │ <a href="https://github.com/vulcangz">vulcangz</a>        │  28374 │
+27. │ <a href="https://github.com/CNXTEoE">CNXTEoE</a>         │  28045 │
+28. │ <a href="https://github.com/tdusty47">tdusty47</a>        │  27534 │
+29. │ <a href="https://github.com/lifa123">lifa123</a>         │  23707 │
+30. │ <a href="https://github.com/MihalczGabor">MihalczGabor</a>    │  23385 │
+31. │ <a href="https://github.com/nikolay">nikolay</a>         │  22510 │
+32. │ <a href="https://github.com/the-cc-dev">the-cc-dev</a>      │  22030 │
+33. │ <a href="https://github.com/romanofficial">romanofficial</a>   │  21838 │
+34. │ <a href="https://github.com/wangpengwen">wangpengwen</a>     │  20754 │
+35. │ <a href="https://github.com/hartca">hartca</a>          │  20730 │
+36. │ <a href="https://github.com/trietptm">trietptm</a>        │  19942 │
+37. │ <a href="https://github.com/denisfitz57">denisfitz57</a>     │  19567 │
+38. │ <a href="https://github.com/likaihere">likaihere</a>       │  19343 │
+39. │ <a href="https://github.com/ntilotta">ntilotta</a>        │  18966 │
+40. │ <a href="https://github.com/Jerzerak">Jerzerak</a>        │  18862 │
+41. │ <a href="https://github.com/AlexxNica">AlexxNica</a>       │  18385 │
+42. │ <a href="https://github.com/oudommeas">oudommeas</a>       │  18382 │
+43. │ <a href="https://github.com/bestwpw">bestwpw</a>         │  18311 │
+44. │ <a href="https://github.com/mrluanma">mrluanma</a>        │  17802 │
+45. │ <a href="https://github.com/nschlemm">nschlemm</a>        │  17797 │
+46. │ <a href="https://github.com/neo355">neo355</a>          │  17727 │
+47. │ <a href="https://github.com/mohsinalimat">mohsinalimat</a>    │  17342 │
+48. │ <a href="https://github.com/Jackneill">Jackneill</a>       │  17308 │
+49. │ <a href="https://github.com/tg-z">tg-z</a>            │  17282 │
+50. │ <a href="https://github.com/modulexcite">modulexcite</a>     │  17098 │
     └─────────────────┴────────┘
 
-50 rows in set. Elapsed: 17.129 sec. Processed 192.10 million rows, 3.30 GB (11.21 million rows/s., 192.81 MB/s.)
+50 rows in set. Elapsed: 2.715 sec. Processed 204.18 million rows, 3.52 GB (75.20 million rows/s., 1.29 GB/s.)
 </pre>
 
-<p>I checked the results: <span class="code">4148</span> looks like an empty account... very suspicious. The next user looks okay. But how it's possible to give 202 533 stars?</p>
+<p>I checked the results: <span class="code">4148</span> looks like an empty account... very suspicious. The next user looks okay. But how it's possible to give 202 534 stars?</p>
 
-<p>In comparison, I only gave 165 stars:</p>
+<p>In comparison, I only gave 195 stars:</p>
 <pre>
 :) SELECT actor_login, count() AS stars FROM github_events WHERE event_type = 'WatchEvent' AND actor_login = 'alexey-milovidov' GROUP BY actor_login ORDER BY stars DESC LIMIT 50
 
    ┌─actor_login──────┬─stars─┐
-1. │ <a href="https://github.com/alexey-milovidov">alexey-milovidov</a> │   165 │
+1. │ <a href="https://github.com/alexey-milovidov">alexey-milovidov</a> │   196 │
    └──────────────────┴───────┘
 
-1 rows in set. Elapsed: 4.446 sec. Processed 192.10 million rows, 3.12 GB (43.21 million rows/s., 701.87 MB/s.)
+1 rows in set. Elapsed: 0.923 sec. Processed 204.18 million rows, 3.41 GB (221.21 million rows/s., 3.70 GB/s.)
 </pre>
 
 <p>And here are my favorites sorted by the total number of stars:</p>
@@ -954,59 +958,59 @@ ORDER BY stars DESC
 LIMIT 50
 
     ┌─repo_name──────────────────────────────┬─stars─┐
- 1. │ <a href="https://github.com/koalaman/shellcheck">koalaman/shellcheck</a>                    │ 20836 │
- 2. │ <a href="https://github.com/mxgmn/WaveFunctionCollapse">mxgmn/WaveFunctionCollapse</a>             │ 15433 │
- 3. │ <a href="https://github.com/nothings/stb">nothings/stb</a>                           │ 13403 │
- 4. │ <a href="https://github.com/Swordfish90/cool-retro-term">Swordfish90/cool-retro-term</a>            │ 11437 │
- 5. │ <a href="https://github.com/kovidgoyal/kitty">kovidgoyal/kitty</a>                       │  9979 │
- 6. │ <a href="https://github.com/gabime/spdlog">gabime/spdlog</a>                          │  9719 │
+ 1. │ <a href="https://github.com/koalaman/shellcheck">koalaman/shellcheck</a>                    │ 21933 │
+ 2. │ <a href="https://github.com/mxgmn/WaveFunctionCollapse">mxgmn/WaveFunctionCollapse</a>             │ 15884 │
+ 3. │ <a href="https://github.com/nothings/stb">nothings/stb</a>                           │ 14165 │
+ 4. │ <a href="https://github.com/Swordfish90/cool-retro-term">Swordfish90/cool-retro-term</a>            │ 12117 │
+ 5. │ <a href="https://github.com/kovidgoyal/kitty">kovidgoyal/kitty</a>                       │ 10685 │
+ 6. │ <a href="https://github.com/gabime/spdlog">gabime/spdlog</a>                          │ 10426 │
  7. │ <a href="https://github.com/lemire/simdjson">lemire/simdjson</a>                        │  9541 │
- 8. │ <a href="https://github.com/yandex/ClickHouse">yandex/ClickHouse</a>                      │  8628 │
- 9. │ <a href="https://github.com/mre/awesome-static-analysis">mre/awesome-static-analysis</a>            │  7126 │
-10. │ <a href="https://github.com/sharkdp/hyperfine">sharkdp/hyperfine</a>                      │  5999 │
-11. │ <a href="https://github.com/llvm/llvm-project">llvm/llvm-project</a>                      │  5906 │
-12. │ <a href="https://github.com/chrissimpkins/codeface">chrissimpkins/codeface</a>                 │  5850 │
-13. │ <a href="https://github.com/google/oss-fuzz">google/oss-fuzz</a>                        │  5782 │
-14. │ <a href="https://github.com/catboost/catboost">catboost/catboost</a>                      │  5743 │
-15. │ <a href="https://github.com/olivernn/lunr.js">olivernn/lunr.js</a>                       │  5192 │
-16. │ <a href="https://github.com/antirez/kilo">antirez/kilo</a>                           │  5183 │
-17. │ <a href="https://github.com/rqlite/rqlite">rqlite/rqlite</a>                          │  5093 │
-18. │ <a href="https://github.com/jemalloc/jemalloc">jemalloc/jemalloc</a>                      │  5077 │
-19. │ <a href="https://github.com/mozilla/rr">mozilla/rr</a>                             │  4828 │
-20. │ <a href="https://github.com/sysown/proxysql">sysown/proxysql</a>                        │  4084 │
-21. │ <a href="https://github.com/kahing/goofys">kahing/goofys</a>                          │  3143 │
-22. │ <a href="https://github.com/weidai11/cryptopp">weidai11/cryptopp</a>                      │  2565 │
-23. │ <a href="https://github.com/jbeder/yaml-cpp">jbeder/yaml-cpp</a>                        │  2302 │
-24. │ <a href="https://github.com/intel/hyperscan">intel/hyperscan</a>                        │  2062 │
-25. │ <a href="https://github.com/jlfwong/speedscope">jlfwong/speedscope</a>                     │  1803 │
-26. │ <a href="https://github.com/yandex/odyssey">yandex/odyssey</a>                         │  1755 │
-27. │ <a href="https://github.com/simongog/sdsl-lite">simongog/sdsl-lite</a>                     │  1680 │
-28. │ <a href="https://github.com/boyter/scc">boyter/scc</a>                             │  1666 │
-29. │ <a href="https://github.com/phracker/MacOSX-SDKs">phracker/MacOSX-SDKs</a>                   │  1641 │
-30. │ <a href="https://github.com/GoogleCloudPlatform/PerfKitBenchmarker">GoogleCloudPlatform/PerfKitBenchmarker</a> │  1498 │
-31. │ <a href="https://github.com/apache/avro">apache/avro</a>                            │  1471 │
-32. │ <a href="https://github.com/arrowtype/recursive">arrowtype/recursive</a>                    │  1409 │
-33. │ <a href="https://github.com/orlp/pdqsort">orlp/pdqsort</a>                           │  1264 │
-34. │ <a href="https://github.com/uncrustify/uncrustify">uncrustify/uncrustify</a>                  │  1254 │
-35. │ <a href="https://github.com/drh/lcc">drh/lcc</a>                                │  1141 │
-36. │ <a href="https://github.com/google/highwayhash">google/highwayhash</a>                     │  1105 │
-37. │ <a href="https://github.com/centaurean/density">centaurean/density</a>                     │   974 │
-38. │ <a href="https://github.com/woboq/woboq_codebrowser">woboq/woboq_codebrowser</a>                │   778 │
-39. │ <a href="https://github.com/flant/loghouse">flant/loghouse</a>                         │   734 │
-40. │ <a href="https://github.com/kshvakov/clickhouse">kshvakov/clickhouse</a>                    │   649 │
-41. │ <a href="https://github.com/Restream/reindexer">Restream/reindexer</a>                     │   581 │
-42. │ <a href="https://github.com/aklomp/base64">aklomp/base64</a>                          │   541 │
-43. │ <a href="https://github.com/Tessil/hat-trie">Tessil/hat-trie</a>                        │   506 │
-44. │ <a href="https://github.com/mull-project/mull">mull-project/mull</a>                      │   475 │
-45. │ <a href="https://github.com/powturbo/TurboPFor">powturbo/TurboPFor</a>                     │   461 │
-46. │ <a href="https://github.com/mymarilyn/clickhouse-driver">mymarilyn/clickhouse-driver</a>            │   459 │
-47. │ <a href="https://github.com/richox/orz">richox/orz</a>                             │   458 │
-48. │ <a href="https://github.com/google/cctz">google/cctz</a>                            │   454 │
-49. │ <a href="https://github.com/tpoechtrager/cctools-port">tpoechtrager/cctools-port</a>              │   416 │
-50. │ <a href="https://github.com/Vertamedia/clickhouse-grafana">Vertamedia/clickhouse-grafana</a>          │   412 │
+ 8. │ <a href="https://github.com/yandex/ClickHouse">yandex/ClickHouse</a>                      │  8629 │
+ 9. │ <a href="https://github.com/rsms/inter">rsms/inter</a>                             │  8573 │
+10. │ <a href="https://github.com/mre/awesome-static-analysis">mre/awesome-static-analysis</a>            │  7125 │
+11. │ <a href="https://github.com/llvm/llvm-project">llvm/llvm-project</a>                      │  6984 │
+12. │ <a href="https://github.com/cube-js/cube.js">cube-js/cube.js</a>                        │  6648 │
+13. │ <a href="https://github.com/sharkdp/hyperfine">sharkdp/hyperfine</a>                      │  6478 │
+14. │ <a href="https://github.com/darlinghq/darling">darlinghq/darling</a>                      │  6155 │
+15. │ <a href="https://github.com/google/oss-fuzz">google/oss-fuzz</a>                        │  5983 │
+16. │ <a href="https://github.com/chrissimpkins/codeface">chrissimpkins/codeface</a>                 │  5975 │
+17. │ <a href="https://github.com/catboost/catboost">catboost/catboost</a>                      │  5937 │
+18. │ <a href="https://github.com/hashicorp/packer">hashicorp/packer</a>                       │  5667 │
+19. │ <a href="https://github.com/olivernn/lunr.js">olivernn/lunr.js</a>                       │  5403 │
+20. │ <a href="https://github.com/jemalloc/jemalloc">jemalloc/jemalloc</a>                      │  5390 │
+21. │ <a href="https://github.com/rqlite/rqlite">rqlite/rqlite</a>                          │  5353 │
+22. │ <a href="https://github.com/antirez/kilo">antirez/kilo</a>                           │  5346 │
+23. │ <a href="https://github.com/mozilla/rr">mozilla/rr</a>                             │  5155 │
+24. │ <a href="https://github.com/angr/angr">angr/angr</a>                              │  4973 │
+25. │ <a href="https://github.com/sysown/proxysql">sysown/proxysql</a>                        │  4250 │
+26. │ <a href="https://github.com/plausible/analytics">plausible/analytics</a>                    │  3460 │
+27. │ <a href="https://github.com/kahing/goofys">kahing/goofys</a>                          │  3309 │
+28. │ <a href="https://github.com/weidai11/cryptopp">weidai11/cryptopp</a>                      │  2691 │
+29. │ <a href="https://github.com/zmap/zmap">zmap/zmap</a>                              │  2635 │
+30. │ <a href="https://github.com/jbeder/yaml-cpp">jbeder/yaml-cpp</a>                        │  2502 │
+31. │ <a href="https://github.com/intel/hyperscan">intel/hyperscan</a>                        │  2177 │
+32. │ <a href="https://github.com/jlfwong/speedscope">jlfwong/speedscope</a>                     │  2147 │
+33. │ <a href="https://github.com/lief-project/LIEF">lief-project/LIEF</a>                      │  2067 │
+34. │ <a href="https://github.com/boyter/scc">boyter/scc</a>                             │  1892 │
+35. │ <a href="https://github.com/yandex/odyssey">yandex/odyssey</a>                         │  1823 │
+36. │ <a href="https://github.com/simongog/sdsl-lite">simongog/sdsl-lite</a>                     │  1718 │
+37. │ <a href="https://github.com/phracker/MacOSX-SDKs">phracker/MacOSX-SDKs</a>                   │  1702 │
+38. │ <a href="https://github.com/zserge/awfice">zserge/awfice</a>                          │  1662 │
+39. │ <a href="https://github.com/randombit/botan">randombit/botan</a>                        │  1586 │
+40. │ <a href="https://github.com/arrowtype/recursive">arrowtype/recursive</a>                    │  1578 │
+41. │ <a href="https://github.com/apache/avro">apache/avro</a>                            │  1561 │
+42. │ <a href="https://github.com/GoogleCloudPlatform/PerfKitBenchmarker">GoogleCloudPlatform/PerfKitBenchmarker</a> │  1558 │
+43. │ <a href="https://github.com/uncrustify/uncrustify">uncrustify/uncrustify</a>                  │  1309 │
+44. │ <a href="https://github.com/orlp/pdqsort">orlp/pdqsort</a>                           │  1303 │
+45. │ <a href="https://github.com/drh/lcc">drh/lcc</a>                                │  1204 │
+46. │ <a href="https://github.com/google/highwayhash">google/highwayhash</a>                     │  1129 │
+47. │ <a href="https://github.com/centaurean/density">centaurean/density</a>                     │   984 │
+48. │ <a href="https://github.com/google/boringssl">google/boringssl</a>                       │   962 │
+49. │ <a href="https://github.com/woboq/woboq_codebrowser">woboq/woboq_codebrowser</a>                │   800 │
+50. │ <a href="https://github.com/flant/loghouse">flant/loghouse</a>                         │   788 │
     └────────────────────────────────────────┴───────┘
 
-50 rows in set. Elapsed: 11.245 sec. Processed 1.03 million rows, 6.21 MB (91.30 thousand rows/s., 552.40 KB/s.)
+50 rows in set. Elapsed: 1.831 sec. Processed 1.86 million rows, 15.08 MB (1.02 million rows/s., 8.24 MB/s.)
 </pre>
 
 <h3>Repository affinity list</h3>
@@ -1029,59 +1033,59 @@ ORDER BY stars DESC
 LIMIT 50
 
     ┌─repo_name────────────────────────┬─stars─┐
- 1. │ <a href="https://github.com/tensorflow/tensorflow">tensorflow/tensorflow</a>            │  4237 │
- 2. │ <a href="https://github.com/pingcap/tidb">pingcap/tidb</a>                     │  3496 │
- 3. │ <a href="https://github.com/donnemartin/system-design-primer">donnemartin/system-design-primer</a> │  3379 │
- 4. │ <a href="https://github.com/golang/go">golang/go</a>                        │  3366 │
- 5. │ <a href="https://github.com/prometheus/prometheus">prometheus/prometheus</a>            │  3338 │
- 6. │ <a href="https://github.com/sindresorhus/awesome">sindresorhus/awesome</a>             │  3188 │
- 7. │ <a href="https://github.com/kubernetes/kubernetes">kubernetes/kubernetes</a>            │  3135 │
- 8. │ <a href="https://github.com/vuejs/vue">vuejs/vue</a>                        │  2846 │
- 9. │ <a href="https://github.com/avelino/awesome-go">avelino/awesome-go</a>               │  2840 │
-10. │ <a href="https://github.com/grafana/grafana">grafana/grafana</a>                  │  2828 │
-11. │ <a href="https://github.com/minio/minio">minio/minio</a>                      │  2618 │
-12. │ <a href="https://github.com/istio/istio">istio/istio</a>                      │  2570 │
-13. │ <a href="https://github.com/grpc/grpc">grpc/grpc</a>                        │  2563 │
-14. │ <a href="https://github.com/flutter/flutter">flutter/flutter</a>                  │  2552 │
-15. │ <a href="https://github.com/gin-gonic/gin">gin-gonic/gin</a>                    │  2507 │
-16. │ <a href="https://github.com/jlevy/the-art-of-command-line">jlevy/the-art-of-command-line</a>    │  2494 │
-17. │ <a href="https://github.com/containous/traefik">containous/traefik</a>               │  2431 │
-18. │ <a href="https://github.com/facebook/react">facebook/react</a>                   │  2426 │
-19. │ <a href="https://github.com/996icu/996.ICU">996icu/996.ICU</a>                   │  2358 │
-20. │ <a href="https://github.com/facebook/rocksdb">facebook/rocksdb</a>                 │  2324 │
-21. │ <a href="https://github.com/cockroachdb/cockroach">cockroachdb/cockroach</a>            │  2321 │
-22. │ <a href="https://github.com/metabase/metabase">metabase/metabase</a>                │  2318 │
-23. │ <a href="https://github.com/GoogleChrome/puppeteer">GoogleChrome/puppeteer</a>           │  2292 │
-24. │ <a href="https://github.com/elastic/elasticsearch">elastic/elasticsearch</a>            │  2283 │
-25. │ <a href="https://github.com/facebook/react-native">facebook/react-native</a>            │  2266 │
-26. │ <a href="https://github.com/ant-design/ant-design">ant-design/ant-design</a>            │  2181 │
-27. │ <a href="https://github.com/Microsoft/vscode">Microsoft/vscode</a>                 │  2144 │
-28. │ <a href="https://github.com/firehol/netdata">firehol/netdata</a>                  │  2137 │
-29. │ <a href="https://github.com/rust-lang/rust">rust-lang/rust</a>                   │  2134 │
-30. │ <a href="https://github.com/ansible/ansible">ansible/ansible</a>                  │  2127 │
-31. │ <a href="https://github.com/mholt/caddy">mholt/caddy</a>                      │  2121 │
-32. │ <a href="https://github.com/kamranahmedse/developer-roadmap">kamranahmedse/developer-roadmap</a>  │  2105 │
-33. │ <a href="https://github.com/hashicorp/consul">hashicorp/consul</a>                 │  2100 │
-34. │ <a href="https://github.com/antirez/redis">antirez/redis</a>                    │  2091 │
-35. │ <a href="https://github.com/tensorflow/models">tensorflow/models</a>                │  2086 │
-36. │ <a href="https://github.com/dgraph-io/dgraph">dgraph-io/dgraph</a>                 │  2078 │
-37. │ <a href="https://github.com/torvalds/linux">torvalds/linux</a>                   │  2063 │
-38. │ <a href="https://github.com/vinta/awesome-python">vinta/awesome-python</a>             │  2061 │
-39. │ <a href="https://github.com/robbyrussell/oh-my-zsh">robbyrussell/oh-my-zsh</a>           │  2051 │
-40. │ <a href="https://github.com/google/leveldb">google/leveldb</a>                   │  2025 │
-41. │ <a href="https://github.com/getredash/redash">getredash/redash</a>                 │  1979 │
-42. │ <a href="https://github.com/danistefanovic/build-your-own-x">danistefanovic/build-your-own-x</a>  │  1956 │
-43. │ <a href="https://github.com/fatedier/frp">fatedier/frp</a>                     │  1935 │
-44. │ <a href="https://github.com/wg/wrk">wg/wrk</a>                           │  1891 │
-45. │ <a href="https://github.com/apache/spark">apache/spark</a>                     │  1888 │
-46. │ <a href="https://github.com/pytorch/pytorch">pytorch/pytorch</a>                  │  1865 │
-47. │ <a href="https://github.com/getify/You-Dont-Know-JS">getify/You-Dont-Know-JS</a>          │  1859 │
-48. │ <a href="https://github.com/syncthing/syncthing">syncthing/syncthing</a>              │  1828 │
-49. │ <a href="https://github.com/apache/flink">apache/flink</a>                     │  1818 │
-50. │ <a href="https://github.com/TheAlgorithms/Python">TheAlgorithms/Python</a>             │  1814 │
+ 1. │ <a href="https://github.com/tensorflow/tensorflow">tensorflow/tensorflow</a>            │  4672 │
+ 2. │ <a href="https://github.com/pingcap/tidb">pingcap/tidb</a>                     │  3971 │
+ 3. │ <a href="https://github.com/donnemartin/system-design-primer">donnemartin/system-design-primer</a> │  3789 │
+ 4. │ <a href="https://github.com/golang/go">golang/go</a>                        │  3773 │
+ 5. │ <a href="https://github.com/prometheus/prometheus">prometheus/prometheus</a>            │  3705 │
+ 6. │ <a href="https://github.com/kubernetes/kubernetes">kubernetes/kubernetes</a>            │  3556 │
+ 7. │ <a href="https://github.com/sindresorhus/awesome">sindresorhus/awesome</a>             │  3519 │
+ 8. │ <a href="https://github.com/avelino/awesome-go">avelino/awesome-go</a>               │  3180 │
+ 9. │ <a href="https://github.com/vuejs/vue">vuejs/vue</a>                        │  3172 │
+10. │ <a href="https://github.com/grafana/grafana">grafana/grafana</a>                  │  3170 │
+11. │ <a href="https://github.com/minio/minio">minio/minio</a>                      │  2932 │
+12. │ <a href="https://github.com/istio/istio">istio/istio</a>                      │  2907 │
+13. │ <a href="https://github.com/flutter/flutter">flutter/flutter</a>                  │  2898 │
+14. │ <a href="https://github.com/gin-gonic/gin">gin-gonic/gin</a>                    │  2880 │
+15. │ <a href="https://github.com/grpc/grpc">grpc/grpc</a>                        │  2836 │
+16. │ <a href="https://github.com/996icu/996.ICU">996icu/996.ICU</a>                   │  2833 │
+17. │ <a href="https://github.com/jlevy/the-art-of-command-line">jlevy/the-art-of-command-line</a>    │  2778 │
+18. │ <a href="https://github.com/facebook/react">facebook/react</a>                   │  2717 │
+19. │ <a href="https://github.com/containous/traefik">containous/traefik</a>               │  2676 │
+20. │ <a href="https://github.com/elastic/elasticsearch">elastic/elasticsearch</a>            │  2653 │
+21. │ <a href="https://github.com/facebook/rocksdb">facebook/rocksdb</a>                 │  2593 │
+22. │ <a href="https://github.com/cockroachdb/cockroach">cockroachdb/cockroach</a>            │  2564 │
+23. │ <a href="https://github.com/metabase/metabase">metabase/metabase</a>                │  2548 │
+24. │ <a href="https://github.com/facebook/react-native">facebook/react-native</a>            │  2506 │
+25. │ <a href="https://github.com/ant-design/ant-design">ant-design/ant-design</a>            │  2456 │
+26. │ <a href="https://github.com/GoogleChrome/puppeteer">GoogleChrome/puppeteer</a>           │  2448 │
+27. │ <a href="https://github.com/kamranahmedse/developer-roadmap">kamranahmedse/developer-roadmap</a>  │  2416 │
+28. │ <a href="https://github.com/ansible/ansible">ansible/ansible</a>                  │  2380 │
+29. │ <a href="https://github.com/torvalds/linux">torvalds/linux</a>                   │  2367 │
+30. │ <a href="https://github.com/rust-lang/rust">rust-lang/rust</a>                   │  2356 │
+31. │ <a href="https://github.com/antirez/redis">antirez/redis</a>                    │  2337 │
+32. │ <a href="https://github.com/hashicorp/consul">hashicorp/consul</a>                 │  2329 │
+33. │ <a href="https://github.com/vinta/awesome-python">vinta/awesome-python</a>             │  2302 │
+34. │ <a href="https://github.com/Microsoft/vscode">Microsoft/vscode</a>                 │  2297 │
+35. │ <a href="https://github.com/google/leveldb">google/leveldb</a>                   │  2276 │
+36. │ <a href="https://github.com/tensorflow/models">tensorflow/models</a>                │  2276 │
+37. │ <a href="https://github.com/firehol/netdata">firehol/netdata</a>                  │  2253 │
+38. │ <a href="https://github.com/dgraph-io/dgraph">dgraph-io/dgraph</a>                 │  2251 │
+39. │ <a href="https://github.com/mholt/caddy">mholt/caddy</a>                      │  2247 │
+40. │ <a href="https://github.com/robbyrussell/oh-my-zsh">robbyrussell/oh-my-zsh</a>           │  2238 │
+41. │ <a href="https://github.com/fatedier/frp">fatedier/frp</a>                     │  2227 │
+42. │ <a href="https://github.com/danistefanovic/build-your-own-x">danistefanovic/build-your-own-x</a>  │  2226 │
+43. │ <a href="https://github.com/getredash/redash">getredash/redash</a>                 │  2182 │
+44. │ <a href="https://github.com/wg/wrk">wg/wrk</a>                           │  2137 │
+45. │ <a href="https://github.com/apache/spark">apache/spark</a>                     │  2129 │
+46. │ <a href="https://github.com/apache/flink">apache/flink</a>                     │  2119 │
+47. │ <a href="https://github.com/TheAlgorithms/Python">TheAlgorithms/Python</a>             │  2100 │
+48. │ <a href="https://github.com/pytorch/pytorch">pytorch/pytorch</a>                  │  2094 │
+49. │ <a href="https://github.com/getify/You-Dont-Know-JS">getify/You-Dont-Know-JS</a>          │  2050 │
+50. │ <a href="https://github.com/syncthing/syncthing">syncthing/syncthing</a>              │  2010 │
     └──────────────────────────────────┴───────┘
 
-50 rows in set. Elapsed: 7.119 sec. Processed 192.12 million rows, 5.29 GB (26.99 million rows/s., 742.58 MB/s.)
+50 rows in set. Elapsed: 1.166 sec. Processed 204.27 million rows, 6.63 GB (175.18 million rows/s., 5.68 GB/s.)
 </pre>
 
 <p>It's Tensorflow... and TiDB. Yes, I knew, that we are the friends with TiDB (they are using ClickHouse engine under the hood for analytical queries). Then golang, prometheus and kubernetes. The overall list is slightly biased towards data-intensive applications: database engines, distributed filesystems, data orchestration, etc...</p>
@@ -1342,67 +1346,67 @@ SELECT
     actor_login,
     sum(is_my_repo) AS stars_my,
     sum(NOT is_my_repo) AS stars_other,
-    stars_my / (165 + stars_other) AS ratio
+    round(stars_my / (196 + stars_other), 3) AS ratio
 FROM github_events
 WHERE event_type = 'WatchEvent'
 GROUP BY actor_login
 ORDER BY ratio DESC
 LIMIT 50
 
-    ┌─actor_login──────┬─stars_my─┬─stars_other─┬────────────────ratio─┐
- 1. │ <a href="https://github.com/alexey-milovidov">alexey-milovidov</a> │      165 │           0 │                    1 │
- 2. │ <a href="https://github.com/leicsss">leicsss</a>          │       14 │          14 │   0.0782122905027933 │
- 3. │ <a href="https://github.com/exitNA">exitNA</a>           │       31 │         285 │  0.06888888888888889 │
- 4. │ <a href="https://github.com/LingangJiang">LingangJiang</a>     │       13 │          58 │  0.05829596412556054 │
- 5. │ <a href="https://github.com/isublimity">isublimity</a>       │       12 │          51 │  0.05555555555555555 │
- 6. │ <a href="https://github.com/gmaurel">gmaurel</a>          │        9 │           1 │  0.05421686746987952 │
- 7. │ <a href="https://github.com/filimonov">filimonov</a>        │       16 │         131 │  0.05405405405405406 │
- 8. │ <a href="https://github.com/geofflangdale">geofflangdale</a>    │        9 │          12 │  0.05084745762711865 │
- 9. │ <a href="https://github.com/LiuYangkuan">LiuYangkuan</a>      │        9 │          16 │ 0.049723756906077346 │
-10. │ <a href="https://github.com/peterborodatyy">peterborodatyy</a>   │       13 │          97 │  0.04961832061068702 │
-11. │ <a href="https://github.com/lzy305">lzy305</a>           │       10 │          47 │  0.04716981132075472 │
-12. │ <a href="https://github.com/artpaul">artpaul</a>          │       10 │          47 │  0.04716981132075472 │
-13. │ <a href="https://github.com/gecko984">gecko984</a>         │        8 │           8 │ 0.046242774566473986 │
-14. │ <a href="https://github.com/hagen1778">hagen1778</a>        │       22 │         324 │ 0.044989775051124746 │
-15. │ <a href="https://github.com/ludv1x">ludv1x</a>           │        8 │          18 │  0.04371584699453552 │
-16. │ <a href="https://github.com/jason-godden">jason-godden</a>     │        7 │           3 │ 0.041666666666666664 │
-17. │ <a href="https://github.com/jackpgao">jackpgao</a>         │       15 │         205 │  0.04054054054054054 │
-18. │ <a href="https://github.com/gabime">gabime</a>           │       12 │         131 │  0.04054054054054054 │
-19. │ <a href="https://github.com/eden-shiwm">eden-shiwm</a>       │        9 │          72 │   0.0379746835443038 │
-20. │ <a href="https://github.com/powturbo">powturbo</a>         │        7 │          24 │ 0.037037037037037035 │
-21. │ <a href="https://github.com/vstakhov">vstakhov</a>         │       10 │         108 │  0.03663003663003663 │
-22. │ <a href="https://github.com/ztlpn">ztlpn</a>            │        7 │          33 │  0.03535353535353535 │
-23. │ <a href="https://github.com/mkabilov">mkabilov</a>         │        9 │          92 │  0.03501945525291829 │
-24. │ <a href="https://github.com/hodgesrm">hodgesrm</a>         │        6 │           8 │  0.03468208092485549 │
-25. │ <a href="https://github.com/xiaoyem">xiaoyem</a>          │        8 │          67 │ 0.034482758620689655 │
-26. │ <a href="https://github.com/yfedoseev">yfedoseev</a>        │        7 │          41 │  0.03398058252427184 │
-27. │ <a href="https://github.com/pukhlyakova">pukhlyakova</a>      │        6 │          12 │  0.03389830508474576 │
-28. │ <a href="https://github.com/as-hu-aabk">as-hu-aabk</a>       │       10 │         133 │  0.03355704697986577 │
-29. │ <a href="https://github.com/Johnny-Three">Johnny-Three</a>     │       10 │         135 │  0.03333333333333333 │
-30. │ <a href="https://github.com/bocharov">bocharov</a>         │        6 │          16 │  0.03314917127071823 │
-31. │ <a href="https://github.com/devjgm">devjgm</a>           │        6 │          18 │  0.03278688524590164 │
-32. │ <a href="https://github.com/leannor">leannor</a>          │        7 │          51 │ 0.032407407407407406 │
-33. │ <a href="https://github.com/kshvakov">kshvakov</a>         │       32 │         840 │ 0.031840796019900496 │
-34. │ <a href="https://github.com/yakud">yakud</a>            │        8 │          88 │  0.03162055335968379 │
-35. │ <a href="https://github.com/dairui2">dairui2</a>          │        9 │         120 │ 0.031578947368421054 │
-36. │ <a href="https://github.com/nikitamikhaylov">nikitamikhaylov</a>  │        6 │          33 │ 0.030303030303030304 │
-37. │ <a href="https://github.com/s-mx">s-mx</a>             │        8 │         100 │  0.03018867924528302 │
-38. │ <a href="https://github.com/Feacur">Feacur</a>           │       13 │         269 │ 0.029953917050691243 │
-39. │ <a href="https://github.com/xiaodao004">xiaodao004</a>       │        5 │           4 │ 0.029585798816568046 │
-40. │ <a href="https://github.com/dota17">dota17</a>           │        6 │          39 │ 0.029411764705882353 │
-41. │ <a href="https://github.com/xzkostyan">xzkostyan</a>        │        5 │           7 │ 0.029069767441860465 │
-42. │ <a href="https://github.com/Garfield2013">Garfield2013</a>     │        5 │           7 │ 0.029069767441860465 │
-43. │ <a href="https://github.com/zhang2014">zhang2014</a>        │        6 │          42 │ 0.028985507246376812 │
-44. │ <a href="https://github.com/dulong">dulong</a>           │       12 │         251 │ 0.028846153846153848 │
-45. │ <a href="https://github.com/openbsod">openbsod</a>         │       16 │         391 │  0.02877697841726619 │
-46. │ <a href="https://github.com/sichkarev">sichkarev</a>        │        5 │          10 │  0.02857142857142857 │
-47. │ <a href="https://github.com/e11it">e11it</a>            │       13 │         296 │ 0.028199566160520606 │
-48. │ <a href="https://github.com/FrancescAlted">FrancescAlted</a>    │        6 │          48 │ 0.028169014084507043 │
-49. │ <a href="https://github.com/oliverchang">oliverchang</a>      │        5 │          14 │ 0.027932960893854747 │
-50. │ <a href="https://github.com/nesergey">nesergey</a>         │        5 │          15 │ 0.027777777777777776 │
-    └──────────────────┴──────────┴─────────────┴──────────────────────┘
+    ┌─actor_login───────┬─stars_my─┬─stars_other─┬─ratio─┐
+ 1. │ <a href="https://github.com/alexey-milovidov">alexey-milovidov</a>  │      196 │           0 │     1 │
+ 2. │ <a href="https://github.com/leicsss">leicsss</a>           │       14 │          14 │ 0.067 │
+ 3. │ <a href="https://github.com/exitNA">exitNA</a>            │       31 │         293 │ 0.063 │
+ 4. │ <a href="https://github.com/filimonov">filimonov</a>         │       19 │         147 │ 0.055 │
+ 5. │ <a href="https://github.com/LingangJiang">LingangJiang</a>      │       13 │          63 │  0.05 │
+ 6. │ <a href="https://github.com/isublimity">isublimity</a>        │       12 │          51 │ 0.049 │
+ 7. │ <a href="https://github.com/geofflangdale">geofflangdale</a>     │       10 │          11 │ 0.048 │
+ 8. │ <a href="https://github.com/LiuYangkuan">LiuYangkuan</a>       │       10 │          15 │ 0.047 │
+ 9. │ <a href="https://github.com/gmaurel">gmaurel</a>           │        9 │           1 │ 0.046 │
+10. │ <a href="https://github.com/lzy305">lzy305</a>            │       11 │          54 │ 0.044 │
+11. │ <a href="https://github.com/peterborodatyy">peterborodatyy</a>    │       13 │          97 │ 0.044 │
+12. │ <a href="https://github.com/hagen1778">hagen1778</a>         │       22 │         331 │ 0.042 │
+13. │ <a href="https://github.com/artpaul">artpaul</a>           │       10 │          47 │ 0.041 │
+14. │ <a href="https://github.com/gecko984">gecko984</a>          │        8 │          10 │ 0.039 │
+15. │ <a href="https://github.com/ludv1x">ludv1x</a>            │        8 │          18 │ 0.037 │
+16. │ <a href="https://github.com/jackpgao">jackpgao</a>          │       15 │         209 │ 0.037 │
+17. │ <a href="https://github.com/vstakhov">vstakhov</a>          │       11 │         109 │ 0.036 │
+18. │ <a href="https://github.com/gabime">gabime</a>            │       12 │         135 │ 0.036 │
+19. │ <a href="https://github.com/jason-godden">jason-godden</a>      │        7 │           4 │ 0.035 │
+20. │ <a href="https://github.com/mkabilov">mkabilov</a>          │       10 │          94 │ 0.034 │
+21. │ <a href="https://github.com/eden-shiwm">eden-shiwm</a>        │        9 │          75 │ 0.033 │
+22. │ <a href="https://github.com/powturbo">powturbo</a>          │        7 │          24 │ 0.032 │
+23. │ <a href="https://github.com/openbsod">openbsod</a>          │       19 │         412 │ 0.031 │
+24. │ <a href="https://github.com/UmGabrielQualquer">UmGabrielQualquer</a> │        6 │           0 │ 0.031 │
+25. │ <a href="https://github.com/kshvakov">kshvakov</a>          │       32 │         842 │ 0.031 │
+26. │ <a href="https://github.com/Johnny-Three">Johnny-Three</a>      │       10 │         140 │  0.03 │
+27. │ <a href="https://github.com/xiaoyem">xiaoyem</a>           │        8 │          67 │  0.03 │
+28. │ <a href="https://github.com/as-hu-aabk">as-hu-aabk</a>        │       10 │         133 │  0.03 │
+29. │ <a href="https://github.com/yfedoseev">yfedoseev</a>         │        7 │          41 │  0.03 │
+30. │ <a href="https://github.com/ztlpn">ztlpn</a>             │        7 │          39 │  0.03 │
+31. │ <a href="https://github.com/ahmedsharifkhan">ahmedsharifkhan</a>   │        6 │          10 │ 0.029 │
+32. │ <a href="https://github.com/hodgesrm">hodgesrm</a>          │        6 │           8 │ 0.029 │
+33. │ <a href="https://github.com/zhang2014">zhang2014</a>         │        7 │          42 │ 0.029 │
+34. │ <a href="https://github.com/Feacur">Feacur</a>            │       14 │         296 │ 0.028 │
+35. │ <a href="https://github.com/dairui2">dairui2</a>           │        9 │         126 │ 0.028 │
+36. │ <a href="https://github.com/yakud">yakud</a>             │        8 │          92 │ 0.028 │
+37. │ <a href="https://github.com/e11it">e11it</a>             │       14 │         306 │ 0.028 │
+38. │ <a href="https://github.com/devjgm">devjgm</a>            │        6 │          21 │ 0.028 │
+39. │ <a href="https://github.com/leannor">leannor</a>           │        7 │          51 │ 0.028 │
+40. │ <a href="https://github.com/bocharov">bocharov</a>          │        6 │          16 │ 0.028 │
+41. │ <a href="https://github.com/dulong">dulong</a>            │       12 │         255 │ 0.027 │
+42. │ <a href="https://github.com/nenomius">nenomius</a>          │       11 │         208 │ 0.027 │
+43. │ <a href="https://github.com/daskol">daskol</a>            │       10 │         173 │ 0.027 │
+44. │ <a href="https://github.com/Vitaliy-Grigoriev">Vitaliy-Grigoriev</a> │        9 │         138 │ 0.027 │
+45. │ <a href="https://github.com/s-mx">s-mx</a>              │        8 │         108 │ 0.026 │
+46. │ <a href="https://github.com/4ertus2">4ertus2</a>           │        6 │          31 │ 0.026 │
+47. │ <a href="https://github.com/nikitamikhaylov">nikitamikhaylov</a>   │        6 │          34 │ 0.026 │
+48. │ <a href="https://github.com/pamarcos">pamarcos</a>          │       10 │         195 │ 0.026 │
+49. │ <a href="https://github.com/keydunov">keydunov</a>          │        7 │          72 │ 0.026 │
+50. │ <a href="https://github.com/xzkostyan">xzkostyan</a>         │        5 │           8 │ 0.025 │
+    └───────────────────┴──────────┴─────────────┴───────┘
 
-50 rows in set. Elapsed: 22.547 sec. Processed 384.19 million rows, 7.89 GB (17.04 million rows/s., 350.08 MB/s.)
+50 rows in set. Elapsed: 3.873 sec. Processed 408.36 million rows, 8.59 GB (105.43 million rows/s., 2.22 GB/s.)
 </pre>
 
 <p>Here are my friends... and I don't know what to do with this list.</p>
@@ -1576,121 +1580,121 @@ LIMIT 1 BY repo_name
 LIMIT 50
 
     ┌─repo_name──────────────────────────────────────┬────────day─┬─stars─┐
- 1. │ <a href="https://github.com/996icu/996.ICU">996icu/996.ICU</a>                                 │ 2019-03-28 │ 75797 │
- 2. │ <a href="https://github.com/M4cs/BabySploit">M4cs/BabySploit</a>                                │ 2019-09-09 │ 44855 │
- 3. │ <a href="https://github.com/x64dbg/x64dbg">x64dbg/x64dbg</a>                                  │ 2018-01-06 │ 26391 │
- 4. │ <a href="https://github.com/microsoft/Terminal">microsoft/Terminal</a>                             │ 2019-05-07 │ 14618 │
- 5. │ <a href="https://github.com/apple/swift">apple/swift</a>                                    │ 2015-12-04 │ 12061 │
- 6. │ <a href="https://github.com/openbilibili/go-common">openbilibili/go-common</a>                         │ 2019-04-22 │  8174 │
- 7. │ <a href="https://github.com/amattson21/gitjob">amattson21/gitjob</a>                              │ 2016-10-08 │  7651 │
- 8. │ <a href="https://github.com/yarnpkg/yarn">yarnpkg/yarn</a>                                   │ 2016-10-12 │  6372 │
- 9. │ <a href="https://github.com/skylot/jadx">skylot/jadx</a>                                    │ 2018-01-06 │  6309 │
-10. │ <a href="https://github.com/open-guides/og-aws">open-guides/og-aws</a>                             │ 2016-10-12 │  6156 │
-11. │ <a href="https://github.com/mr-mig/every-programmer-should-know">mr-mig/every-programmer-should-know</a>            │ 2017-09-05 │  6053 │
-12. │ <a href="https://github.com/phase/sure">phase/sure</a>                                     │ 2015-06-16 │  6039 │
-13. │ <a href="https://github.com/Konloch/bytecode-viewer">Konloch/bytecode-viewer</a>                        │ 2018-01-06 │  6000 │
-14. │ <a href="https://github.com/DankMemer/webhook-server">DankMemer/webhook-server</a>                       │ 2019-02-16 │  5667 │
-15. │ <a href="https://github.com/jlevy/the-art-of-command-line">jlevy/the-art-of-command-line</a>                  │ 2015-06-16 │  5602 │
-16. │ <a href="https://github.com/tensorflow/tensorflow">tensorflow/tensorflow</a>                          │ 2015-11-10 │  5498 │
-17. │ <a href="https://github.com/Microsoft/calculator">Microsoft/calculator</a>                           │ 2019-03-07 │  5290 │
-18. │ <a href="https://github.com/danistefanovic/build-your-own-x">danistefanovic/build-your-own-x</a>                │ 2018-05-13 │  5180 │
-19. │ <a href="https://github.com/facebook/react-native">facebook/react-native</a>                          │ 2015-03-27 │  4926 │
-20. │ <a href="https://github.com/facebookresearch/Detectron">facebookresearch/Detectron</a>                     │ 2018-01-23 │  4889 │
-21. │ <a href="https://github.com/FallibleInc/security-guide-for-developers">FallibleInc/security-guide-for-developers</a>      │ 2016-07-22 │  4864 │
-22. │ <a href="https://github.com/NationalSecurityAgency/ghidra">NationalSecurityAgency/ghidra</a>                  │ 2019-03-06 │  4728 │
+ 1. │ <a href="https://github.com/996icu/996.ICU">996icu/996.ICU</a>                                 │ 2019-03-28 │ 76056 │
+ 2. │ <a href="https://github.com/M4cs/BabySploit">M4cs/BabySploit</a>                                │ 2019-09-08 │ 46985 │
+ 3. │ <a href="https://github.com/x64dbg/x64dbg">x64dbg/x64dbg</a>                                  │ 2018-01-06 │ 26459 │
+ 4. │ <a href="https://github.com/microsoft/Terminal">microsoft/Terminal</a>                             │ 2019-05-07 │ 14419 │
+ 5. │ <a href="https://github.com/apple/swift">apple/swift</a>                                    │ 2015-12-04 │ 10619 │
+ 6. │ <a href="https://github.com/desktop/desktop">desktop/desktop</a>                                │ 2020-11-16 │ 10047 │
+ 7. │ <a href="https://github.com/openbilibili/go-common">openbilibili/go-common</a>                         │ 2019-04-22 │  8176 │
+ 8. │ <a href="https://github.com/amattson21/gitjob">amattson21/gitjob</a>                              │ 2016-10-08 │  6511 │
+ 9. │ <a href="https://github.com/mr-mig/every-programmer-should-know">mr-mig/every-programmer-should-know</a>            │ 2017-09-05 │  6433 │
+10. │ <a href="https://github.com/skylot/jadx">skylot/jadx</a>                                    │ 2018-01-06 │  6319 │
+11. │ <a href="https://github.com/phase/sure">phase/sure</a>                                     │ 2015-06-16 │  6039 │
+12. │ <a href="https://github.com/Konloch/bytecode-viewer">Konloch/bytecode-viewer</a>                        │ 2018-01-06 │  6000 │
+13. │ <a href="https://github.com/jlevy/the-art-of-command-line">jlevy/the-art-of-command-line</a>                  │ 2015-06-16 │  5897 │
+14. │ <a href="https://github.com/yarnpkg/yarn">yarnpkg/yarn</a>                                   │ 2016-10-12 │  5823 │
+15. │ <a href="https://github.com/DankMemer/webhook-server">DankMemer/webhook-server</a>                       │ 2019-02-16 │  5667 │
+16. │ <a href="https://github.com/tensorflow/tensorflow">tensorflow/tensorflow</a>                          │ 2015-11-10 │  5247 │
+17. │ <a href="https://github.com/open-guides/og-aws">open-guides/og-aws</a>                             │ 2016-10-12 │  5097 │
+18. │ <a href="https://github.com/danistefanovic/build-your-own-x">danistefanovic/build-your-own-x</a>                │ 2018-05-13 │  5077 │
+19. │ <a href="https://github.com/facebookresearch/Detectron">facebookresearch/Detectron</a>                     │ 2018-01-23 │  5036 │
+20. │ <a href="https://github.com/Microsoft/calculator">Microsoft/calculator</a>                           │ 2019-03-07 │  4965 │
+21. │ <a href="https://github.com/NationalSecurityAgency/ghidra">NationalSecurityAgency/ghidra</a>                  │ 2019-03-06 │  4908 │
+22. │ <a href="https://github.com/FallibleInc/security-guide-for-developers">FallibleInc/security-guide-for-developers</a>      │ 2016-07-22 │  4861 │
 23. │ <a href="https://github.com/vk-com/kphp-kdb">vk-com/kphp-kdb</a>                                │ 2018-01-07 │  4723 │
-24. │ <a href="https://github.com/GoogleChrome/puppeteer">GoogleChrome/puppeteer</a>                         │ 2017-08-17 │  4572 │
-25. │ <a href="https://github.com/chrislgarry/Apollo-11">chrislgarry/Apollo-11</a>                          │ 2016-07-11 │  4518 │
-26. │ <a href="https://github.com/LingDong-/wenyan-lang">LingDong-/wenyan-lang</a>                          │ 2019-12-18 │  4490 │
-27. │ <a href="https://github.com/google/material-design-lite">google/material-design-lite</a>                    │ 2015-07-07 │  4460 │
-28. │ <a href="https://github.com/MSWorkers/support.996.ICU">MSWorkers/support.996.ICU</a>                      │ 2019-04-23 │  4266 │
-29. │ <a href="https://github.com/sdmg15/Best-websites-a-programmer-should-visit">sdmg15/Best-websites-a-programmer-should-visit</a> │ 2017-06-07 │  4205 │
-30. │ <a href="https://github.com/NARKOZ/hacker-scripts">NARKOZ/hacker-scripts</a>                          │ 2015-11-24 │  4113 │
-31. │ <a href="https://github.com/AioiLight/TJAPlayer3">AioiLight/TJAPlayer3</a>                           │ 2019-01-29 │  4076 │
-32. │ <a href="https://github.com/facebook/prepack">facebook/prepack</a>                               │ 2017-05-04 │  4054 │
-33. │ <a href="https://github.com/houshanren/hangzhou_house_knowledge">houshanren/hangzhou_house_knowledge</a>            │ 2018-02-26 │  4050 │
-34. │ <a href="https://github.com/jwasham/google-interview-university">jwasham/google-interview-university</a>            │ 2016-10-06 │  3987 │
-35. │ <a href="https://github.com/donnemartin/system-design-primer">donnemartin/system-design-primer</a>               │ 2017-03-09 │  3948 │
-36. │ <a href="https://github.com/trekhleb/javascript-algorithms">trekhleb/javascript-algorithms</a>                 │ 2018-05-24 │  3944 │
-37. │ <a href="https://github.com/minimaxir/big-list-of-naughty-strings">minimaxir/big-list-of-naughty-strings</a>          │ 2017-01-16 │  3938 │
-38. │ <a href="https://github.com/bradtraversy/design-resources-for-developers">bradtraversy/design-resources-for-developers</a>   │ 2020-05-07 │  3909 │
-39. │ <a href="https://github.com/vuejs/vue">vuejs/vue</a>                                      │ 2018-06-15 │  3841 │
-40. │ <a href="https://github.com/Dman95/SASM">Dman95/SASM</a>                                    │ 2018-01-07 │  3761 │
-41. │ <a href="https://github.com/formulahendry/955.WLB">formulahendry/955.WLB</a>                          │ 2019-03-29 │  3699 │
-42. │ <a href="https://github.com/felixrieseberg/windows95">felixrieseberg/windows95</a>                       │ 2018-08-24 │  3640 │
-43. │ <a href="https://github.com/nylas/N1">nylas/N1</a>                                       │ 2015-10-06 │  3578 │
-44. │ <a href="https://github.com/ry/deno">ry/deno</a>                                        │ 2018-05-31 │  3527 │
-45. │ <a href="https://github.com/kelseyhightower/nocode">kelseyhightower/nocode</a>                         │ 2018-02-08 │  3481 │
-46. │ <a href="https://github.com/facebook/react">facebook/react</a>                                 │ 2018-06-15 │  3470 │
-47. │ <a href="https://github.com/Microsoft/vscode">Microsoft/vscode</a>                               │ 2015-11-19 │  3423 │
-48. │ <a href="https://github.com/dylanaraps/pure-bash-bible">dylanaraps/pure-bash-bible</a>                     │ 2019-09-19 │  3383 │
+24. │ <a href="https://github.com/LingDong-/wenyan-lang">LingDong-/wenyan-lang</a>                          │ 2019-12-18 │  4478 │
+25. │ <a href="https://github.com/facebook/react-native">facebook/react-native</a>                          │ 2015-03-27 │  4324 │
+26. │ <a href="https://github.com/MSWorkers/support.996.ICU">MSWorkers/support.996.ICU</a>                      │ 2019-04-23 │  4310 │
+27. │ <a href="https://github.com/chrislgarry/Apollo-11">chrislgarry/Apollo-11</a>                          │ 2016-07-10 │  4309 │
+28. │ <a href="https://github.com/jwasham/google-interview-university">jwasham/google-interview-university</a>            │ 2016-10-06 │  4300 │
+29. │ <a href="https://github.com/google/material-design-lite">google/material-design-lite</a>                    │ 2015-07-07 │  4209 │
+30. │ <a href="https://github.com/GoogleChrome/puppeteer">GoogleChrome/puppeteer</a>                         │ 2017-08-17 │  4162 │
+31. │ <a href="https://github.com/NARKOZ/hacker-scripts">NARKOZ/hacker-scripts</a>                          │ 2015-11-24 │  4100 │
+32. │ <a href="https://github.com/donnemartin/system-design-primer">donnemartin/system-design-primer</a>               │ 2017-03-09 │  4087 │
+33. │ <a href="https://github.com/houshanren/hangzhou_house_knowledge">houshanren/hangzhou_house_knowledge</a>            │ 2018-02-26 │  4085 │
+34. │ <a href="https://github.com/AioiLight/TJAPlayer3">AioiLight/TJAPlayer3</a>                           │ 2019-01-29 │  4076 │
+35. │ <a href="https://github.com/sdmg15/Best-websites-a-programmer-should-visit">sdmg15/Best-websites-a-programmer-should-visit</a> │ 2017-06-07 │  4056 │
+36. │ <a href="https://github.com/vuejs/vue">vuejs/vue</a>                                      │ 2018-06-15 │  3897 │
+37. │ <a href="https://github.com/Dman95/SASM">Dman95/SASM</a>                                    │ 2018-01-07 │  3761 │
+38. │ <a href="https://github.com/formulahendry/955.WLB">formulahendry/955.WLB</a>                          │ 2019-03-29 │  3714 │
+39. │ <a href="https://github.com/facebook/prepack">facebook/prepack</a>                               │ 2017-05-04 │  3709 │
+40. │ <a href="https://github.com/trekhleb/javascript-algorithms">trekhleb/javascript-algorithms</a>                 │ 2018-05-24 │  3655 │
+41. │ <a href="https://github.com/bradtraversy/design-resources-for-developers">bradtraversy/design-resources-for-developers</a>   │ 2020-05-07 │  3624 │
+42. │ <a href="https://github.com/facebook/react">facebook/react</a>                                 │ 2018-06-15 │  3563 │
+43. │ <a href="https://github.com/ry/deno">ry/deno</a>                                        │ 2018-05-31 │  3536 │
+44. │ <a href="https://github.com/minimaxir/big-list-of-naughty-strings">minimaxir/big-list-of-naughty-strings</a>          │ 2017-01-16 │  3533 │
+45. │ <a href="https://github.com/kelseyhightower/nocode">kelseyhightower/nocode</a>                         │ 2018-02-07 │  3528 │
+46. │ <a href="https://github.com/felixrieseberg/windows95">felixrieseberg/windows95</a>                       │ 2018-08-24 │  3518 │
+47. │ <a href="https://github.com/dylanaraps/pure-bash-bible">dylanaraps/pure-bash-bible</a>                     │ 2019-09-19 │  3501 │
+48. │ <a href="https://github.com/lib-pku/libpku">lib-pku/libpku</a>                                 │ 2019-04-09 │  3366 │
 49. │ <a href="https://github.com/Awesome-HarmonyOS/HarmonyOS">Awesome-HarmonyOS/HarmonyOS</a>                    │ 2019-08-13 │  3324 │
-50. │ <a href="https://github.com/lib-pku/libpku">lib-pku/libpku</a>                                 │ 2019-04-09 │  3295 │
+50. │ <a href="https://github.com/libra/libra">libra/libra</a>                                    │ 2019-06-18 │  3245 │
     └────────────────────────────────────────────────┴────────────┴───────┘
 
-50 rows in set. Elapsed: 19.437 sec. Processed 192.10 million rows, 2.20 GB (9.88 million rows/s., 113.09 MB/s.)
+50 rows in set. Elapsed: 7.616 sec. Processed 204.18 million rows, 2.45 GB (26.81 million rows/s., 322.16 MB/s.)
 </pre>
 
-<p>There is "openbilibili" &mdash; something like Chinese YouTube, but the repository is closed due to DMCA takedown.</p>
+<p>The <a href="https://github.com/desktop/desktop">GitHub Desktop</a> is the most new. There is "openbilibili" &mdash; something like Chinese YouTube, but the repository is closed due to DMCA takedown.</p>
 
 <p>I accidentially made a similar query for repositories gained most stars over just a second:</p>
 <pre>
 :) SELECT repo_name, created_at, count() AS stars FROM github_events WHERE event_type = 'WatchEvent' GROUP BY repo_name, created_at ORDER BY count() DESC LIMIT 50
 
     ┌─repo_name────────────────────────────┬──────────created_at─┬─stars─┐
- 1. │ <a href="https://github.com/expressjs/express">expressjs/express</a>                    │ 2018-04-29 23:30:59 │   370 │
- 2. │ <a href="https://github.com/expressjs/express">expressjs/express</a>                    │ 2018-04-29 23:31:00 │   195 │
- 3. │ <a href="https://github.com/danieldaeschle/swapy">danieldaeschle/swapy</a>                 │ 2018-04-29 19:10:44 │   132 │
- 4. │ <a href="https://github.com/flutter/flutter">flutter/flutter</a>                      │ 2018-04-29 18:13:58 │   118 │
- 5. │ <a href="https://github.com/danieldaeschle/amazon-music-linux">danieldaeschle/amazon-music-linux</a>    │ 2018-04-08 22:15:47 │   100 │
- 6. │ <a href="https://github.com/Apress/java-regular-expressions">Apress/java-regular-expressions</a>      │ 2018-04-29 23:29:01 │    99 │
- 7. │ <a href="https://github.com/danieldaeschle/amazon-music-linux">danieldaeschle/amazon-music-linux</a>    │ 2018-04-08 22:15:42 │    93 │
- 8. │ <a href="https://github.com/Apress/java-regular-expressions">Apress/java-regular-expressions</a>      │ 2018-04-29 23:29:06 │    93 │
- 9. │ <a href="https://github.com/simplyianm/preston">simplyianm/preston</a>                   │ 2015-02-28 06:58:12 │    91 │
-10. │ <a href="https://github.com/danieldaeschle/swapy">danieldaeschle/swapy</a>                 │ 2018-04-29 19:10:41 │    91 │
-11. │ <a href="https://github.com/tejasmanohar/omnus">tejasmanohar/omnus</a>                   │ 2015-02-28 06:59:37 │    89 │
-12. │ <a href="https://github.com/Dman95/SASM">Dman95/SASM</a>                          │ 2018-01-07 05:09:35 │    88 │
-13. │ <a href="https://github.com/simplyianm/motivate">simplyianm/motivate</a>                  │ 2015-02-28 06:58:32 │    86 │
-14. │ <a href="https://github.com/flutter/flutter">flutter/flutter</a>                      │ 2018-04-29 18:13:55 │    83 │
-15. │ <a href="https://github.com/LRB-Experiments/PDForumNotifications">LRB-Experiments/PDForumNotifications</a> │ 2018-04-29 18:15:07 │    83 │
-16. │ <a href="https://github.com/LRB-Experiments/PDForumNotifications">LRB-Experiments/PDForumNotifications</a> │ 2018-04-29 18:15:04 │    82 │
-17. │ <a href="https://github.com/torusrxxx/x64dbg">torusrxxx/x64dbg</a>                     │ 2018-01-07 04:54:02 │    82 │
-18. │ <a href="https://github.com/borisrepl/boris">borisrepl/boris</a>                      │ 2015-07-13 10:52:56 │    81 │
-19. │ <a href="https://github.com/HJLebbink/asm-dude">HJLebbink/asm-dude</a>                   │ 2018-01-07 04:57:30 │    81 │
-20. │ <a href="https://github.com/tejasmanohar/twilio-plays-2048">tejasmanohar/twilio-plays-2048</a>       │ 2015-02-28 06:56:55 │    79 │
-21. │ <a href="https://github.com/x64dbg/x64dbg">x64dbg/x64dbg</a>                        │ 2018-01-07 04:47:08 │    79 │
-22. │ <a href="https://github.com/tj/n">tj/n</a>                                 │ 2015-02-28 07:03:14 │    79 │
-23. │ <a href="https://github.com/danieldaeschle/amazon-music-linux">danieldaeschle/amazon-music-linux</a>    │ 2018-04-08 22:15:39 │    78 │
-24. │ <a href="https://github.com/x64dbg/x64dbg">x64dbg/x64dbg</a>                        │ 2018-01-07 04:46:55 │    78 │
-25. │ <a href="https://github.com/Dman95/SASM">Dman95/SASM</a>                          │ 2018-01-07 05:08:59 │    77 │
-26. │ <a href="https://github.com/x64dbg/docs">x64dbg/docs</a>                          │ 2018-01-06 09:45:25 │    76 │
-27. │ <a href="https://github.com/vk-com/kphp-kdb">vk-com/kphp-kdb</a>                      │ 2018-01-07 05:06:09 │    76 │
-28. │ <a href="https://github.com/x64dbg/x64dbgpy">x64dbg/x64dbgpy</a>                      │ 2018-01-07 04:59:23 │    75 │
-29. │ <a href="https://github.com/aionnetwork/aion">aionnetwork/aion</a>                     │ 2018-05-10 23:25:09 │    75 │
-30. │ <a href="https://github.com/Dman95/SASM">Dman95/SASM</a>                          │ 2018-01-07 05:09:31 │    74 │
-31. │ <a href="https://github.com/LordZamy/BurstTab">LordZamy/BurstTab</a>                    │ 2015-02-28 07:57:11 │    74 │
-32. │ <a href="https://github.com/ThomasJaeger/VisualMASM">ThomasJaeger/VisualMASM</a>              │ 2018-01-06 09:51:24 │    74 │
-33. │ <a href="https://github.com/Dman95/SASM">Dman95/SASM</a>                          │ 2018-01-07 05:08:23 │    73 │
-34. │ <a href="https://github.com/tejasmanohar/npm-algos">tejasmanohar/npm-algos</a>               │ 2015-07-13 10:50:59 │    73 │
-35. │ <a href="https://github.com/x64dbg/x64dbgpy">x64dbg/x64dbgpy</a>                      │ 2018-01-07 04:59:09 │    73 │
-36. │ <a href="https://github.com/x64dbg/x64dbg">x64dbg/x64dbg</a>                        │ 2018-01-07 04:47:30 │    73 │
-37. │ <a href="https://github.com/Dman95/SASM">Dman95/SASM</a>                          │ 2018-01-07 05:09:12 │    73 │
-38. │ <a href="https://github.com/x64dbg/x64dbg">x64dbg/x64dbg</a>                        │ 2018-01-06 10:24:09 │    73 │
-39. │ <a href="https://github.com/Dman95/SASM">Dman95/SASM</a>                          │ 2018-01-07 05:08:54 │    72 │
-40. │ <a href="https://github.com/vk-com/kphp-kdb">vk-com/kphp-kdb</a>                      │ 2018-01-07 05:06:18 │    72 │
-41. │ <a href="https://github.com/x64dbg/x64dbg">x64dbg/x64dbg</a>                        │ 2018-01-07 04:47:28 │    72 │
-42. │ <a href="https://github.com/x64dbg/x64dbg">x64dbg/x64dbg</a>                        │ 2018-01-06 10:18:02 │    71 │
-43. │ <a href="https://github.com/vk-com/kphp-kdb">vk-com/kphp-kdb</a>                      │ 2018-01-07 05:06:38 │    71 │
-44. │ <a href="https://github.com/x64dbg/x64dbg">x64dbg/x64dbg</a>                        │ 2018-01-07 04:47:17 │    71 │
-45. │ <a href="https://github.com/andrewtian/whatcanidoforbitcoin.xyz">andrewtian/whatcanidoforbitcoin.xyz</a>  │ 2015-09-28 00:45:27 │    71 │
-46. │ <a href="https://github.com/x64dbg/x64dbg">x64dbg/x64dbg</a>                        │ 2018-01-06 10:22:56 │    70 │
-47. │ <a href="https://github.com/pfmoore/shimmy">pfmoore/shimmy</a>                       │ 2018-04-29 16:02:22 │    69 │
-48. │ <a href="https://github.com/x64dbg/x64dbg">x64dbg/x64dbg</a>                        │ 2018-01-07 04:47:10 │    69 │
-49. │ <a href="https://github.com/flutter/flutter">flutter/flutter</a>                      │ 2018-04-29 18:13:32 │    69 │
-50. │ <a href="https://github.com/qw3rtman/gg">qw3rtman/gg</a>                          │ 2015-08-19 05:45:39 │    68 │
+ 1. │ <a href="https://github.com/expressjs/express">expressjs/express</a>                    │ 2018-04-29 20:30:59 │   370 │
+ 2. │ <a href="https://github.com/expressjs/express">expressjs/express</a>                    │ 2018-04-29 20:31:00 │   195 │
+ 3. │ <a href="https://github.com/danieldaeschle/swapy">danieldaeschle/swapy</a>                 │ 2018-04-29 16:10:44 │   132 │
+ 4. │ <a href="https://github.com/flutter/flutter">flutter/flutter</a>                      │ 2018-04-29 15:13:58 │   118 │
+ 5. │ <a href="https://github.com/danieldaeschle/amazon-music-linux">danieldaeschle/amazon-music-linux</a>    │ 2018-04-08 19:15:47 │   100 │
+ 6. │ <a href="https://github.com/Apress/java-regular-expressions">Apress/java-regular-expressions</a>      │ 2018-04-29 20:29:01 │    99 │
+ 7. │ <a href="https://github.com/danieldaeschle/amazon-music-linux">danieldaeschle/amazon-music-linux</a>    │ 2018-04-08 19:15:42 │    93 │
+ 8. │ <a href="https://github.com/Apress/java-regular-expressions">Apress/java-regular-expressions</a>      │ 2018-04-29 20:29:06 │    93 │
+ 9. │ <a href="https://github.com/simplyianm/preston">simplyianm/preston</a>                   │ 2015-02-28 03:58:12 │    91 │
+10. │ <a href="https://github.com/danieldaeschle/swapy">danieldaeschle/swapy</a>                 │ 2018-04-29 16:10:41 │    91 │
+11. │ <a href="https://github.com/tejasmanohar/omnus">tejasmanohar/omnus</a>                   │ 2015-02-28 03:59:37 │    89 │
+12. │ <a href="https://github.com/Dman95/SASM">Dman95/SASM</a>                          │ 2018-01-07 02:09:35 │    88 │
+13. │ <a href="https://github.com/simplyianm/motivate">simplyianm/motivate</a>                  │ 2015-02-28 03:58:32 │    86 │
+14. │ <a href="https://github.com/flutter/flutter">flutter/flutter</a>                      │ 2018-04-29 15:13:55 │    83 │
+15. │ <a href="https://github.com/LRB-Experiments/PDForumNotifications">LRB-Experiments/PDForumNotifications</a> │ 2018-04-29 15:15:07 │    83 │
+16. │ <a href="https://github.com/LRB-Experiments/PDForumNotifications">LRB-Experiments/PDForumNotifications</a> │ 2018-04-29 15:15:04 │    82 │
+17. │ <a href="https://github.com/torusrxxx/x64dbg">torusrxxx/x64dbg</a>                     │ 2018-01-07 01:54:02 │    82 │
+18. │ <a href="https://github.com/borisrepl/boris">borisrepl/boris</a>                      │ 2015-07-13 07:52:56 │    81 │
+19. │ <a href="https://github.com/HJLebbink/asm-dude">HJLebbink/asm-dude</a>                   │ 2018-01-07 01:57:30 │    81 │
+20. │ <a href="https://github.com/tejasmanohar/twilio-plays-2048">tejasmanohar/twilio-plays-2048</a>       │ 2015-02-28 03:56:55 │    79 │
+21. │ <a href="https://github.com/x64dbg/x64dbg">x64dbg/x64dbg</a>                        │ 2018-01-07 01:47:08 │    79 │
+22. │ <a href="https://github.com/tj/n">tj/n</a>                                 │ 2015-02-28 04:03:14 │    79 │
+23. │ <a href="https://github.com/danieldaeschle/amazon-music-linux">danieldaeschle/amazon-music-linux</a>    │ 2018-04-08 19:15:39 │    78 │
+24. │ <a href="https://github.com/x64dbg/x64dbg">x64dbg/x64dbg</a>                        │ 2018-01-07 01:46:55 │    78 │
+25. │ <a href="https://github.com/Dman95/SASM">Dman95/SASM</a>                          │ 2018-01-07 02:08:59 │    77 │
+26. │ <a href="https://github.com/x64dbg/docs">x64dbg/docs</a>                          │ 2018-01-06 06:45:25 │    76 │
+27. │ <a href="https://github.com/vk-com/kphp-kdb">vk-com/kphp-kdb</a>                      │ 2018-01-07 02:06:09 │    76 │
+28. │ <a href="https://github.com/x64dbg/x64dbgpy">x64dbg/x64dbgpy</a>                      │ 2018-01-07 01:59:23 │    75 │
+29. │ <a href="https://github.com/aionnetwork/aion">aionnetwork/aion</a>                     │ 2018-05-10 20:25:09 │    75 │
+30. │ <a href="https://github.com/Dman95/SASM">Dman95/SASM</a>                          │ 2018-01-07 02:09:31 │    74 │
+31. │ <a href="https://github.com/LordZamy/BurstTab">LordZamy/BurstTab</a>                    │ 2015-02-28 04:57:11 │    74 │
+32. │ <a href="https://github.com/ThomasJaeger/VisualMASM">ThomasJaeger/VisualMASM</a>              │ 2018-01-06 06:51:24 │    74 │
+33. │ <a href="https://github.com/Dman95/SASM">Dman95/SASM</a>                          │ 2018-01-07 02:08:23 │    73 │
+34. │ <a href="https://github.com/tejasmanohar/npm-algos">tejasmanohar/npm-algos</a>               │ 2015-07-13 07:50:59 │    73 │
+35. │ <a href="https://github.com/x64dbg/x64dbgpy">x64dbg/x64dbgpy</a>                      │ 2018-01-07 01:59:09 │    73 │
+36. │ <a href="https://github.com/x64dbg/x64dbg">x64dbg/x64dbg</a>                        │ 2018-01-07 01:47:30 │    73 │
+37. │ <a href="https://github.com/Dman95/SASM">Dman95/SASM</a>                          │ 2018-01-07 02:09:12 │    73 │
+38. │ <a href="https://github.com/x64dbg/x64dbg">x64dbg/x64dbg</a>                        │ 2018-01-06 07:24:09 │    73 │
+39. │ <a href="https://github.com/Dman95/SASM">Dman95/SASM</a>                          │ 2018-01-07 02:08:54 │    72 │
+40. │ <a href="https://github.com/vk-com/kphp-kdb">vk-com/kphp-kdb</a>                      │ 2018-01-07 02:06:18 │    72 │
+41. │ <a href="https://github.com/x64dbg/x64dbg">x64dbg/x64dbg</a>                        │ 2018-01-07 01:47:28 │    72 │
+42. │ <a href="https://github.com/x64dbg/x64dbg">x64dbg/x64dbg</a>                        │ 2018-01-06 07:18:02 │    71 │
+43. │ <a href="https://github.com/vk-com/kphp-kdb">vk-com/kphp-kdb</a>                      │ 2018-01-07 02:06:38 │    71 │
+44. │ <a href="https://github.com/x64dbg/x64dbg">x64dbg/x64dbg</a>                        │ 2018-01-07 01:47:17 │    71 │
+45. │ <a href="https://github.com/andrewtian/whatcanidoforbitcoin.xyz">andrewtian/whatcanidoforbitcoin.xyz</a>  │ 2015-09-27 21:45:27 │    71 │
+46. │ <a href="https://github.com/x64dbg/x64dbg">x64dbg/x64dbg</a>                        │ 2018-01-06 07:22:56 │    70 │
+47. │ <a href="https://github.com/pfmoore/shimmy">pfmoore/shimmy</a>                       │ 2018-04-29 13:02:22 │    69 │
+48. │ <a href="https://github.com/x64dbg/x64dbg">x64dbg/x64dbg</a>                        │ 2018-01-07 01:47:10 │    69 │
+49. │ <a href="https://github.com/flutter/flutter">flutter/flutter</a>                      │ 2018-04-29 15:13:32 │    69 │
+50. │ <a href="https://github.com/qw3rtman/gg">qw3rtman/gg</a>                          │ 2015-08-19 02:45:39 │    68 │
     └──────────────────────────────────────┴─────────────────────┴───────┘
 
-50 rows in set. Elapsed: 41.772 sec. Processed 192.10 million rows, 2.20 GB (4.60 million rows/s., 52.62 MB/s.)
+50 rows in set. Elapsed: 11.912 sec. Processed 204.18 million rows, 2.45 GB (17.14 million rows/s., 205.97 MB/s.)
 </pre>
 
 <p>Another JavaScript framework got 370 stars in one peaceful April evening? It's complete madness... By the way, what is <span class="code">borisrepl</span>?</p>
@@ -1708,67 +1712,67 @@ SELECT
 FROM github_events
 WHERE event_type = 'WatchEvent'
 GROUP BY repo_name
-HAVING (min(created_at) <= '2019-01-01 00:00:00') AND (stars2019 >= 1000)
+HAVING (min(created_at) &lt;= '2019-01-01 00:00:00') AND (stars2019 >= 1000)
 ORDER BY yoy DESC
 LIMIT 50
 
-    ┌─repo_name──────────────────────────────┬─stars2020─┬─stars2019─┬────────────────yoy─┬──────────first_seen─┐
- 1. │ <a href="https://github.com/puppeteer/puppeteer">puppeteer/puppeteer</a>                    │      7858 │      1254 │ 6.2663476874003186 │ 2015-01-14 11:00:55 │
- 2. │ <a href="https://github.com/ohmyzsh/ohmyzsh">ohmyzsh/ohmyzsh</a>                        │     15626 │      2525 │  6.188514851485149 │ 2017-03-22 19:44:20 │
- 3. │ <a href="https://github.com/jitsi/jitsi-meet">jitsi/jitsi-meet</a>                       │      9143 │      1547 │ 5.9101486748545575 │ 2015-01-03 21:52:40 │
- 4. │ <a href="https://github.com/r-spacex/SpaceX-API">r-spacex/SpaceX-API</a>                    │      3624 │      1083 │ 3.3462603878116344 │ 2017-06-26 10:00:38 │
- 5. │ <a href="https://github.com/Dod-o/Statistical-Learning-Method_Code">Dod-o/Statistical-Learning-Method_Code</a> │      4342 │      1437 │ 3.0215727209464163 │ 2018-11-15 19:38:25 │
- 6. │ <a href="https://github.com/openspug/spug">openspug/spug</a>                          │      3011 │      1116 │ 2.6980286738351253 │ 2018-02-10 14:01:08 │
- 7. │ <a href="https://github.com/iamadamdev/bypass-paywalls-chrome">iamadamdev/bypass-paywalls-chrome</a>      │      5660 │      2246 │ 2.5200356188780053 │ 2018-04-08 02:54:45 │
- 8. │ <a href="https://github.com/TheAlgorithms/Javascript">TheAlgorithms/Javascript</a>               │      3299 │      1311 │ 2.5163996948893974 │ 2017-08-03 19:27:42 │
- 9. │ <a href="https://github.com/LingCoder/OnJava8">LingCoder/OnJava8</a>                      │      9794 │      4082 │ 2.3993140617344437 │ 2018-12-06 10:16:35 │
-10. │ <a href="https://github.com/ctgk/PRML">ctgk/PRML</a>                              │      4698 │      1970 │  2.384771573604061 │ 2017-07-03 06:06:25 │
-11. │ <a href="https://github.com/trojan-gfw/trojan">trojan-gfw/trojan</a>                      │      9122 │      3939 │  2.315816197004316 │ 2017-11-13 08:54:52 │
-12. │ <a href="https://github.com/dabreegster/abstreet">dabreegster/abstreet</a>                   │      3476 │      1501 │ 2.3157894736842106 │ 2018-06-07 01:07:38 │
-13. │ <a href="https://github.com/Fndroid/clash_for_windows_pkg">Fndroid/clash_for_windows_pkg</a>          │      6494 │      2979 │  2.179926149714669 │ 2018-10-19 03:14:07 │
-14. │ <a href="https://github.com/denoland/deno">denoland/deno</a>                          │     27729 │     12834 │ 2.1605890603085554 │ 2018-08-03 03:26:45 │
-15. │ <a href="https://github.com/retejs/rete">retejs/rete</a>                            │      2204 │      1075 │  2.050232558139535 │ 2018-05-31 06:06:05 │
-16. │ <a href="https://github.com/williamfiset/Algorithms">williamfiset/Algorithms</a>                │      3605 │      1776 │ 2.0298423423423424 │ 2017-05-12 06:37:24 │
-17. │ <a href="https://github.com/halfrost/LeetCode-Go">halfrost/LeetCode-Go</a>                   │      2381 │      1191 │ 1.9991603694374476 │ 2018-04-16 12:29:48 │
-18. │ <a href="https://github.com/AlexeyAB/darknet">AlexeyAB/darknet</a>                       │      6705 │      3463 │ 1.9361825007219173 │ 2016-12-04 22:18:28 │
-19. │ <a href="https://github.com/the1812/Bilibili-Evolved">the1812/Bilibili-Evolved</a>               │      2381 │      1255 │  1.897211155378486 │ 2018-08-30 12:55:58 │
-20. │ <a href="https://github.com/jgraph/drawio-desktop">jgraph/drawio-desktop</a>                  │      6240 │      3292 │ 1.8955042527339003 │ 2017-06-07 20:17:38 │
-21. │ <a href="https://github.com/aniftyco/awesome-tailwindcss">aniftyco/awesome-tailwindcss</a>           │      1901 │      1007 │  1.887785501489573 │ 2018-08-07 13:00:59 │
-22. │ <a href="https://github.com/tiangolo/fastapi">tiangolo/fastapi</a>                       │     13723 │      7470 │ 1.8370816599732263 │ 2018-12-08 13:05:29 │
-23. │ <a href="https://github.com/darlinghq/darling">darlinghq/darling</a>                      │      2058 │      1133 │ 1.8164165931156222 │ 2015-10-11 18:42:44 │
-24. │ <a href="https://github.com/Requarks/wiki">Requarks/wiki</a>                          │      4976 │      2769 │ 1.7970386421090647 │ 2016-08-30 21:46:22 │
-25. │ <a href="https://github.com/yuanming-hu/taichi">yuanming-hu/taichi</a>                     │      4286 │      2445 │  1.752965235173824 │ 2017-02-04 07:35:46 │
-26. │ <a href="https://github.com/easychen/howto-make-more-money">easychen/howto-make-more-money</a>         │      5464 │      3121 │   1.75072092278116 │ 2016-03-13 16:53:13 │
-27. │ <a href="https://github.com/MathewSachin/Captura">MathewSachin/Captura</a>                   │      2432 │      1392 │ 1.7471264367816093 │ 2015-09-12 15:31:42 │
-28. │ <a href="https://github.com/dodyg/practical-aspnetcore">dodyg/practical-aspnetcore</a>             │      2048 │      1183 │ 1.7311918850380388 │ 2016-08-09 15:14:52 │
-29. │ <a href="https://github.com/Dreamacro/clash">Dreamacro/clash</a>                        │      6365 │      3849 │ 1.6536762795531308 │ 2018-06-10 17:41:49 │
-30. │ <a href="https://github.com/ryansolid/solid">ryansolid/solid</a>                        │      2310 │      1433 │  1.612002791346825 │ 2018-05-26 17:28:51 │
-31. │ <a href="https://github.com/midwayjs/midway">midwayjs/midway</a>                        │      1679 │      1052 │ 1.5960076045627376 │ 2018-07-12 10:12:06 │
-32. │ <a href="https://github.com/wilsonfreitas/awesome-quant">wilsonfreitas/awesome-quant</a>            │      1641 │      1052 │ 1.5598859315589353 │ 2016-05-10 13:19:52 │
-33. │ <a href="https://github.com/TheAlgorithms/Go">TheAlgorithms/Go</a>                       │      2019 │      1299 │ 1.5542725173210161 │ 2017-07-11 07:34:48 │
-34. │ <a href="https://github.com/JanDeDobbeleer/oh-my-posh">JanDeDobbeleer/oh-my-posh</a>              │      1910 │      1229 │ 1.5541090317331163 │ 2018-04-12 07:42:01 │
-35. │ <a href="https://github.com/lukasz-madon/awesome-remote-job">lukasz-madon/awesome-remote-job</a>        │      3851 │      2515 │ 1.5312127236580517 │ 2015-01-02 06:07:30 │
-36. │ <a href="https://github.com/ZhongFuCheng3y/3y">ZhongFuCheng3y/3y</a>                      │      6552 │      4302 │ 1.5230125523012552 │ 2018-10-24 14:40:44 │
-37. │ <a href="https://github.com/debauchee/barrier">debauchee/barrier</a>                      │      3813 │      2506 │ 1.5215482841181165 │ 2018-02-23 15:36:21 │
-38. │ <a href="https://github.com/turbolinks/turbolinks">turbolinks/turbolinks</a>                  │      2497 │      1649 │  1.514251061249242 │ 2016-02-01 05:24:49 │
-39. │ <a href="https://github.com/an-tao/drogon">an-tao/drogon</a>                          │      1908 │      1262 │ 1.5118858954041206 │ 2018-05-04 13:03:32 │
-40. │ <a href="https://github.com/jwasham/coding-interview-university">jwasham/coding-interview-university</a>    │     38502 │     25557 │ 1.5065148491606997 │ 2017-02-27 23:09:29 │
-41. │ <a href="https://github.com/The-Art-of-Hacking/h4cker">The-Art-of-Hacking/h4cker</a>              │      3937 │      2623 │ 1.5009531071292412 │ 2018-10-06 15:02:56 │
-42. │ <a href="https://github.com/cchen156/Learning-to-See-in-the-Dark">cchen156/Learning-to-See-in-the-Dark</a>   │      1585 │      1063 │  1.491063029162747 │ 2018-04-17 23:31:49 │
-43. │ <a href="https://github.com/twintproject/twint">twintproject/twint</a>                     │      3355 │      2253 │ 1.4891256102973813 │ 2018-06-12 06:34:17 │
-44. │ <a href="https://github.com/tinode/chat">tinode/chat</a>                            │      2189 │      1470 │ 1.4891156462585033 │ 2015-09-05 11:46:32 │
-45. │ <a href="https://github.com/kylesliu/awesome-golang-leetcode">kylesliu/awesome-golang-leetcode</a>       │      1639 │      1103 │  1.485947416137806 │ 2018-10-08 10:07:35 │
-46. │ <a href="https://github.com/wulabing/V2Ray_ws-tls_bash_onekey">wulabing/V2Ray_ws-tls_bash_onekey</a>      │      3020 │      2049 │ 1.4738897022938018 │ 2017-12-24 16:11:47 │
-47. │ <a href="https://github.com/squidfunk/mkdocs-material">squidfunk/mkdocs-material</a>              │      1571 │      1066 │  1.473733583489681 │ 2016-02-09 22:27:50 │
-48. │ <a href="https://github.com/d2l-ai/d2l-en">d2l-ai/d2l-en</a>                          │      3849 │      2615 │ 1.4718929254302102 │ 2018-12-27 05:19:43 │
-49. │ <a href="https://github.com/zyedidia/micro">zyedidia/micro</a>                         │      3123 │      2149 │ 1.4532340623545836 │ 2016-03-23 22:56:03 │
-50. │ <a href="https://github.com/facebook/pyre-check">facebook/pyre-check</a>                    │      1592 │      1099 │  1.448589626933576 │ 2018-05-11 18:54:32 │
-    └────────────────────────────────────────┴───────────┴───────────┴────────────────────┴─────────────────────┘
+    ┌─repo_name──────────────────────────────────┬─stars2020─┬─stars2019─┬───yoy─┬──────────first_seen─┐
+ 1. │ <a href="https://github.com/puppeteer/puppeteer">puppeteer/puppeteer</a>                        │     10733 │      1255 │ 8.552 │ 2015-01-14 08:00:55 │
+ 2. │ <a href="https://github.com/ohmyzsh/ohmyzsh">ohmyzsh/ohmyzsh</a>                            │     20463 │      2529 │ 8.091 │ 2017-03-22 16:44:20 │
+ 3. │ <a href="https://github.com/halfrost/LeetCode-Go">halfrost/LeetCode-Go</a>                       │      8061 │      1191 │ 6.768 │ 2018-04-16 09:29:48 │
+ 4. │ <a href="https://github.com/jitsi/jitsi-meet">jitsi/jitsi-meet</a>                           │     10245 │      1548 │ 6.618 │ 2015-01-03 18:52:40 │
+ 5. │ <a href="https://github.com/desktop/desktop">desktop/desktop</a>                            │     12227 │      2600 │ 4.703 │ 2017-05-16 17:10:37 │
+ 6. │ <a href="https://github.com/TheAlgorithms/Javascript">TheAlgorithms/Javascript</a>                   │      5779 │      1312 │ 4.405 │ 2017-08-03 16:27:42 │
+ 7. │ <a href="https://github.com/iamadamdev/bypass-paywalls-chrome">iamadamdev/bypass-paywalls-chrome</a>          │      8970 │      2246 │ 3.994 │ 2018-04-07 23:54:45 │
+ 8. │ <a href="https://github.com/r-spacex/SpaceX-API">r-spacex/SpaceX-API</a>                        │      3957 │      1083 │ 3.654 │ 2017-06-26 07:00:38 │
+ 9. │ <a href="https://github.com/openspug/spug">openspug/spug</a>                              │      3980 │      1116 │ 3.566 │ 2018-02-10 11:01:08 │
+10. │ <a href="https://github.com/Dod-o/Statistical-Learning-Method_Code">Dod-o/Statistical-Learning-Method_Code</a>     │      5122 │      1437 │ 3.564 │ 2018-11-15 16:38:25 │
+11. │ <a href="https://github.com/Fndroid/clash_for_windows_pkg">Fndroid/clash_for_windows_pkg</a>              │      8859 │      2979 │ 2.974 │ 2018-10-19 00:14:07 │
+12. │ <a href="https://github.com/williamfiset/Algorithms">williamfiset/Algorithms</a>                    │      5180 │      1778 │ 2.913 │ 2017-05-12 03:37:24 │
+13. │ <a href="https://github.com/LingCoder/OnJava8">LingCoder/OnJava8</a>                          │     11595 │      4082 │ 2.841 │ 2018-12-06 07:16:35 │
+14. │ <a href="https://github.com/aniftyco/awesome-tailwindcss">aniftyco/awesome-tailwindcss</a>               │      2780 │      1007 │ 2.761 │ 2018-08-07 10:00:59 │
+15. │ <a href="https://github.com/the1812/Bilibili-Evolved">the1812/Bilibili-Evolved</a>                   │      3452 │      1255 │ 2.751 │ 2018-08-30 09:55:58 │
+16. │ <a href="https://github.com/darlinghq/darling">darlinghq/darling</a>                          │      3091 │      1133 │ 2.728 │ 2015-10-11 15:42:44 │
+17. │ <a href="https://github.com/jgraph/drawio-desktop">jgraph/drawio-desktop</a>                      │      8677 │      3293 │ 2.635 │ 2017-06-07 17:17:38 │
+18. │ <a href="https://github.com/ctgk/PRML">ctgk/PRML</a>                                  │      5057 │      1970 │ 2.567 │ 2017-07-03 03:06:25 │
+19. │ <a href="https://github.com/twintproject/twint">twintproject/twint</a>                         │      5739 │      2254 │ 2.546 │ 2018-06-12 03:34:17 │
+20. │ <a href="https://github.com/trojan-gfw/trojan">trojan-gfw/trojan</a>                          │     10004 │      3945 │ 2.536 │ 2017-11-13 05:54:52 │
+21. │ <a href="https://github.com/dabreegster/abstreet">dabreegster/abstreet</a>                       │      3726 │      1503 │ 2.479 │ 2018-06-06 22:07:38 │
+22. │ <a href="https://github.com/tomnomnom/gron">tomnomnom/gron</a>                             │      2578 │      1051 │ 2.453 │ 2016-06-04 23:19:04 │
+23. │ <a href="https://github.com/ritchieng/the-incredible-pytorch">ritchieng/the-incredible-pytorch</a>           │      3377 │      1401 │  2.41 │ 2017-02-11 08:37:30 │
+24. │ <a href="https://github.com/denoland/deno">denoland/deno</a>                              │     30868 │     12833 │ 2.405 │ 2018-08-03 00:26:45 │
+25. │ <a href="https://github.com/elsewhencode/project-guidelines">elsewhencode/project-guidelines</a>            │      3596 │      1503 │ 2.393 │ 2018-03-21 18:06:16 │
+26. │ <a href="https://github.com/AlexeyAB/darknet">AlexeyAB/darknet</a>                           │      8219 │      3465 │ 2.372 │ 2016-12-04 19:18:28 │
+27. │ <a href="https://github.com/MathewSachin/Captura">MathewSachin/Captura</a>                       │      3269 │      1392 │ 2.348 │ 2015-09-12 12:31:42 │
+28. │ <a href="https://github.com/remoteintech/remote-jobs">remoteintech/remote-jobs</a>                   │      6702 │      2858 │ 2.345 │ 2017-09-09 13:12:05 │
+29. │ <a href="https://github.com/tiangolo/fastapi">tiangolo/fastapi</a>                           │     17226 │      7474 │ 2.305 │ 2018-12-08 10:05:29 │
+30. │ <a href="https://github.com/retejs/rete">retejs/rete</a>                                │      2459 │      1075 │ 2.287 │ 2018-05-31 03:06:05 │
+31. │ <a href="https://github.com/an-tao/drogon">an-tao/drogon</a>                              │      2796 │      1262 │ 2.216 │ 2018-05-04 10:03:32 │
+32. │ <a href="https://github.com/Dreamacro/clash">Dreamacro/clash</a>                            │      8370 │      3850 │ 2.174 │ 2018-06-10 14:41:49 │
+33. │ <a href="https://github.com/debauchee/barrier">debauchee/barrier</a>                          │      5438 │      2505 │ 2.171 │ 2018-02-23 12:36:21 │
+34. │ <a href="https://github.com/The-Art-of-Hacking/h4cker">The-Art-of-Hacking/h4cker</a>                  │      5661 │      2622 │ 2.159 │ 2018-10-06 12:02:56 │
+35. │ <a href="https://github.com/TheAlgorithms/Go">TheAlgorithms/Go</a>                           │      2794 │      1299 │ 2.151 │ 2017-07-11 04:34:48 │
+36. │ <a href="https://github.com/ryansolid/solid">ryansolid/solid</a>                            │      3059 │      1433 │ 2.135 │ 2018-05-26 14:28:51 │
+37. │ <a href="https://github.com/JanDeDobbeleer/oh-my-posh">JanDeDobbeleer/oh-my-posh</a>                  │      2615 │      1229 │ 2.128 │ 2018-04-12 04:42:01 │
+38. │ <a href="https://github.com/wilsonfreitas/awesome-quant">wilsonfreitas/awesome-quant</a>                │      2228 │      1053 │ 2.116 │ 2016-05-10 10:19:52 │
+39. │ <a href="https://github.com/Requarks/wiki">Requarks/wiki</a>                              │      5852 │      2769 │ 2.113 │ 2016-08-30 18:46:22 │
+40. │ <a href="https://github.com/GitSquared/edex-ui">GitSquared/edex-ui</a>                         │     12220 │      5797 │ 2.108 │ 2017-10-14 15:55:21 │
+41. │ <a href="https://github.com/Aircoookie/WLED">Aircoookie/WLED</a>                            │      2401 │      1141 │ 2.104 │ 2017-12-17 08:36:13 │
+42. │ <a href="https://github.com/FreeCAD/FreeCAD">FreeCAD/FreeCAD</a>                            │      3723 │      1777 │ 2.095 │ 2015-07-04 23:06:13 │
+43. │ <a href="https://github.com/JaeYeopHan/Interview_Question_for_Beginner">JaeYeopHan/Interview_Question_for_Beginner</a> │      3566 │      1719 │ 2.074 │ 2017-06-16 15:39:58 │
+44. │ <a href="https://github.com/midwayjs/midway">midwayjs/midway</a>                            │      2168 │      1052 │ 2.061 │ 2018-07-12 07:12:06 │
+45. │ <a href="https://github.com/squidfunk/mkdocs-material">squidfunk/mkdocs-material</a>                  │      2188 │      1066 │ 2.053 │ 2016-02-09 19:27:50 │
+46. │ <a href="https://github.com/jwasham/coding-interview-university">jwasham/coding-interview-university</a>        │     52415 │     25556 │ 2.051 │ 2017-02-27 20:09:29 │
+47. │ <a href="https://github.com/TheCherno/Hazel">TheCherno/Hazel</a>                            │      2624 │      1292 │ 2.031 │ 2018-10-20 04:01:11 │
+48. │ <a href="https://github.com/danluu/post-mortems">danluu/post-mortems</a>                        │      2418 │      1193 │ 2.027 │ 2015-08-03 12:52:45 │
+49. │ <a href="https://github.com/s-matyukevich/raspberry-pi-os">s-matyukevich/raspberry-pi-os</a>              │      2700 │      1356 │ 1.991 │ 2018-04-10 01:44:12 │
+50. │ <a href="https://github.com/easychen/howto-make-more-money">easychen/howto-make-more-money</a>             │      6165 │      3121 │ 1.975 │ 2016-03-13 13:53:13 │
+    └────────────────────────────────────────────┴───────────┴───────────┴───────┴─────────────────────┘
 
-50 rows in set. Elapsed: 3.568 sec. Processed 192.10 million rows, 2.20 GB (53.84 million rows/s., 616.02 MB/s.)
+50 rows in set. Elapsed: 0.886 sec. Processed 204.18 million rows, 2.45 GB (230.41 million rows/s., 2.77 GB/s.)
 </pre>
 
-<p>It's not surprising to see Jitsi (open-source video conferences) has grown almost 6 times in 2020!</p>
+<p>It's not surprising to see <a href="https://github.com/jitsi/jitsi-meet">Jitsi</a> (open-source video conferences) has grown almost 6 times in 2020!</p>
 
 <h3>Repositories that stagnated the most</h3>
 
@@ -1778,7 +1782,7 @@ SELECT
     repo_name,
     sum(year = 2020) AS stars2020,
     sum(year = 2019) AS stars2019,
-    stars2020 / stars2019 AS yoy,
+    round(stars2020 / stars2019, 3) AS yoy,
     min(created_at) AS first_seen
 FROM github_events
 WHERE event_type = 'WatchEvent'
@@ -1787,61 +1791,63 @@ HAVING (min(created_at) <= '2019-01-01 00:00:00') AND (max(created_at) >= '2020-
 ORDER BY yoy ASC
 LIMIT 50
 
-    ┌─repo_name─────────────────────────────────────┬─stars2020─┬─stars2019─┬───────────────────yoy─┬──────────first_seen─┐
- 1. │ <a href="https://github.com/M4cs/BabySploit">M4cs/BabySploit</a>                               │       100 │     71013 │ 0.0014081928660949403 │ 2018-11-11 13:10:30 │
- 2. │ <a href="https://github.com/energicryptocurrency/energi">energicryptocurrency/energi</a>                   │        12 │      6720 │ 0.0017857142857142857 │ 2017-07-14 19:01:39 │
- 3. │ <a href="https://github.com/everitoken/evt">everitoken/evt</a>                                │         6 │      1366 │  0.004392386530014641 │ 2018-04-23 06:57:30 │
- 4. │ <a href="https://github.com/AioiLight/TJAPlayer3">AioiLight/TJAPlayer3</a>                          │        24 │      5308 │   0.00452147701582517 │ 2018-01-17 22:59:10 │
- 5. │ <a href="https://github.com/SqueezerIO/squeezer">SqueezerIO/squeezer</a>                           │        27 │      3307 │  0.008164499546416692 │ 2017-05-15 10:31:14 │
- 6. │ <a href="https://github.com/react-native-training/react-native-elements">react-native-training/react-native-elements</a>   │        38 │      3341 │  0.011373840167614486 │ 2017-04-03 07:27:02 │
- 7. │ <a href="https://github.com/dengyuhan/magnetW">dengyuhan/magnetW</a>                             │        50 │      4215 │  0.011862396204033215 │ 2018-03-09 12:18:23 │
- 8. │ <a href="https://github.com/app-developers/top">app-developers/top</a>                            │        28 │      1953 │  0.014336917562724014 │ 2018-06-27 11:04:07 │
- 9. │ <a href="https://github.com/KidkArolis/jetpack">KidkArolis/jetpack</a>                            │        21 │      1174 │   0.01788756388415673 │ 2017-03-13 15:09:24 │
-10. │ <a href="https://github.com/achael/eht-imaging">achael/eht-imaging</a>                            │       123 │      5358 │   0.02295632698768197 │ 2016-02-03 06:06:34 │
-11. │ <a href="https://github.com/marcan/takeover.sh">marcan/takeover.sh</a>                            │        72 │      2785 │   0.02585278276481149 │ 2017-02-10 19:27:02 │
-12. │ <a href="https://github.com/metatron-app/metatron-discovery">metatron-app/metatron-discovery</a>               │        90 │      3120 │  0.028846153846153848 │ 2018-07-27 10:55:44 │
-13. │ <a href="https://github.com/soheilpro/catj">soheilpro/catj</a>                                │        41 │      1307 │   0.03136954858454476 │ 2015-05-06 19:51:41 │
-14. │ <a href="https://github.com/sinclairzx81/zero">sinclairzx81/zero</a>                             │        74 │      2160 │   0.03425925925925926 │ 2017-06-14 06:45:10 │
-15. │ <a href="https://github.com/kezhenxu94/mini-github">kezhenxu94/mini-github</a>                        │        44 │      1283 │     0.034294621979735 │ 2018-11-04 18:11:38 │
-16. │ <a href="https://github.com/FreeCodeCampChina/freecodecamp.cn">FreeCodeCampChina/freecodecamp.cn</a>             │       264 │      7650 │  0.034509803921568626 │ 2016-09-24 13:10:42 │
-17. │ <a href="https://github.com/trojanowski/react-apollo-hooks">trojanowski/react-apollo-hooks</a>                │        79 │      1976 │  0.039979757085020245 │ 2018-10-29 10:56:09 │
-18. │ <a href="https://github.com/JesseKPhillips/USA-Constitution">JesseKPhillips/USA-Constitution</a>               │        80 │      1924 │   0.04158004158004158 │ 2017-11-17 00:14:35 │
-19. │ <a href="https://github.com/RomuloOliveira/commit-messages-guide">RomuloOliveira/commit-messages-guide</a>          │       242 │      5817 │   0.04160220044696579 │ 2018-02-26 05:54:42 │
-20. │ <a href="https://github.com/ecthros/uncaptcha2">ecthros/uncaptcha2</a>                            │       186 │      4236 │  0.043909348441926344 │ 2018-12-31 20:20:19 │
-21. │ <a href="https://github.com/koekeishiya/chunkwm">koekeishiya/chunkwm</a>                           │        61 │      1331 │   0.04583020285499624 │ 2017-01-15 17:43:56 │
-22. │ <a href="https://github.com/trimstray/the-practical-linux-hardening-guide">trimstray/the-practical-linux-hardening-guide</a> │       352 │      7355 │   0.04785859959211421 │ 2018-10-07 01:36:36 │
-23. │ <a href="https://github.com/sveinbjornt/Sloth">sveinbjornt/Sloth</a>                             │       168 │      3483 │   0.04823428079242033 │ 2015-01-13 19:56:36 │
-24. │ <a href="https://github.com/apachecn/awesome-algorithm">apachecn/awesome-algorithm</a>                    │       170 │      3425 │  0.049635036496350364 │ 2018-09-24 19:46:26 │
-25. │ <a href="https://github.com/hiroppy/fusuma">hiroppy/fusuma</a>                                │       187 │      3327 │   0.05620679290652239 │ 2018-04-27 04:43:35 │
-26. │ <a href="https://github.com/dwyl/learn-json-web-tokens">dwyl/learn-json-web-tokens</a>                    │       144 │      2500 │                0.0576 │ 2015-07-06 16:09:04 │
-27. │ <a href="https://github.com/danijar/handout">danijar/handout</a>                               │       106 │      1825 │   0.05808219178082192 │ 2018-11-25 00:07:46 │
-28. │ <a href="https://github.com/uswds/public-sans">uswds/public-sans</a>                             │       210 │      3601 │    0.0583171341294085 │ 2018-10-06 23:42:23 │
-29. │ <a href="https://github.com/chrisdickinson/git-rs">chrisdickinson/git-rs</a>                         │        71 │      1197 │  0.059314954051796154 │ 2018-12-22 08:52:49 │
-30. │ <a href="https://github.com/jfcoz/postgresqltuner">jfcoz/postgresqltuner</a>                         │       107 │      1750 │  0.061142857142857145 │ 2016-12-16 01:08:38 │
-31. │ <a href="https://github.com/facebookincubator/spectrum">facebookincubator/spectrum</a>                    │        90 │      1471 │  0.061182868796736914 │ 2018-11-20 19:31:01 │
-32. │ <a href="https://github.com/Bogdan-Lyashenko/codecrumbs">Bogdan-Lyashenko/codecrumbs</a>                   │       141 │      2293 │   0.06149149585695595 │ 2018-05-03 13:50:17 │
-33. │ <a href="https://github.com/lib-pku/libpku">lib-pku/libpku</a>                                │      1424 │     23015 │   0.06187269172278949 │ 2018-11-22 16:35:21 │
-34. │ <a href="https://github.com/trimstray/htrace.sh">trimstray/htrace.sh</a>                           │       173 │      2788 │   0.06205164992826399 │ 2018-07-14 01:40:41 │
-35. │ <a href="https://github.com/adblockradio/adblockradio">adblockradio/adblockradio</a>                     │        74 │      1184 │                0.0625 │ 2018-11-15 17:33:52 │
-36. │ <a href="https://github.com/charlax/professional-programming">charlax/professional-programming</a>              │       819 │     12892 │   0.06352776915916848 │ 2016-05-07 06:25:06 │
-37. │ <a href="https://github.com/TheBerkin/rant">TheBerkin/rant</a>                                │        82 │      1283 │   0.06391270459859703 │ 2017-07-25 02:31:51 │
-38. │ <a href="https://github.com/Wookai/paper-tips-and-tricks">Wookai/paper-tips-and-tricks</a>                  │       181 │      2705 │   0.06691312384473198 │ 2015-07-09 21:16:32 │
-39. │ <a href="https://github.com/mlabouardy/komiser">mlabouardy/komiser</a>                            │       129 │      1904 │   0.06775210084033613 │ 2018-03-17 19:43:27 │
-40. │ <a href="https://github.com/jhuangtw-dev/xg2xg">jhuangtw-dev/xg2xg</a>                            │       488 │      7033 │   0.06938717474761837 │ 2017-01-07 18:54:00 │
-41. │ <a href="https://github.com/shengxinjing/programmer-job-blacklist">shengxinjing/programmer-job-blacklist</a>         │      1096 │     15750 │   0.06958730158730159 │ 2017-02-23 05:45:43 │
-42. │ <a href="https://github.com/geekinglcq/CDCS">geekinglcq/CDCS</a>                               │       114 │      1628 │   0.07002457002457002 │ 2018-03-19 10:54:49 │
-43. │ <a href="https://github.com/Louiszhai/tool">Louiszhai/tool</a>                                │       309 │      4286 │   0.07209519365375641 │ 2016-07-14 09:04:09 │
-44. │ <a href="https://github.com/IdeasOnCanvas/Aiolos">IdeasOnCanvas/Aiolos</a>                          │        85 │      1167 │    0.0728363324764353 │ 2018-12-07 21:35:11 │
-45. │ <a href="https://github.com/xyproto/algernon">xyproto/algernon</a>                              │        87 │      1189 │   0.07317073170731707 │ 2015-03-11 05:18:19 │
-46. │ <a href="https://github.com/jeffgerickson/algorithms">jeffgerickson/algorithms</a>                      │       464 │      6139 │   0.07558234240104252 │ 2018-12-28 06:01:40 │
-47. │ <a href="https://github.com/supertuxkart/stk-code">supertuxkart/stk-code</a>                         │       188 │      2419 │   0.07771806531624638 │ 2015-01-04 05:39:04 │
-48. │ <a href="https://github.com/schollz/howmanypeoplearearound">schollz/howmanypeoplearearound</a>                │       225 │      2873 │   0.07831534980856247 │ 2017-05-13 20:59:11 │
-49. │ <a href="https://github.com/facebookincubator/redux-react-hook">facebookincubator/redux-react-hook</a>            │       141 │      1799 │   0.07837687604224569 │ 2018-11-09 19:19:29 │
-50. │ <a href="https://github.com/Avik-Jain/100-Days-of-ML-Code-Chinese-Version">Avik-Jain/100-Days-of-ML-Code-Chinese-Version</a> │       149 │      1715 │   0.08688046647230321 │ 2018-08-05 17:45:50 │
-    └───────────────────────────────────────────────┴───────────┴───────────┴───────────────────────┴─────────────────────┘
+    ┌─repo_name─────────────────────────────────────┬─stars2020─┬─stars2019─┬───yoy─┬──────────first_seen─┐
+ 1. │ <a href="https://github.com/DoubleLabyrinth/navicat-keygen">DoubleLabyrinth/navicat-keygen</a>                │         1 │      6459 │     0 │ 2017-12-08 02:04:48 │
+ 2. │ <a href="https://github.com/arpitjindal97/technology_books">arpitjindal97/technology_books</a>                │         1 │      4001 │     0 │ 2017-08-16 19:08:59 │
+ 3. │ <a href="https://github.com/b3log/pipe">b3log/pipe</a>                                    │         2 │      2380 │ 0.001 │ 2017-12-20 05:08:15 │
+ 4. │ <a href="https://github.com/energicryptocurrency/energi">energicryptocurrency/energi</a>                   │        12 │      6720 │ 0.002 │ 2017-07-14 16:01:39 │
+ 5. │ <a href="https://github.com/M4cs/BabySploit">M4cs/BabySploit</a>                               │       122 │     71013 │ 0.002 │ 2018-11-11 10:10:30 │
+ 6. │ <a href="https://github.com/AioiLight/TJAPlayer3">AioiLight/TJAPlayer3</a>                          │        28 │      5308 │ 0.005 │ 2018-01-17 19:59:10 │
+ 7. │ <a href="https://github.com/everitoken/evt">everitoken/evt</a>                                │         8 │      1366 │ 0.006 │ 2018-04-23 03:57:30 │
+ 8. │ <a href="https://github.com/SqueezerIO/squeezer">SqueezerIO/squeezer</a>                           │        41 │      3307 │ 0.012 │ 2017-05-15 07:31:14 │
+ 9. │ <a href="https://github.com/dengyuhan/magnetW">dengyuhan/magnetW</a>                             │        54 │      4215 │ 0.013 │ 2018-03-09 09:18:23 │
+10. │ <a href="https://github.com/react-native-training/react-native-elements">react-native-training/react-native-elements</a>   │        48 │      3341 │ 0.014 │ 2017-04-03 04:27:02 │
+11. │ <a href="https://github.com/app-developers/top">app-developers/top</a>                            │        35 │      1950 │ 0.018 │ 2018-06-27 08:04:07 │
+12. │ <a href="https://github.com/KidkArolis/jetpack">KidkArolis/jetpack</a>                            │        29 │      1174 │ 0.025 │ 2017-03-13 12:09:24 │
+13. │ <a href="https://github.com/achael/eht-imaging">achael/eht-imaging</a>                            │       158 │      5358 │ 0.029 │ 2016-02-03 03:06:34 │
+14. │ <a href="https://github.com/metatron-app/metatron-discovery">metatron-app/metatron-discovery</a>               │       113 │      3120 │ 0.036 │ 2018-07-27 07:55:44 │
+15. │ <a href="https://github.com/marcan/takeover.sh">marcan/takeover.sh</a>                            │       102 │      2786 │ 0.037 │ 2017-02-10 16:27:02 │
+16. │ <a href="https://github.com/kezhenxu94/mini-github">kezhenxu94/mini-github</a>                        │        49 │      1283 │ 0.038 │ 2018-11-04 15:11:38 │
+17. │ <a href="https://github.com/soheilpro/catj">soheilpro/catj</a>                                │        51 │      1307 │ 0.039 │ 2015-05-06 16:51:41 │
+18. │ <a href="https://github.com/sinclairzx81/zero">sinclairzx81/zero</a>                             │        90 │      2160 │ 0.042 │ 2017-06-14 03:45:10 │
+19. │ <a href="https://github.com/FreeCodeCampChina/freecodecamp.cn">FreeCodeCampChina/freecodecamp.cn</a>             │       323 │      7651 │ 0.042 │ 2016-09-24 10:10:42 │
+20. │ <a href="https://github.com/trojanowski/react-apollo-hooks">trojanowski/react-apollo-hooks</a>                │        89 │      1976 │ 0.045 │ 2018-10-29 07:56:09 │
+21. │ <a href="https://github.com/koekeishiya/chunkwm">koekeishiya/chunkwm</a>                           │        61 │      1331 │ 0.046 │ 2017-01-15 14:43:56 │
+22. │ <a href="https://github.com/JesseKPhillips/USA-Constitution">JesseKPhillips/USA-Constitution</a>               │        92 │      1924 │ 0.048 │ 2017-11-16 21:14:35 │
+23. │ <a href="https://github.com/RomuloOliveira/commit-messages-guide">RomuloOliveira/commit-messages-guide</a>          │       295 │      5817 │ 0.051 │ 2018-02-26 02:54:42 │
+24. │ <a href="https://github.com/mgp25/Instagram-API">mgp25/Instagram-API</a>                           │        96 │      1769 │ 0.054 │ 2015-11-16 18:48:36 │
+25. │ <a href="https://github.com/apachecn/awesome-algorithm">apachecn/awesome-algorithm</a>                    │       191 │      3424 │ 0.056 │ 2018-09-24 16:46:26 │
+26. │ <a href="https://github.com/ecthros/uncaptcha2">ecthros/uncaptcha2</a>                            │       246 │      4219 │ 0.058 │ 2018-12-31 17:20:19 │
+27. │ <a href="https://github.com/TheBerkin/rant">TheBerkin/rant</a>                                │        83 │      1283 │ 0.065 │ 2017-07-24 23:31:51 │
+28. │ <a href="https://github.com/sveinbjornt/Sloth">sveinbjornt/Sloth</a>                             │       230 │      3483 │ 0.066 │ 2015-01-13 16:56:36 │
+29. │ <a href="https://github.com/dwyl/learn-json-web-tokens">dwyl/learn-json-web-tokens</a>                    │       168 │      2500 │ 0.067 │ 2015-07-06 13:09:04 │
+30. │ <a href="https://github.com/trimstray/the-practical-linux-hardening-guide">trimstray/the-practical-linux-hardening-guide</a> │       498 │      7355 │ 0.068 │ 2018-10-06 22:36:36 │
+31. │ <a href="https://github.com/chrisdickinson/git-rs">chrisdickinson/git-rs</a>                         │        86 │      1197 │ 0.072 │ 2018-12-22 05:52:49 │
+32. │ <a href="https://github.com/danijar/handout">danijar/handout</a>                               │       133 │      1825 │ 0.073 │ 2018-11-24 21:07:46 │
+33. │ <a href="https://github.com/uswds/public-sans">uswds/public-sans</a>                             │       263 │      3601 │ 0.073 │ 2018-10-06 20:42:23 │
+34. │ <a href="https://github.com/trimstray/htrace.sh">trimstray/htrace.sh</a>                           │       210 │      2788 │ 0.075 │ 2018-07-13 22:40:41 │
+35. │ <a href="https://github.com/Bogdan-Lyashenko/codecrumbs">Bogdan-Lyashenko/codecrumbs</a>                   │       184 │      2293 │  0.08 │ 2018-05-03 10:50:17 │
+36. │ <a href="https://github.com/jfcoz/postgresqltuner">jfcoz/postgresqltuner</a>                         │       140 │      1750 │  0.08 │ 2016-12-15 22:08:38 │
+37. │ <a href="https://github.com/lib-pku/libpku">lib-pku/libpku</a>                                │      1843 │     23015 │  0.08 │ 2018-11-22 13:35:21 │
+38. │ <a href="https://github.com/charlax/professional-programming">charlax/professional-programming</a>              │      1065 │     12892 │ 0.083 │ 2016-05-07 03:25:06 │
+39. │ <a href="https://github.com/adblockradio/adblockradio">adblockradio/adblockradio</a>                     │        98 │      1184 │ 0.083 │ 2018-11-15 14:33:52 │
+40. │ <a href="https://github.com/Wookai/paper-tips-and-tricks">Wookai/paper-tips-and-tricks</a>                  │       230 │      2705 │ 0.085 │ 2015-07-09 18:16:32 │
+41. │ <a href="https://github.com/facebookincubator/spectrum">facebookincubator/spectrum</a>                    │       125 │      1471 │ 0.085 │ 2018-11-20 16:31:01 │
+42. │ <a href="https://github.com/jhuangtw-dev/xg2xg">jhuangtw-dev/xg2xg</a>                            │       600 │      7033 │ 0.085 │ 2017-01-07 15:54:00 │
+43. │ <a href="https://github.com/geekinglcq/CDCS">geekinglcq/CDCS</a>                               │       145 │      1628 │ 0.089 │ 2018-03-19 07:54:49 │
+44. │ <a href="https://github.com/Louiszhai/tool">Louiszhai/tool</a>                                │       391 │      4286 │ 0.091 │ 2016-07-14 06:04:09 │
+45. │ <a href="https://github.com/mlabouardy/komiser">mlabouardy/komiser</a>                            │       178 │      1904 │ 0.093 │ 2018-03-17 16:43:27 │
+46. │ <a href="https://github.com/CoolPhilChen/SJTU-Courses">CoolPhilChen/SJTU-Courses</a>                     │       538 │      5739 │ 0.094 │ 2018-01-20 02:04:41 │
+47. │ <a href="https://github.com/facebookincubator/redux-react-hook">facebookincubator/redux-react-hook</a>            │       173 │      1799 │ 0.096 │ 2018-11-09 16:19:29 │
+48. │ <a href="https://github.com/shengxinjing/programmer-job-blacklist">shengxinjing/programmer-job-blacklist</a>         │      1522 │     15750 │ 0.097 │ 2017-02-23 02:45:43 │
+49. │ <a href="https://github.com/hiroppy/fusuma">hiroppy/fusuma</a>                                │       324 │      3327 │ 0.097 │ 2018-04-27 01:43:35 │
+50. │ <a href="https://github.com/x-ream/x7">x-ream/x7</a>                                     │       131 │      1275 │ 0.103 │ 2018-12-23 13:46:14 │
+    └───────────────────────────────────────────────┴───────────┴───────────┴───────┴─────────────────────┘
 
-50 rows in set. Elapsed: 3.598 sec. Processed 192.10 million rows, 2.20 GB (53.39 million rows/s., 610.97 MB/s.)
+50 rows in set. Elapsed: 0.756 sec. Processed 204.18 million rows, 2.45 GB (270.15 million rows/s., 3.25 GB/s.)
 </pre>
+
+<p>The first entries are not available on GitHub due to removal.</p>
 
 <h3>Repositories with the most steady growth over time</h3>
 
