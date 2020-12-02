@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Everything You Would Like To Know About GitHub But Afraid To Ask</title>
+    <title>Everything You Always Wanted To Know About GitHub (But Were Afraid To Ask)</title>
     <style type="text/css">
         html
         {
@@ -159,13 +159,13 @@
 </head>
 <body>
 
-<h1>Everything You Would Like To Know<br/>About GitHub But Afraid To Ask</h1>
+<h1>Everything You Always Wanted To Know<br/>About GitHub (But Were Afraid To Ask)</h1>
 
 <h2>Abstract</h2>
 
-<p>We prepared a dataset from <a href="https://www.gharchive.org/">GH Archive</a> that contains all the events in all GitHub repositories since 2015 in structured format. The dataset was uploaded into <a href="https://clickhouse.tech/">ClickHouse</a>, it contains 2.8 billion records. We redistribute it for research purposes, it can be downloaded by <a href="#download-the-dataset">direct link</a>. This dataset allows to answer most of the questions about GitHub that you can imagine.</p>
+<p>We prepared a dataset from the <a href="https://www.gharchive.org/">GH Archive</a> that contains all the events in all GitHub repositories since 2015 in structured format. The dataset was uploaded into <a href="https://clickhouse.tech/">ClickHouse</a>, where it contains 2.8 billion records. We redistribute it for research purposes and it can be downloaded at this <a href="#download-the-dataset">direct link</a>. This dataset can help answer almost any question about GitHub that you can imagine.</p>
 
-<p>The article will show the usage of the dataset and the insights about GitHub ecosystem. It emphasizes how easy is to play with data using modern tools.</p>
+<p>This article shows the usage of the dataset and offers insights into the GitHub ecosystem. It emphasizes how easy it is to play with data using modern tools.</p>
 
 
 <div id="move-to-top"><a href="#table-of-contents">▲</a></div>
@@ -191,7 +191,7 @@
 1 rows in set. Elapsed: 0.036 sec. Processed 204.18 million rows, 204.18 MB (5.63 billion rows/s., 5.63 GB/s.)
 </pre>
 
-<p>There is no event when someone removes the star. So, star removal is invisible. It should be rare nevertheless, so we can calculate the approximate number of stars from these events.</p>
+<p>There is no event when someone removes the star. This means that star removal is invisible, but it should be rare in any case, so we can calculate the approximate number of stars from these events.</p>
 
 <pre>
 :) SELECT action, count() FROM github_events WHERE event_type = 'WatchEvent' GROUP BY action
@@ -218,12 +218,12 @@
 </pre>
 
 <p>The number looks consistent with the real star count.</p>
-<p>(the repository was moved from <span class="code">yandex/ClickHouse</span> to <span class="code">ClickHouse/ClickHouse</span> on October 2019, so we have to sum up the numbers for two repos)</p>
+<p>(The repository was moved from <span class="code">yandex/ClickHouse</span> to <span class="code">ClickHouse/ClickHouse</span> on October 2019, so we have to sum up the numbers for two repos.)</p>
 
 
 <h3>Top repositories by stars</h3>
 
-<p>The first report that comes to mind.</p>
+<p>This is the first report that comes to mind.</p>
 
 <pre>
 :) SET output_format_pretty_row_numbers = 1
@@ -285,14 +285,14 @@
 50 rows in set. Elapsed: 0.583 sec. Processed 204.18 million rows, 1.64 GB (350.31 million rows/s., 2.81 GB/s.)
 </pre>
 
-<p>The top repository ever is "996.ICU" &mdash; it's not a software, but more like a project to improve awareness about work schedule in different Chinese companies. But wait... it's not the top repo. We see two copies of "FreeCodeCamp": <span class="code">FreeCodeCamp/FreeCodeCamp</span> and <span class="code">freeCodeCamp/freeCodeCamp</span>. If we sum up the stars it will be <span class="code">225390 + 139197 = 360137</span> &mdash; slightly more than "996.ICU". So, the top repository on GitHub is an educational resource.</p>
+<p>The top repository ever is "996.ICU" &mdash; it's not for software, but more like a project to improve awareness about work schedules in different Chinese companies. But wait... it's not the top repo. We see two copies of "FreeCodeCamp": <span class="code">FreeCodeCamp/FreeCodeCamp</span> and <span class="code">freeCodeCamp/freeCodeCamp</span>. If we sum up the stars it will be <span class="code">225390 + 139197 = 360137</span> &mdash; slightly more than "996.ICU". So, the top repository on GitHub is an educational resource.</p>
 
-<p>Next we see: JavaScript framework, then Machine Learning framework, then another JavaScript framework, then the list of Awesome Awesomeness, then the JavaScript education resources, then another education project, another education project, UI framework, education, education, UI framework, JS something, CSS framework and finally on 17th place there is Linux. Let's stop at this point.</p>
+<p>Next we see: JavaScript framework, then Machine Learning framework, then another JavaScript framework, then the list of Awesome Awesomeness, then the JavaScript education resources, then another education project, another education project, UI framework, education, education, UI framework, JS something, CSS framework and finally in 17th place there is Linux. Let's stop at this point.</p>
 
-<p>Bottomline: GitHub is full of JavaScript frameworks and education content. But don't jump to conclusions, we only scratched the surface!</p>
+<p>Bottomline: GitHub is full of JavaScript frameworks and education content. But don't jump to conclusions yet &mdash; we've only scratched the surface!</p>
 
 
-<h3>Distribution of repositories by stars count</h3>
+<h3>Distribution of repositories by star count</h3>
 
 <p>By the way, what is the distribution of repositories by stars?</p>
 <pre>
@@ -323,7 +323,7 @@ ORDER BY stars ASC
 6 rows in set. Elapsed: 1.254 sec. Processed 204.18 million rows, 1.64 GB (162.87 million rows/s., 1.31 GB/s.)
 </pre>
 
-<p>There are only 13 million repositories that has at least one star. There are only 1.2 million repositories with 10+ stars. Just 200 000 repositories have over 100 stars, 25 000 have over 1k stars, 1500 have over 10k stars and there are only 14 repositories with more than 100k stars.</p>
+<p>There are only 13 million repositories that have at least one star. There are only 1.2 million repositories with 10+ stars. Just 200 000 repositories have over 100 stars, 25 000 have over 1k stars, 1500 have over 10k stars and there are only 14 repositories with more than 100k stars.</p>
 
 <h3>The total number of repositories on GitHub</h3>
 <pre>
@@ -339,7 +339,7 @@ ORDER BY stars ASC
 <p>If we will take all stars and distribute uniformly across all the repositories, every repository will get 1.37 stars.</p>
 
 
-<h3>How the list of top repositories changed over years?</h3>
+<h3>How has the list of top repositories changed over the years?</h3>
 
 <p>
   <a data-div-id-prefix="repos" class="button">2015</a>
@@ -409,7 +409,7 @@ ORDER BY stars ASC
 50 rows in set. Elapsed: 0.420 sec. Processed 188.98 million rows, 2.14 GB (449.89 million rows/s., 5.10 GB/s.)
 </pre>
 
-<p>The top repo is Chinese educational resource to prepare for algorithms interview. Actually amost all from top 10 is about education. The only exceptions are: <span class="code">Deno</span> &mdash; a JS runtime and <span class="code">CSSEGISandData/COVID-19</span> &mdash; a repo for COVID-19 data. Yes, I expected that 2020 is about COVID-19 but happily enough not only about COVID-19.</p>
+<p>The top repo is a Chinese educational resource to prepare for an algorithms interview. Actually, amost all of the top 10 are related to education. The only exceptions are: <span class="code">Deno</span> &mdash; a JS runtime and <span class="code">CSSEGISandData/COVID-19</span> &mdash; a repo for COVID-19 data. Yes, I expected that 2020 would be about COVID-19 but happily enough it's not only about COVID-19.</p>
 </div>
 
 <div id="repos2019">
@@ -845,7 +845,7 @@ FORMAT JSON
 
 <div class="chart" id="chart_top_repos"></div>
 
-<h3>How the total number of stars changed over years?</h3>
+<h3>How has the total number of stars changed over time?</h3>
 
 <pre>
 :) SELECT toYear(created_at) AS year, count() AS stars, bar(stars, 0, 50000000, 10) AS bar FROM github_events WHERE event_type = 'WatchEvent' GROUP BY year ORDER BY year
@@ -864,7 +864,7 @@ FORMAT JSON
 8 rows in set. Elapsed: 0.124 sec. Processed 204.18 million rows, 1.02 GB (1.65 billion rows/s., 8.25 GB/s.)
 </pre>
 
-<p>We see just steady linear growth with YoY rate about 25%. By the way, there is no archive data before 2015 and the 2011 and 2012 data points look like outliers.</p>
+<p>We see just steady linear growth with a YoY rate of about 25%. By the way, there is no archive data before 2015 and the 2011 and 2012 data points look like outliers.</p>
 
 
 <h3>Who are all those people giving stars?</h3>
@@ -928,7 +928,7 @@ FORMAT JSON
 50 rows in set. Elapsed: 2.715 sec. Processed 204.18 million rows, 3.52 GB (75.20 million rows/s., 1.29 GB/s.)
 </pre>
 
-<p>I checked the results: <span class="code">4148</span> looks like an empty account... very suspicious. The next user looks okay. But how it's possible to give 202 534 stars?</p>
+<p>I checked the results: <span class="code">4148</span> looks like an empty account... very suspicious. The next user looks okay. But how is it possible to give 202 534 stars?</p>
 
 <p>In comparison, I only gave 195 stars:</p>
 <pre>
@@ -1088,7 +1088,7 @@ LIMIT 50
 50 rows in set. Elapsed: 1.166 sec. Processed 204.27 million rows, 6.63 GB (175.18 million rows/s., 5.68 GB/s.)
 </pre>
 
-<p>It's Tensorflow... and TiDB. Yes, I knew, that we are the friends with TiDB (they are using ClickHouse engine under the hood for analytical queries). Then golang, prometheus and kubernetes. The overall list is slightly biased towards data-intensive applications: database engines, distributed filesystems, data orchestration, etc...</p>
+<p>It's Tensorflow... and TiDB. Yes, I knew that we are friends with TiDB (they are using the ClickHouse engine under the hood for analytical queries). Then golang, prometheus and kubernetes. The overall list is slightly biased towards data-intensive applications: database engines, distributed filesystems, data orchestration, etc.</p>
 
 <p>Let's calculate the affinity index: the ratio of stars to repositories that were given by users that gave a star to
   <a data-div-id-prefix="affinity_" class="button_selected">ClickHouse</a>
@@ -1173,7 +1173,7 @@ LIMIT 50
 
 <p>This is the perfect exploration tool for related repositories!</p>
 
-<p>I also added a threshold on the number of stars and I'm counting stars from unique authors instead of just star events, because otherwise I face some data anomalities.</p>
+<p>I also added a threshold on the number of stars and I'm counting stars from unique authors instead of just star events, because otherwise I face some data anomalies.</p>
 </div>
 
 <div id="affinity_Linux">
@@ -1328,7 +1328,7 @@ LIMIT 50
 </pre>
 </div>
 
-<p>Surprisingly this simple heuristic works so good!</p>
+<p>Surprisingly this simple heuristic works really well!</p>
 
 
 <h3>Finding friends through counting stars</h3>
@@ -1488,7 +1488,7 @@ LIMIT 50
 50 rows in set. Elapsed: 0.546 sec. Processed 199.18 million rows, 2.64 GB (364.86 million rows/s., 4.84 GB/s.)
 </pre>
 
-<p>Authors that filed an issue in ClickHouse also filed issues to what repositories?</p>
+<p>Authors that filed an issue in ClickHouse also filed issues in what repositories?</p>
 
 <pre>
 SELECT
@@ -1637,7 +1637,7 @@ LIMIT 50
 
 <p>The <a href="https://github.com/desktop/desktop">GitHub Desktop</a> is the most new. There is "openbilibili" &mdash; something like Chinese YouTube, but the repository is closed due to DMCA takedown.</p>
 
-<p>I accidentially made a similar query for repositories gained most stars over just a second:</p>
+<p>I accidentially made a similar query for repositories the gained the most stars over just one second:</p>
 <pre>
 :) SELECT repo_name, created_at, count() AS stars FROM github_events WHERE event_type = 'WatchEvent' GROUP BY repo_name, created_at ORDER BY count() DESC LIMIT 50
 
@@ -1772,9 +1772,9 @@ LIMIT 50
 50 rows in set. Elapsed: 0.886 sec. Processed 204.18 million rows, 2.45 GB (230.41 million rows/s., 2.77 GB/s.)
 </pre>
 
-<p>It's not surprising to see <a href="https://github.com/jitsi/jitsi-meet">Jitsi</a> (open-source video conferences) has grown almost 6 times in 2020!</p>
+<p>It's not surprising to see <a href="https://github.com/jitsi/jitsi-meet">Jitsi</a> (open-source video conferences) has grown almost sixfold in 2020!</p>
 
-<h3>Repositories that stagnated the most</h3>
+<h3>Repositories with the worst stagnation</h3>
 
 <pre>
 WITH toYear(created_at) AS year
@@ -1929,7 +1929,7 @@ LIMIT 50
 50 rows in set. Elapsed: 55.199 sec. Processed 192.10 million rows, 2.20 GB (3.48 million rows/s., 39.82 MB/s.)
 </pre>
 
-<h3>What is the best weekday to catch a star?</h3>
+<h3>What is the best day of the week to catch a star?</h3>
 
 <pre>
 :) SELECT toDayOfWeek(created_at) AS day, count() AS stars, bar(stars, 0, 50000000, 10) AS bar FROM github_events WHERE event_type = 'WatchEvent' GROUP BY day ORDER BY day
@@ -1947,7 +1947,7 @@ LIMIT 50
 7 rows in set. Elapsed: 0.416 sec. Processed 192.10 million rows, 960.49 MB (461.41 million rows/s., 2.31 GB/s.)
 </pre>
 
-<p>It is Tuesday. Definitely not weekend. Maybe Wednesday or Thursday but not Monday or Friday.</p>
+<p>It is Tuesday. Definitely not the weekend. Maybe Wednesday or Thursday, but not Monday or Friday.</p>
 
 
 <h3>The total number of users on GitHub</h3>
@@ -1962,7 +1962,7 @@ LIMIT 50
 1 rows in set. Elapsed: 29.260 sec. Processed 2.74 billion rows, 15.30 GB (93.81 million rows/s., 523.05 MB/s.)
 </pre>
 
-<p>31 million. Actually that are the users that are not only registered but also participated at lest in... something.</p>
+<p>31 million. Actually, these are users that are not only registered but also participated at least in... something.</p>
 
 
 <p>Total number of users that gave at least one star:</p>
@@ -1977,7 +1977,7 @@ LIMIT 50
 1 rows in set. Elapsed: 6.654 sec. Processed 201.26 million rows, 3.45 GB (30.25 million rows/s., 518.19 MB/s.)
 </pre>
 
-<p>Just 9 millions. I heard that some people don't give stars. They just do their job instead.</p>
+<p>Just 9 million. I've heard that some people don't give stars. They just do their job instead.</p>
 
 
 <p>Total number of users with at least one push:</p>
@@ -1992,7 +1992,7 @@ LIMIT 50
 1 rows in set. Elapsed: 8.876 sec. Processed 1.42 billion rows, 7.46 GB (159.50 million rows/s., 840.10 MB/s.)
 </pre>
 
-<p>Actually there are more people who pushed the code than those who give stars.</p>
+<p>There are actually more people who pushed code than those who gave stars.</p>
 
 
 <p>Total number of users with at least one created PR:</p>
@@ -2009,7 +2009,7 @@ LIMIT 50
 
 <h3>Stars from heavy GitHub users</h3>
 
-<p>What if we count top starred repositories but only from those who made at lest one PR to at least one repo?</p>
+<p>What if we count top starred repositories but only from those who made at least one PR in at least one repo?</p>
 
 <pre>
 SELECT
@@ -2082,8 +2082,8 @@ LIMIT 50
 50 rows in set. Elapsed: 10.890 sec. Processed 397.05 million rows, 5.98 GB (36.46 million rows/s., 548.96 MB/s.)
 </pre>
 
-<p>The list is similar to the overall top.</p>
-<p>What if we will take authors that have made at least 10 PRs?</p>
+<p>The list is similar to the overall top list.</p>
+<p>What if we take authors who have made at least 10 PRs?</p>
 
 <pre>
 SELECT
@@ -2158,7 +2158,7 @@ LIMIT 50
 50 rows in set. Elapsed: 6.076 sec. Processed 397.05 million rows, 6.05 GB (65.34 million rows/s., 995.92 MB/s.)
 </pre>
 
-<p>If we count only software, the list is the following: React, Vue, Tensorflow, VSCode, Linux, Golang, Flutter.</p>
+<p>If we count only software, the list looks like this: React, Vue, Tensorflow, VSCode, Linux, Golang, Flutter.</p>
 
 
 <h3>Repositories with the maximum amount of pull requests:</h3>
@@ -2224,11 +2224,11 @@ LIMIT 50
 
 <p>Here we can see some very specific data. The top repository looks like a test repository where you can check signing a CLA. But there are only 4 users with PRs and they are obviously bots. The next is a repository for a dataset about politicians.</p>
 
-<p>Conclusion: if there are many pull requests from small number of users &mdash; it means that this is just a part of some automated process.</p>
+<p>Conclusion: if there are many pull requests from a small number of users, it means that this is just a part of some automated process.</p>
 
 <p>Number three is the package repository for Nix OS. It's quite understandable &mdash; if you want your package to be in the OS, just make a pull request. And there are a lot of packages. The same for №5 &mdash; Homebrew.</p>
 
-<p>And there is one empty repository with a huge number of trash pull requests: <a href="https://github.com/sauron-demo/sauron/pulls?q=is%3Apr+is%3Aclosed">sauron</a>. Looks like a script get out of control.</p>
+<p>And there is one empty repository with a huge number of trash pull requests: <a href="https://github.com/sauron-demo/sauron/pulls?q=is%3Apr+is%3Aclosed">sauron</a>. Looks like a script got out of control.</p>
 
 
 <p>Repositories with the maximum amount of pull request contributors:</p>
@@ -2292,7 +2292,7 @@ LIMIT 50
 50 rows in set. Elapsed: 2.743 sec. Processed 195.79 million rows, 2.72 GB (71.38 million rows/s., 993.23 MB/s.)
 </pre>
 
-<p>"firstcontributions" is the obvious case: a repository that teach you how to make a pull request... by allowing you to make a pull request to this repository. "patchwork" is similar. Most of the repositories in this list are similar.</p>
+<p>"firstcontributions" is the obvious case: a repository that teaches you how to make a pull request... by allowing you to make a pull request to this repository. "patchwork" is similar. Most of the repositories in this list are similar.</p>
 
 
 <h3>Repositories with the maximum amount of issues</h3>
@@ -2356,11 +2356,11 @@ LIMIT 50
 50 rows in set. Elapsed: 2.857 sec. Processed 92.61 million rows, 1.36 GB (32.41 million rows/s., 474.90 MB/s.)
 </pre>
 
-<p>The top repository no longer exists &mdash; probably some misuse of GitHub. The №2 repository has quite funny description: "demo: A new issue is created in this repo every minute". The №3 repository has similar purpose: "this is a test" but the list of issues look more sane &mdash; like someone is using GitHub issues for automated crash reports. The №4 is a replacement for a spreadsheet.</p>
+<p>The top repository no longer exists &mdash; probably some misuse of GitHub. The 2nd-place repository has a funny description: "demo: A new issue is created in this repo every minute". The 3rd-place repository has a similar purpose: "this is a test", but the list of issues look more sane &mdash; like someone is using GitHub issues for automated crash reports. 4th place is a replacement for a spreadsheet.</p>
 
 <p>The first meaningful result is Microsoft/vscode with over 50k issues from over 15k authors. And the issues are real.</p>
 
-<p>Conclusion: if a repository has high number of issues &mdash; maybe issues are created automatically from crash reports.</p>
+<p>Conclusion: if a repository has a high number of issues, maybe issues are created automatically from crash reports.</p>
 
 <p>Let's also add the number of stars to this report:</p>
 <pre>
@@ -2432,7 +2432,7 @@ LIMIT 50
 50 rows in set. Elapsed: 5.323 sec. Processed 293.88 million rows, 6.59 GB (55.21 million rows/s., 1.24 GB/s.)
 </pre>
 
-<p>Now we can distinguish real issues from robot ones. Let's add cutoff by 1000 stars:</p>
+<p>Now we can distinguish real issues from robot ones. Let's add a cutoff at 1000 stars:</p>
 <pre>
 WITH (event_type = 'IssuesEvent') AND (action = 'opened') AS issue_created
 SELECT
@@ -2503,9 +2503,9 @@ LIMIT 50
 50 rows in set. Elapsed: 5.560 sec. Processed 293.88 million rows, 6.59 GB (52.86 million rows/s., 1.19 GB/s.)
 </pre>
 
-<p>Now it's look like a reasonable list of the top repositories.</p>
+<p>Now it looks like a reasonable list of the top repositories.</p>
 
-<p>And the next report: let's sort by the number of issue authors:</p>
+<p>And for the next report, let's sort by the number of issue authors:</p>
 
 <pre>
 WITH (event_type = 'IssuesEvent') AND (action = 'opened') AS issue_created
@@ -2576,7 +2576,7 @@ LIMIT 50
 50 rows in set. Elapsed: 5.555 sec. Processed 293.88 million rows, 6.59 GB (52.91 million rows/s., 1.19 GB/s.)
 </pre>
 
-<h3>Repositories with the most people have push access</h3>
+<h3>Repositories with the most people who have push access</h3>
 
 <pre>
 :) SELECT repo_name, uniqIf(actor_login, event_type = 'PushEvent') AS u, sum(event_type = 'WatchEvent') AS stars FROM github_events WHERE event_type IN ('PushEvent', 'WatchEvent') GROUP BY repo_name ORDER BY u DESC LIMIT 50
@@ -2637,10 +2637,10 @@ LIMIT 50
 50 rows in set. Elapsed: 17.982 sec. Processed 1.62 billion rows, 21.18 GB (89.92 million rows/s., 1.18 GB/s.)
 </pre>
 
-<p>First two are educational. And I'm happy to see LLVM project in position №3. It's really fantastic to have almost thousand of people pushing to the repository. Maybe it's just a development model where they are giving access to separate branches for user or organization?</p>
+<p>The first two are educational. And I'm happy to see the LLVM project in 3rd place. It's really fantastic to have almost a thousand people pushing to the repository. Maybe it's just a development model where they are giving access to separate branches for a user or organization?</p>
 
 
-<p>Repositories with the most people have push access to the main branch.</p>
+<p>Repositories with the most people who have push access to the main branch.</p>
 
 <pre>
 SELECT
@@ -2709,9 +2709,9 @@ LIMIT 50
 50 rows in set. Elapsed: 19.622 sec. Processed 1.62 billion rows, 34.28 GB (82.40 million rows/s., 1.75 GB/s.)
 </pre>
 
-<p>Almost the same with LLVM on top.</p>
+<p>Almost the same, with LLVM on top.</p>
 
-<p>With cutoff by the number of stars:</p>
+<p>With a cutoff for the number of stars:</p>
 
 <pre>
 SELECT
@@ -2782,7 +2782,7 @@ LIMIT 50
 </pre>
 
 
-<h3>Repositories with the maximum amount of accepted invitations</h3>
+<h3>Repositories with the maximum number of accepted invitations</h3>
 
 <pre>
 :) SELECT repo_name, sum(event_type = 'MemberEvent') AS invitations, sum(event_type = 'WatchEvent') AS stars FROM github_events WHERE event_type IN ('MemberEvent', 'WatchEvent') GROUP BY repo_name HAVING stars >= 100 ORDER BY invitations DESC LIMIT 50
@@ -2904,12 +2904,12 @@ LIMIT 50
 50 rows in set. Elapsed: 0.855 sec. Processed 74.17 million rows, 712.96 MB (86.74 million rows/s., 833.81 MB/s.)
 </pre>
 
-<p>There are 74 million forks on GitHub. It's about half of all repositories. If we filter out repositories that have their main purpose to be forked, the clear winner is Tensorflow, then Bootstrap, React and OpenCV and Linux.</p>
+<p>There are 74 million forks on GitHub. This is about half of all repositories. If we filter out repositories that have their main purpose to be forked, the clear winner is Tensorflow, then Bootstrap, React and OpenCV and Linux.</p>
 
 
 <h3>Proportions between stars and forks</h3>
 
-<p>Let's check the proportion of stars and forks.</p>
+<p>Let's check the proportion of stars to forks.</p>
 
 <pre>
 SELECT
@@ -2979,9 +2979,9 @@ LIMIT 50
 50 rows in set. Elapsed: 1.759 sec. Processed 278.35 million rows, 2.35 GB (158.22 million rows/s., 1.34 GB/s.)
 </pre>
 
-<p>We can see a separation. Some repositories are "for forks" like the "octocat/Spoon-Knife" &mdash; they either have fork as a purpose of the repo or some of them represent a template to make something on top. Some repositories are "for stars" &mdash; usually it's not a software but some text content, like the "996icu/996.ICU" and "sindresorhus/awesome".</p>
+<p>We can see a separation. Some repositories are "for forks" like the "octocat/Spoon-Knife" &mdash; they either have fork as a purpose of the repo or some of them represent a template to base something new on. Some repositories are "for stars" &mdash; usually it's not software but some text content, like "996icu/996.ICU" and "sindresorhus/awesome".</p>
 
-<p>Let's find out the most "for forks" and "for stars" repositories.</p>
+<p>Let's find out which repositories are the most "for forks" and "for stars".</p>
 
 <p>More stars less forks:</p>
 
@@ -3307,7 +3307,7 @@ LIMIT 50
 50 rows in set. Elapsed: 1.630 sec. Processed 191.63 million rows, 2.26 GB (117.56 million rows/s., 1.39 GB/s.)
 </pre>
 
-<p>Spark has the most active discussions among the top repositories. In contrast, the repository with the least comments per issue &mdash; "google-test/signcla-probe-repo" is clearly not for discussions.</p>
+<p>Spark has the most active discussions among the top repositories. In contrast, the repository with the least comments per issue, "google-test/signcla-probe-repo", is clearly not for discussions.</p>
 
 <p>Now let's find the most active issues...</p>
 
@@ -3380,7 +3380,7 @@ LIMIT 50
 50 rows in set. Elapsed: 5.332 sec. Processed 191.63 million rows, 2.45 GB (35.94 million rows/s., 460.08 MB/s.)
 </pre>
 
-<p>The top repositories has most comments in their first issue. It's like technical comments made by some script. Nothing interesting and actually I did not find these comments on GitHub website (maybe they are already deleted).</p>
+<p>The top repositories have the most comments in their first issue. It looks like technical comments made by some script. Nothing interesting here, and actually I did not find these comments on the GitHub website (maybe they have already been deleted).</p>
 
 <p>I aimed to find some "epic bugs". Let's filter out by issue number:</p>
 
@@ -3453,7 +3453,7 @@ LIMIT 50
 50 rows in set. Elapsed: 3.943 sec. Processed 191.63 million rows, 2.45 GB (48.59 million rows/s., 622.08 MB/s.)
 </pre>
 
-<p>I checked the <a href="https://github.com/openshift/oc/pull/270">first</a> and it's also like some script gone out of control.</p>
+<p>I checked the <a href="https://github.com/openshift/oc/pull/270">first one</a> and it also looks like some script gone out of control.</p>
 <p>Let's also count the number of comment authors and add a threshold:</p>
 
 <pre>
@@ -3634,7 +3634,7 @@ LIMIT 50
 
 <p>It's rarely the case when a single commit has comments.</p>
 
-<p>Here is the top repositories by the number of commit comments:</p>
+<p>Here are the top repositories by the number of commit comments:</p>
 <pre>
 SELECT
     repo_name,
@@ -3702,9 +3702,9 @@ LIMIT 50
 50 rows in set. Elapsed: 0.147 sec. Processed 7.39 million rows, 122.44 MB (50.26 million rows/s., 832.86 MB/s.)
 </pre>
 
-<p>If there are many comments but small number of comment authors, usually they are comments from CI robot.</p>
+<p>If there are many comments but a small number of comment authors, usually they are comments from the CI robot.</p>
 
-<p>Here are the most "hot" commits:</p>
+<p>Here are the "hottest" commits:</p>
 
 <pre>
 SELECT
@@ -3923,7 +3923,7 @@ LIMIT 50
 
 <p>Obviously most of them are bots. If someone has pushed to 1 398 330 repositories, it's clearly a bot. Even someone pretending to be a human is <a href="https://github.com/peter-clifford/grax-hd-trial">clearly a bot</a>.</p>
 
-<p>How to filter out bots? Let's add a threshold on the number of repositories. Let's also count only those who created at least two issues and given at least two stars. And also output the favorite repository for every user. And also count only across the top 10k repositories.</p>
+<p>How can we filter out bots? Let's add a threshold on the number of repositories. Let's also count only those who created at least two issues and gave at least two stars. And also output the favorite repository for every user. And also count only across the top 10k repositories.</p>
 
 <pre>
 SELECT
@@ -4004,7 +4004,7 @@ LIMIT 50
 50 rows in set. Elapsed: 6.575 sec. Processed 255.69 million rows, 5.06 GB (38.89 million rows/s., 769.73 MB/s.)
 </pre>
 
-<p>Ok, I see some real people here. Definitely sure about at least one of them.</p>
+<p>Ok, I see some real people here. I'm definitely sure about at least one of them.</p>
 
 
 <h3>Authors with the most pull requests</h3>
@@ -4102,7 +4102,7 @@ LIMIT 50
 50 rows in set. Elapsed: 0.541 sec. Processed 204.18 million rows, 1.64 GB (377.68 million rows/s., 3.03 GB/s.)
 </pre>
 
-<p>You may notice that Microsoft is slightly ahead of Google. Actually it depends on how do you count. Maybe you should sum up Tensorflow, Kubernetes, Flutter, Golang, Chrome for Google; GitHub and DotNet for Microsoft; Facebook Research and React for Facebook.</p>
+<p>You may notice that Microsoft is slightly ahead of Google. Actually, it depends on how you count. Maybe you should sum up Tensorflow, Kubernetes, Flutter, Golang, and Chrome for Google; GitHub and DotNet for Microsoft; Facebook Research and React for Facebook.</p>
 
 <h3>Organizations by the number of repositories</h3>
 
@@ -4178,7 +4178,7 @@ LIMIT 50
 50 rows in set. Elapsed: 1.434 sec. Processed 204.18 million rows, 1.64 GB (142.35 million rows/s., 1.14 GB/s.)
 </pre>
 
-<p>To avoid showing users with a huge number of forked repositories or users with some GitHub misuse, we added a threshold of 10 stars. Microsoft wins by a huge margin. <a href="https://github.com/packtpublishing">Packt Publishing</a> is quite interesting &mdash; they have repositories for articles and books. <a href="https://github.com/sindresorhus">Sindre Sorhus</a> is also very notable open-source contributor, mostly for the list of <a href="https://github.com/sindresorhus/awesome">awesome awesomeness</a>.</p>
+<p>To avoid showing users with a huge number of forked repositories or users with some GitHub misuse, we added a threshold of 10 stars. Microsoft wins by a huge margin. <a href="https://github.com/packtpublishing">Packt Publishing</a> is quite interesting &mdash; they have repositories for articles and books. <a href="https://github.com/sindresorhus">Sindre Sorhus</a> is also a very notable open-source contributor, mostly for the list of <a href="https://github.com/sindresorhus/awesome">awesome awesomeness</a>.</p>
 
 
 <h3>Organizations by the size of community</h3>
@@ -4256,14 +4256,14 @@ LIMIT 50
 50 rows in set. Elapsed: 10.041 sec. Processed 1.97 billion rows, 25.09 GB (196.63 million rows/s., 2.50 GB/s.)
 </pre>
 
-<p>Microsoft wins in 4 out of 6 categories. Apache wins by the number of code reviewers (I thought they are using JIRA, but actually it's not always the case). <a href="https://github.com/learn-co-students/">Learn-co-students</a> wins by a number of PR authors. By the way, they also have 250 000 repositories!</p>
+<p>Microsoft wins in 4 out of 6 categories. Apache wins for the number of code reviewers (I thought they are using JIRA, but actually it's not always the case). <a href="https://github.com/learn-co-students/">Learn-co-students</a> wins for the number of PR authors. By the way, they also have 250 000 repositories!</p>
 
-<p>Please take it with a grain of salt. Not every team is using GitHub as issue tracker or code review system. Linux and Postgres are using maillists. LLVM is using Bugzilla and Phabricator.</p>
+<p>Please take it with a grain of salt. Not every team is using GitHub as their issue tracker or code review system. Linux and Postgres are using maillists. LLVM is using Bugzilla and Phabricator.</p>
 
 
 <h3>Repositories by amount of modified code</h3>
 
-<p>I want to get repositories with the most added and removed code over time. If I do it in naive way, the multiple forks of <a href="https://github.com/cdnjs/cdnjs">cdn.js</a> repository will be on top. By the way, cdn.js is the larges repository in GitHub by size in bytes (it contains all popular JavaScript libraries, the total size is ). To get something interesting, I added threshold by the number of diff size and also by the ratio of added and removed code (in actively developing codebases, the ratio should be close to one).</p>
+<p>I want to get the repositories with the most added and removed code over time. If I do it in a naive way, the multiple forks of <a href="https://github.com/cdnjs/cdnjs">cdn.js</a> repository will be on top. By the way, cdn.js is the largest repository in GitHub by size in bytes (it contains all popular JavaScript libraries, the total size is ). To get something interesting, I added a threshold for the number of diff size and also for the ratio of added and removed code (in actively developing codebases, the ratio should be close to one).</p>
 
 <pre>
 SELECT
@@ -4484,7 +4484,7 @@ LIMIT 50
 50 rows in set. Elapsed: 1.025 sec. Processed 52.21 million rows, 11.22 GB (50.92 million rows/s., 10.94 GB/s.)
 </pre>
 
-<p>Most of the most active reviewers are robots that do style checking and static analysis. But there are real people: <a href="https://github.com/jreback">Jeff&nbsp;Reback</a>. You can also find teachers, who review code from students.</p>
+<p>Most of the most active reviewers are robots that do style checking and static analysis. But there are real people: <a href="https://github.com/jreback">Jeff&nbsp;Reback</a>. You can also find teachers who review code from students.</p>
 
 
 <h3>Top labels</h3>
@@ -4557,7 +4557,7 @@ LIMIT 50
 50 rows in set. Elapsed: 0.779 sec. Processed 484.76 million rows, 6.94 GB (621.92 million rows/s., 8.90 GB/s.)
 </pre>
 
-<p>There are more bugs than enhancements. Fortunately only by a little. "Javascript" is the only programming-language related label in top.</p>
+<p>There are more bugs than enhancements. Fortunately, only by a little. "Javascript" is the only programming-language related label at the top.</p>
 
 <p>The diversity of bugs and features is overwhelming:</p>
 
@@ -4627,7 +4627,7 @@ LIMIT 50
 50 rows in set. Elapsed: 0.653 sec. Processed 484.76 million rows, 6.94 GB (742.45 million rows/s., 10.63 GB/s.)
 </pre>
 
-<p>Actually "bugzilla" label is not only about bugs.</p>
+<p>Actually, the "bugzilla" label is not only about bugs.</p>
 
 <pre>
 WITH arrayJoin(labels) AS label
@@ -4773,7 +4773,7 @@ WHERE (event_type IN ('IssuesEvent', 'PullRequestEvent', 'IssueCommentEvent')) A
 50 rows in set. Elapsed: 1.063 sec. Processed 204.18 million rows, 1.64 GB (192.13 million rows/s., 1.54 GB/s.)
 </pre>
 
-<p>I'm surpsized that <a href="https://github.com/tj/n">tj/n</a> is a real thing. <a href="https://github.com/f/pq">f/pq</a> is also a real thing and also related to node.js. Maybe node.js developers are addicted to short names?</p>
+<p>I'm surprised that <a href="https://github.com/tj/n">tj/n</a> is a real thing. <a href="https://github.com/f/pq">f/pq</a> is also a real thing and also related to node.js. Maybe node.js developers are addicted to short names?</p>
 
 
 <h3>TODO Stars graph for popular organizations</h3>
@@ -4916,7 +4916,7 @@ LIMIT 50
 50 rows in set. Elapsed: 32.243 sec. Processed 2.79 billion rows, 542.96 GB (86.51 million rows/s., 16.84 GB/s.)
 </pre>
 
-<p>Even the "996.ICU" repository has something about ClickHouse. I cannot find it on GitHub website, but I can do it with our dataset!</p>
+<p>Even the "996.ICU" repository has something about ClickHouse. I cannot find it on the GitHub website, but I can do it with our dataset!</p>
 
 <pre>
 :) SELECT * FROM github_events WHERE body ILIKE '%ClickHouse%' AND repo_name = '996icu/996.ICU' \G
@@ -5060,13 +5060,13 @@ review_state:          none
 </pre>
 <p>(among comments shorter than 100 bytes)</p>
 
-<p>Most of the comments are very positive. Except the passive aggressive "Can one of the admins verify this patch?" from Jenkins.</p>
+<p>Most of the comments are very positive, except the passive-aggressive "Can one of the admins verify this patch?" from Jenkins.</p>
 
 
 
 <h3>GitHub roulette</h3>
 
-<p>If we roll a dice and SELECT random 50 repositories with probability proportional to the number of stars, what we will get?</p>
+<p>If we roll a dice and SELECT 50 random repositories with probability proportional to the number of stars, what will we get?</p>
 
 <pre>
 :) SELECT repo_name FROM github_events WHERE event_type = 'WatchEvent' ORDER BY rand() LIMIT 50
@@ -5145,7 +5145,7 @@ Alternatively you can download the same dataset in <a href="https://clickhouse-d
 
 <p>To decompress the dataset from <span class="code">.xz</span> it's recommended to install and use the <span class="code">pixz</span> (parallel xz) tool. The ordinary <span class="code">xz</span> tool can be used as well.</p>
 
-<p>To insert downloaded dataset into ClickHouse, create a table:</p>
+<p>To insert the downloaded dataset into ClickHouse, create a table:</p>
 <pre>
 $ clickhouse-client
 ClickHouse client version 20.11.3.3 (official build).
@@ -5234,10 +5234,10 @@ xz -d &lt; github_events.native.xz | clickhouse-local --input-format Native --ou
 
 <h3>Download the dataset directly into ClickHouse</h3>
 
-<p>This is an option to import the dataset into ClickHouse without separate download and decompression step.</p>
+<p>This is an option to import the dataset into ClickHouse without a separate download and decompression step.</p>
 <p>It requires minimum ClickHouse version 20.12 to support <span class="code">xz</span> decompression.</p>
 
-<p>Create a foreign table that will read data from URL:</p>
+<p>Create a foreign table that will read data from a URL:</p>
 <pre>
 CREATE TABLE github_events_url
 (
@@ -5312,12 +5312,12 @@ CREATE TABLE github_events ENGINE = MergeTree ORDER BY (event_type, repo_name, c
 
 <h2>How this dataset is created</h2>
 
-<p>This section will explain how to recreate dataset from the raw data (1.2 TB json.gz). You don't have to follow these steps as we prepared already <a href="#download-the-dataset">preprocessed structured dataset</a> for download (just 65 GB).</p>
+<p>This section explains how to recreate the dataset from the raw data (1.2 TB json.gz). You don't have to follow these steps because we have already prepared a <a href="#download-the-dataset">preprocessed structured dataset</a> for download (just 65 GB).</p>
 
 
 <h3>Download the raw data</h3>
 
-<p>There is a wonderful project <a href="https://www.gharchive.org/">GH Archive</a>. It provides dumps of events on GitHub to download. Data is split into files per hour like <a href="https://data.gharchive.org/2015-01-01-15.json.gz">https://data.gharchive.org/2015-01-01-15.json.gz</a>.</p>
+<p>There is a wonderful project called <a href="https://www.gharchive.org/">GH Archive</a>. It provides dumps of events on GitHub to download. Data is split into files per hour like <a href="https://data.gharchive.org/2015-01-01-15.json.gz">https://data.gharchive.org/2015-01-01-15.json.gz</a>.</p>
 
 <p>You can download all the files with the command:</p>
 
@@ -5331,12 +5331,12 @@ wget --continue https://data.gharchive.org/{2015..2020}-{01..12}-{01..31}-{0..23
 <p>The total number of files is 84 264 and the total size is about 1.2 TB.</p>
 <p>Typical download speed is ~16 MB/sec. The download will take about a day.</p>
 
-<p>There is no point parallelizing the download within one server, because rate limits will apply and the effective download speed will remain the same. You can parallelize by using different servers... but better not to bother, it is just one terabyte and one to a few days to wait. Prepare a server with at least 1.5 terabytes of space, run the download, go to a weekend and that's it.</p>
+<p>There is no point parallelizing the download within one server, because rate limits will apply and the effective download speed will remain the same. You can parallelize by using different servers... but it's better not to bother because it is just one terabyte and you just need to wait from one day to several days at most. Prepare a server with at least 1.5 terabytes of space, run the download, leave for the weekend and that's it.</p>
 
 
 <h3>Preprocess the raw data for analysis</h3>
 
-<p>The raw dataset is a bunch of gzipped files containing data in <a href="https://jsonlines.org/">JSON Lines</a> format (JSON object on every line). The structure of JSON object is the same that GitHub API provides. Every JSON object contains one event and all the related info. For example, let's look at the <span class="code">PullRequestEvent</span>:</p>
+<p>The raw dataset is a bunch of gzipped files containing data in <a href="https://jsonlines.org/">JSON Lines</a> format (JSON object on every line). The structure of the JSON object is the same as what the GitHub API provides. Every JSON object contains one event and all the related info. For example, let's look at the <span class="code">PullRequestEvent</span>:</p>
 
 <pre>
 gzip -cd &lt; 2020-11-13-9.json.gz | grep -F 'PullRequestEvent' | head -n1 | jq '.'
@@ -5695,14 +5695,14 @@ gzip -cd &lt; 2020-11-13-9.json.gz | grep -F 'PullRequestEvent' | head -n1 | jq 
 }
 </pre>
 
-<p>It's quite a rich JSON. It contains the data about pull request itself and all the associated objects (actor &mdash; who has modified the pull request, the author of the pull request, the repository where the pull request exists, etc...)</p>
+<p>It's quite a rich JSON. It contains the data about the pull request itself and all the associated objects (actor &mdash; who has modified the pull request, the author of the pull request, the repository where the pull request exists, etc.)</p>
 
 
 <h3>A way to analyze the raw data without preprocessing</h3>
 
-<p>There are multiple ways to analyze a bunch of <span class="code">.json.gz</span> files without any preprocessing. For example, you can use <span class="code">jq</span> tool. Though it will be very inefficient.</p>
+<p>There are multiple ways to analyze a bunch of <span class="code">.json.gz</span> files without any preprocessing. For example, you can use the <span class="code">jq</span> tool, though it will be very inefficient.</p>
 
-<p>A more efficient way to analyze data "on rest" without proprocessing is the <span class="code">clickhouse-local</span> tool. It is like the replacement of <span class="code">awk</span>, <span class="code">sed</span>, <span class="code">grep</span> but with ClickHouse SQL engine:</p>
+<p>A more efficient way to analyze data "on rest" without proprocessing is by using the <span class="code">clickhouse-local</span> tool. It is like a replacement for <span class="code">awk</span>, <span class="code">sed</span>, <span class="code">grep</span> with the ClickHouse SQL engine:</p>
 
 <pre>
 clickhouse-local --query "
@@ -5710,21 +5710,21 @@ clickhouse-local --query "
     WHERE JSONExtractString(data, 'actor', 'login') = 'alexey-milovidov'"
 </pre>
 
-<p>Here we parse input data as single String field per line and then process it with JSON functions.<br/>
+<p>Here we parse input data as a single String field per line and then process it with JSON functions.<br/>
 <span class="code">clickhouse-local</span> will do all the heavy-lifting:<br/>
 &mdash; select files by wildcard pattern;<br/>
 &mdash; decompress gzip data on the fly (with zlib-ng);<br/>
 &mdash; parallelize data processing by files and by chunks within each file;<br/>
 &mdash; process JSON with the help of <a href="https://github.com/simdjson/simdjson/">simdjson</a> &mdash; the fastest JSON library out of existence;</p>
 
-<p>Data processing will be limited by disk speed. If we assume 1 GB/sec sequential read speed, it will take about 20 minutes per query. You may think it's okay but it isn't. It is just the best possible speed of processing raw <span class="code">.json.gz</span> data, but we can do better if we preprocess our data.</p>
+<p>Data processing will be limited by disk speed. If we assume 1 GB/sec sequential read speed, it will take about 20 minutes per query. You may think this is okay, but it isn't. It is just the best possible speed of processing raw <span class="code">.json.gz</span> data, but we can do better if we preprocess our data.</p>
 
 <p>If we want to analyze our data faster, we have to transform it from semistructured JSON format to a set of well-structured relational tables. The principle: structured is always more efficient than semistructured.</p>
 
 
 <h3>How to choose the structure for the data?</h3>
 
-<p>First let's find out what data do we have by reading the <a href="https://docs.github.com/en/free-pro-team@latest/developers/webhooks-and-events/webhook-events-and-payloads">GitHub API docs</a>.</p>
+<p>First let's find out what data we have by reading the <a href="https://docs.github.com/en/free-pro-team@latest/developers/webhooks-and-events/webhook-events-and-payloads">GitHub API docs</a>.</p>
 
 <p>There are a <a href="https://docs.github.com/en/free-pro-team@latest/developers/webhooks-and-events/github-event-types">bunch of event types</a>:</p>
 
@@ -5748,13 +5748,13 @@ clickhouse-local --query "
 <p>And the list is incomplete... while analyzing the data I have found a few "secret" or obsolete event types.</p>
 <p>Every event type has its own properties.</p>
 
-<p>How it's better to structure all this data?</p>
+<p>What is the best way to structure all this data?</p>
 
 <p>We can consider two options:</p>
 
 <p><b>1. Every event type in its own table.</b></p>
 
-<p>For example, WatchEvent is about stars assignment. We can create a table for these events. And when we need to calculate the number of stars per repository, the graph of stars or top starred repositories per year, we will just do SELECT from this table. But if we will need to compare the ratio of stars and the number of pull request contributors, we will have to JOIN several tables.</p>
+<p>For example, WatchEvent is about stars assignment. We can create a table for these events. And when we need to calculate the number of stars per repository, the graph of stars or top starred repositories per year, we will just do SELECT from this table. But if we need to compare the ratio of stars and the number of pull request contributors, we will have to JOIN several tables.</p>
 
 <p><b>2. All event types in a single table.</b></p>
 
@@ -5762,7 +5762,7 @@ clickhouse-local --query "
 
 <p>I can strongly recommend the second option: all events in one table.</p>
 
-<p>The table will contain many columns... and that's exactly what are <a href="https://en.wikipedia.org/wiki/Column-oriented_DBMS">column-oriented databases</a> for! Sparse columns will compress well, so you don't have to worry that they are sparse. As the benefit &mdash; you can avoid doing queries with JOINs when you need to analyze multiple event types at once.</p>
+<p>The table will contain many columns... and that's exactly what <a href="https://en.wikipedia.org/wiki/Column-oriented_DBMS">column-oriented databases</a> are for! Sparse columns will compress well, so you don't have to worry that they are sparse. As an added benefit, you can avoid doing queries with JOINs when you need to analyze multiple event types at once.</p>
 
 <p>I analyzed the properties of all event types and ended up with the following table structure in ClickHouse:</p>
 
@@ -5833,24 +5833,24 @@ CREATE TABLE github_events
 
 <p>A few details:</p>
 
-<p>1. Table is ordered by <span class="code">event_type</span>. It means when you SELECT with the condition on the event type, it will process as efficient as if the selected events are located in a separate table.</p>
+<p>1. Table is ordered by <span class="code">event_type</span>. This means that when you SELECT with the condition on the event type, it will process as efficiently as if the selected events were located in a separate table.</p>
 
-<p>2. Next to <span class="code">event_type</span> we have <span class="code">repo_name</span>. When you SELECT data for a certain repo, it will process almost instantly because only a few contiguous ranges of data will be read &mdash; only the ranges that contain data for this repo. Basically, ORDER BY expression in a table is the most efficient index possible. Also worth to note, that data sorted by repository name will compress better due to better data locality.</p>
+<p>2. Next to <span class="code">event_type</span> we have <span class="code">repo_name</span>. When you SELECT data for a certain repo, it will process almost instantly because only a few contiguous ranges of data will be read &mdash; only the ranges that contain data for this repo. Basically, ORDER BY expression in a table is the most efficient index possible. It's also worth noting that data sorted by repository name will compress better due to better data locality.</p>
 
-<p>3. Next to <span class="code">repo_name</span> we have <span class="code">created_at</span> &mdash; the time of event. We put it as the last column in ORDER BY expression, because proper data ordering will improve compression.</p>
+<p>3. Next to <span class="code">repo_name</span> we have <span class="code">created_at</span> &mdash; the time of event. We put it as the last column in the ORDER BY expression, because proper data ordering will improve compression.</p>
 
 <p>4. <span class="code">ENGINE = MergeTree</span> is used as the recommended choice for medium to large sized datasets.</p>
 
 <p>5. We use <span class="code">Enum</span> data types when we know the set of values in advance.</p>
 
-<p>6. We don't use <span class="code">Nullable</span> data types, because they are less efficient than just using empty string / zeros for absense of values.</p>
+<p>6. We don't use <span class="code">Nullable</span> data types, because they are less efficient than just using empty string / zeros for absence of values.</p>
 
 <p>7. <span class="code">LowCardinality(String)</span> is used to apply additional dictionary compression when strings are expected to repeat frequently. Data is always compressed in ClickHouse. But <span class="code">LowCardinality</span> acts better than generic compression, because it allows to process data without decompression.</p>
 
 <p>8. We use <span class="code">Array</span> data type for labels, assignees, etc. It's quite convenient to have this option.</p>
 
 
-<h3>How to transform data from JSON to flat table?</h3>
+<h3>How to transform data from JSON to a flat table</h3>
 
 <p>The most simple way is to use <span class="code">jq</span>.</p>
 
@@ -5920,22 +5920,22 @@ gzip -cd {} | jq -c '
 <p>A quick intro into <span class="code">jq</span> syntax:</p>
 
 <p>
-<span class="code">[...]</span> means &mdash; collect into JSON array.<br/>
+<span class="code">[...]</span> means to collect into a JSON array.<br/>
 <span class="code">.actor.login</span> is the navigation inside the JSON object.<br/>
-<span class="code">.elem.field?</span> &mdash; emit null instead of error if the elem is not an object.<br/>
-<span class="code">//</span> means "or" (Python-like). If left hand side is not found, right hand side will be selected.<br/>
-<span class="code">[]?.name</span> means &mdash; for each element of array select object's field <span class="code">name</span> if exists.
+<span class="code">.elem.field?</span> means to emit null instead of error if the elem is not an object.<br/>
+<span class="code">//</span> means "or" (Python-like). If the left-hand side is not found, the right-hand side will be selected.<br/>
+<span class="code">[]?.name</span> means to select the object's <span class="code">name</span> field if it exists, for each element of the array.
 </p>
 
-<p>This <span class="code">jq</span> expression will create array for every event. We pipe these arrays into <span class="code">clickhouse-client</span> to <span class="code">INSERT INTO github_events</span> parsing the data with <span class="code">JSONCompactEachRow</span> format.</p>
+<p>This <span class="code">jq</span> expression will create an array for every event. We pipe these arrays into <span class="code">clickhouse-client</span> to <span class="code">INSERT INTO github_events</span> parsing the data with <span class="code">JSONCompactEachRow</span> format.</p>
 
 <p>The <span class="code">JSONCompactEachRow</span> is one of the <a href="https://clickhouse.tech/docs/en/interfaces/formats/">input/output formats</a> supported by ClickHouse. Basically it means "JSON array for every table row".</p>
 
-<p>The option <span class="code">--input_format_null_as_default</span> will transform JSON nulls (when field is not found) to default values (like 0 or empty string). The option <span class="code">--date_time_input_format best_effort</span> allows to parse DateTime field in various formats including <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>.</p>
+<p>The option <span class="code">--input_format_null_as_default</span> will transform JSON nulls (when the field is not found) to default values (like 0 or empty string). The option <span class="code">--date_time_input_format best_effort</span> allows to parse the DateTime field in various formats, including <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>.</p>
 
 <p>Data loading will take a few hours, and the bottleneck is <span class="code">jq</span>.</p>
 
-<p>Congratulations, now we are able to recreate the dataset from the raw data! (Assuming the <span class="code">GHArchive</span> continue to exist).</p>
+<p>Congratulations, now we are able to recreate the dataset from the raw data! (Assuming the <span class="code">GHArchive</span> continues to exist).</p>
 
 
 <h3>How to update the database continuously</h3>
@@ -6011,7 +6011,7 @@ gzip -cd {} | jq -c '
 
 <h3>How to create <span class="code">.tsv.xz</span> and <span class="code">.native.xz</span> dumps</h3>
 
-<p>Install <span class="code">pixz</span> tool for faster <span class="code">xz</span> compression and run one of the following commands:</p>
+<p>Install the <span class="code">pixz</span> tool for faster <span class="code">xz</span> compression and run one of the following commands:</p>
 
 <pre>
 clickhouse-client --progress --max_threads 1 --query "SELECT * FROM github_events FORMAT TSV" | pixz > github_events.xz
@@ -6020,23 +6020,23 @@ clickhouse-client --progress --max_threads 1 --query "SELECT * FROM github_event
 
 <h2>ClickHouse Demo Access</h2>
 
-<p>We prepared an instance of ClickHouse in <a href="https://cloud.yandex.com/">Yandex.Cloud</a> for public access. It is a single server 80 vCPU (40 cores) Intel Cascade Lake with 640 GiB or RAM and 4 TiB network SSD. You can connect to it directly and execute your queries (TODO). Many restrictions apply and we don't guarantee it will work at the current moment of time. The server is located in Europe, if you are in different region, hundreds ms latency is expected.</p>
+<p>We prepared an instance of ClickHouse in <a href="https://cloud.yandex.com/">Yandex.Cloud</a> for public access. It is a single server 80 vCPU (40 cores) Intel Cascade Lake with 640 GiB or RAM and 4 TiB network SSD. You can connect to it directly and execute your queries (TODO). Many restrictions apply and we don't guarantee it will work at the current moment of time. The server is located in Europe, so if you are in a different region, expect latency of hundreds ms.</p>
 
 <p>TODO rerun all queries on this server (current results are from slow server).</p>
 
-<p>Actually the dataset is not a "Big Data". It is "Fits on Your Laptop" kind of data. But if your laptop is not powerful enough, you can roll your own <a href="https://cloud.yandex.com/services/managed-clickhouse">Managed ClickHouse</a> instance to play with the data.</p>
+<p>This dataset is not actually "Big Data". It is the "Fits on Your Laptop" kind of data. But if your laptop is not powerful enough, you can roll your own <a href="https://cloud.yandex.com/services/managed-clickhouse">Managed ClickHouse</a> instance to play with the data.</p>
 
-<p>Keep in mind that this dataset is actually very small for ClickHouse. There are <a href="https://clickhouse.tech/docs/en/introduction/adopters/">multiple companies</a> that use distributed multi-petabyte ClickHouse setups for various heavy duty tasks, e.g. to analyze significant share of all the internet traffic in realtime. This article is not to advertise ClickHouse, but at least you know where to look.</p>
+<p>Keep in mind that this dataset is actually very small for ClickHouse. There are <a href="https://clickhouse.tech/docs/en/introduction/adopters/">multiple companies</a> that use distributed multi-petabyte ClickHouse setups for various heavy duty tasks, e.g. to analyze a significant share of all internet traffic in real time. This article is not intended to advertise ClickHouse, but at least now you know where to look.</p>
 
 
 <h2>Sharing the results</h2>
 
-<p>We encourage you to create your own research and tools based on the dataset. This article is <a href="https://github.com/github-sql/explorer">open-source</a> and the content is available under the <a href="https://creativecommons.org/licenses/by/4.0/">CC-BY-4.0</a> license or <a href="https://www.apache.org/licenses/LICENSE-2.0">Apache 2</a> license. Attribution is required. You can propose changes, extend the article, share ideas by pull requests and issues on <a href="https://github.com/github-sql/explorer">GitHub repository</a>. Please notify us about interesting usages of the dataset. We also encourage the application of the dataset for DBMS benchmarks.</p>
+<p>We encourage you to create your own research and tools based on the dataset. This article is <a href="https://github.com/github-sql/explorer">open-source</a> and the content is available under the <a href="https://creativecommons.org/licenses/by/4.0/">CC-BY-4.0</a> license or <a href="https://www.apache.org/licenses/LICENSE-2.0">Apache 2</a> license. Attribution is required. You can propose changes, extend the article, and share ideas by pull requests and issues on <a href="https://github.com/github-sql/explorer">GitHub repository</a>. Please notify us about interesting usages of the dataset. We also encourage the application of the dataset for DBMS benchmarks.</p>
 
-<p>If you need to cite this article do it as following:<br/>
-<span class="code">"Milovidov A., 2020. Everything You Would Like To Know About GitHub But Afraid To Ask, https://TODO"</span></p>
+<p>If you need to cite this article, please do it as follows:<br/>
+<span class="code">"Milovidov A., 2020. Everything You Ever Wanted To Know About GitHub (But Were Afraid To Ask), https://TODO"</span></p>
 
-<p>The authors don't own any rights on the dataset. The dataset includes material that may be subject to third party rights. The query results from the dataset are published under the section 107 of the Copyright Act of 1976, allowance is made for "fair use" for purposes such as criticism, comment, news reporting, teaching, scholarship, education and research. Fair use is a use permitted by copyright statute that might otherwise be infringing.</p>
+<p>The authors don't own any rights to the dataset. The dataset includes material that may be subject to third party rights. The query results from the dataset are published under section 107 of the Copyright Act of 1976; allowance is made for "fair use" for purposes such as criticism, comment, news reporting, teaching, scholarship, education and research. Fair use is a use permitted by copyright statute that might otherwise be infringing.</p>
 
 <p>This website does not use cookies. Discuss at <a href="TODO">Hacker News</a>.</p>
 
