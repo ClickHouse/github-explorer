@@ -5992,19 +5992,21 @@ clickhouse-client --progress --max_threads 1 --query "SELECT * FROM github_event
 The Yandex.Cloud server is located in Europe, and Altinity.Cloud server is in US East AWS region. You can connect to it directly and execute your queries.
 
 <h3>Yandex.Cloud</h3>
-(TODO)
+
+<p>(TODO)</p>
 
 <h3>Altinity.Cloud</h3>
-Connect with clickhouse-client:
-    <pre>clickhouse-client -h github.demo.trial.altinity.cloud --port 9440 -s --user=demo --password=demo</pre> -- note, use the latest client version.
-Connect with DBeaver and other tools over HTTPS or JDBC:
-    <pre>https://demo:demo@github.demo.trial.altinity.cloud:8443</pre>
-    <pre>jdbc:clickhouse://github.demo.trial.altinity.cloud:8443</pre> -- note, that secure connection needs to be used that requires a dedicated flag in JDBC
 
-Many restrictions apply and we don't guarantee it will work all time.
-</p>
+<p>Connect with clickhouse-client:<br/>
+<span class="code">clickhouse-client -h github.demo.trial.altinity.cloud --port 9440 -s --user=demo --password=demo</span>
+<br/>&mdash; note, use the latest client version.</p>
 
-<p>TODO rerun all queries on this server (current results are from slow server).</p>
+<p>Connect with DBeaver and other tools over HTTPS or JDBC:<br/>
+<span class="code">https://demo:demo@github.demo.trial.altinity.cloud:8443</span><br/>
+<span class="code">jdbc:clickhouse://github.demo.trial.altinity.cloud:8443</span><br/>
+&mdash; note, that secure connection needs to be used that requires a dedicated flag in JDBC</p>
+
+<p>Many restrictions apply and we don't guarantee it will work all time.</p>
 
 <p>This dataset is not actually "Big Data". It is the "Fits on Your Laptop" kind of data. But if your laptop is not powerful enough, you can roll your own <a href="https://cloud.yandex.com/services/managed-clickhouse">Managed ClickHouse</a> instance to play with the data.</p>
 
