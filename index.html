@@ -5108,8 +5108,8 @@ review_state:          none
 
 <p>You can download the dataset as a file and then insert into ClickHouse or any other DBMS.</p>
 
-<p>Here is the dataset in <a href="https://clickhouse-datasets.s3.yandex.net/github_events.native.xz">ClickHouse Native format</a> (65 GB).<br/>
-Alternatively you can download the same dataset in <a href="https://clickhouse-datasets.s3.yandex.net/github_events/tsv/github_events.tsv.xz">tab-separated format</a> (76 GB).</p>
+<p>Here is the dataset in <a href="https://datasets.clickhouse.tech/github_events.native.xz">ClickHouse Native format</a> (65 GB).<br/>
+Alternatively you can download the same dataset in <a href="https://datasets.clickhouse.tech/github_events/tsv/github_events.tsv.xz">tab-separated format</a> (76 GB).</p>
 
 <p>To decompress the dataset from <span class="code">.xz</span> it's recommended to install and use the <span class="code">pixz</span> (parallel xz) tool. The ordinary <span class="code">xz</span> tool can be used as well.</p>
 
@@ -5269,7 +5269,7 @@ CREATE TABLE github_events_url
     release_tag_name String,
     release_name String,
     review_state Enum('none' = 0, 'approved' = 1, 'changes_requested' = 2, 'commented' = 3, 'dismissed' = 4, 'pending' = 5)
-) ENGINE = URL('https://clickhouse-datasets.s3.yandex.net/github_events.native.xz', Native);
+) ENGINE = URL('https://datasets.clickhouse.tech/github_events.native.xz', Native);
 </pre>
 
 <p>Create the destination table and insert data:</p>
