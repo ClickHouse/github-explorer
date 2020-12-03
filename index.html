@@ -155,6 +155,21 @@
             margin-top: 2rem;
             box-shadow: 0 0 1rem #EEE;
         }
+
+        .sql
+        {
+            font-weight: bold;
+            white-space: pre-wrap;
+        }
+
+        .edit, .edit:visited
+        {
+            float: right;
+            display: block;
+            font-size: 300%;
+            color: #888;
+            z-index: -1;
+        }
     </style>
 </head>
 <body>
@@ -181,8 +196,8 @@
 
 <p>The <span class="code">WatchEvent</span> is the event when someone gives a star to a repo.</p>
 
-<pre>
-:) SELECT count() FROM github_events WHERE event_type = 'WatchEvent'
+<pre class="query">
+:) <span class="sql">SELECT count() FROM github_events WHERE event_type = 'WatchEvent'</span>
 
 ┌───count()─┐
 │ 204140309 │
@@ -193,8 +208,8 @@
 
 <p>There is no event when someone removes the star. This means that star removal is invisible, but it should be rare in any case, so we can calculate the approximate number of stars from these events.</p>
 
-<pre>
-:) SELECT action, count() FROM github_events WHERE event_type = 'WatchEvent' GROUP BY action
+<pre class="query">
+:) <span class="sql">SELECT action, count() FROM github_events WHERE event_type = 'WatchEvent' GROUP BY action</span>
 
 ┌─action──┬───count()─┐
 │ started │ 204140309 │
@@ -207,8 +222,8 @@
 
 <p>Let's validate the star count by comparing it for my favorite repository:</p>
 
-<pre>
-:) SELECT count() FROM github_events WHERE event_type = 'WatchEvent' AND repo_name IN ('ClickHouse/ClickHouse', 'yandex/ClickHouse') GROUP BY action
+<pre class="query">
+:) <span class="sql">SELECT count() FROM github_events WHERE event_type = 'WatchEvent' AND repo_name IN ('ClickHouse/ClickHouse', 'yandex/ClickHouse') GROUP BY action</span>
 
 ┌─count()─┐
 │   13617 │
@@ -225,9 +240,9 @@
 
 <p>This is the first report that comes to mind.</p>
 
-<pre>
+<pre class="query">
 :) SET output_format_pretty_row_numbers = 1
-:) SELECT repo_name, count() AS stars FROM github_events WHERE event_type = 'WatchEvent' GROUP BY repo_name ORDER BY stars DESC LIMIT 50
+:) <span class="sql">SELECT repo_name, count() AS stars FROM github_events WHERE event_type = 'WatchEvent' GROUP BY repo_name ORDER BY stars DESC LIMIT 50</span>
 
     ┌─repo_name──────────────────────────────┬──stars─┐
  1. │ <a href="https://github.com/996icu/996.ICU">996icu/996.ICU</a>                         │ 354327 │
@@ -295,8 +310,8 @@
 <h3>Distribution of repositories by star count</h3>
 
 <p>By the way, what is the distribution of repositories by stars?</p>
-<pre>
-SELECT
+<pre class="query">
+<span class="sql">SELECT
     exp10(floor(log10(c))) AS stars,
     uniq(k)
 FROM
@@ -309,7 +324,7 @@ FROM
     GROUP BY k
 )
 GROUP BY stars
-ORDER BY stars ASC
+ORDER BY stars ASC</span>
 
 ┌──stars─┬──uniq(k)─┐
 │      1 │ 13615219 │
@@ -326,8 +341,8 @@ ORDER BY stars ASC
 <p>There are only 13 million repositories that have at least one star. There are only 1.2 million repositories with 10+ stars. Just 200 000 repositories have over 100 stars, 25 000 have over 1k stars, 1500 have over 10k stars and there are only 14 repositories with more than 100k stars.</p>
 
 <h3>The total number of repositories on GitHub</h3>
-<pre>
-:) SELECT uniq(repo_name) FROM github_events
+<pre class="query">
+:) <span class="sql">SELECT uniq(repo_name) FROM github_events</span>
 
 ┌─uniq(repo_name)─┐
 │       148702940 │
@@ -350,8 +365,8 @@ ORDER BY stars ASC
 | <a data-div-id-prefix="repos" class="button_selected">2020</a></p>
 
 <div id="repos2020">
-<pre>
-:) SELECT repo_name, count() AS stars FROM github_events WHERE event_type = 'WatchEvent' AND toYear(created_at) = '2020' GROUP BY repo_name ORDER BY stars DESC LIMIT 50
+<pre class="query">
+:) <span class="sql">SELECT repo_name, count() AS stars FROM github_events WHERE event_type = 'WatchEvent' AND toYear(created_at) = '2020' GROUP BY repo_name ORDER BY stars DESC LIMIT 50</span>
 
     ┌─repo_name────────────────────────────────────┬─stars─┐
  1. │ <a href="https://github.com/labuladong/fucking-algorithm">labuladong/fucking-algorithm</a>                 │ 74159 │
@@ -413,8 +428,8 @@ ORDER BY stars ASC
 </div>
 
 <div id="repos2019">
-<pre>
-:) SELECT repo_name, count() AS stars FROM github_events WHERE event_type = 'WatchEvent' AND toYear(created_at) = '2019' GROUP BY repo_name ORDER BY stars DESC LIMIT 50
+<pre class="query">
+:) <span class="sql">SELECT repo_name, count() AS stars FROM github_events WHERE event_type = 'WatchEvent' AND toYear(created_at) = '2019' GROUP BY repo_name ORDER BY stars DESC LIMIT 50</span>
 
     ┌─repo_name──────────────────────────────────┬──stars─┐
  1. │ <a href="https://github.com/996icu/996.ICU">996icu/996.ICU</a>                             │ 344825 │
@@ -476,8 +491,8 @@ ORDER BY stars ASC
 </div>
 
 <div id="repos2018">
-<pre>
-:) SELECT repo_name, count() AS stars FROM github_events WHERE event_type = 'WatchEvent' AND toYear(created_at) = '2018' GROUP BY repo_name ORDER BY stars DESC LIMIT 50
+<pre class="query">
+:) <span class="sql">SELECT repo_name, count() AS stars FROM github_events WHERE event_type = 'WatchEvent' AND toYear(created_at) = '2018' GROUP BY repo_name ORDER BY stars DESC LIMIT 50</span>
 
     ┌─repo_name──────────────────────────────┬─stars─┐
  1. │ <a href="https://github.com/vuejs/vue">vuejs/vue</a>                              │ 51515 │
@@ -538,8 +553,8 @@ ORDER BY stars ASC
 </div>
 
 <div id="repos2017">
-<pre>
-:) SELECT repo_name, count() AS stars FROM github_events WHERE event_type = 'WatchEvent' AND toYear(created_at) = '2017' GROUP BY repo_name ORDER BY stars DESC LIMIT 50
+<pre class="query">
+:) <span class="sql">SELECT repo_name, count() AS stars FROM github_events WHERE event_type = 'WatchEvent' AND toYear(created_at) = '2017' GROUP BY repo_name ORDER BY stars DESC LIMIT 50</span>
 
     ┌─repo_name──────────────────────────────────────┬─stars─┐
  1. │ <a href="https://github.com/freeCodeCamp/freeCodeCamp">freeCodeCamp/freeCodeCamp</a>                      │ 90972 │
@@ -599,8 +614,8 @@ ORDER BY stars ASC
 </div>
 
 <div id="repos2016">
-<pre>
-:) SELECT repo_name, count() AS stars FROM github_events WHERE event_type = 'WatchEvent' AND toYear(created_at) = '2016' GROUP BY repo_name ORDER BY stars DESC LIMIT 50
+<pre class="query">
+:) <span class="sql">SELECT repo_name, count() AS stars FROM github_events WHERE event_type = 'WatchEvent' AND toYear(created_at) = '2016' GROUP BY repo_name ORDER BY stars DESC LIMIT 50</span>
 
     ┌─repo_name───────────────────────────────────────┬──stars─┐
  1. │ <a href="https://github.com/FreeCodeCamp/FreeCodeCamp">FreeCodeCamp/FreeCodeCamp</a>                       │ 182110 │
@@ -660,8 +675,8 @@ ORDER BY stars ASC
 </div>
 
 <div id="repos2015">
-<pre>
-:) SELECT repo_name, count() AS stars FROM github_events WHERE event_type = 'WatchEvent' AND toYear(created_at) = '2015' GROUP BY repo_name ORDER BY stars DESC LIMIT 50
+<pre class="query">
+:) <span class="sql">SELECT repo_name, count() AS stars FROM github_events WHERE event_type = 'WatchEvent' AND toYear(created_at) = '2015' GROUP BY repo_name ORDER BY stars DESC LIMIT 50</span>
 
     ┌─repo_name────────────────────────────────────┬─stars─┐
  1. │ <a href="https://github.com/FreeCodeCamp/FreeCodeCamp">FreeCodeCamp/FreeCodeCamp</a>                    │ 38478 │
@@ -722,8 +737,8 @@ ORDER BY stars ASC
 
 <p>Bonus: all these results in a single report:</p>
 
-<pre>
-SELECT
+<pre class="query">
+<span class="sql">SELECT
     year,
     lower(repo_name) AS repo,
     count()
@@ -735,7 +750,7 @@ GROUP BY
 ORDER BY
     year ASC,
     count() DESC
-LIMIT 10 BY year
+LIMIT 10 BY year</span>
 
 ┌─year─┬─repo──────────────────────────┬─count()─┐
 │ 2015 │ <a href="https://github.com/freecodecamp/freecodecamp">freecodecamp/freecodecamp</a>     │   53795 │
@@ -812,8 +827,8 @@ LIMIT 10 BY year
 </pre>
 
 <p>And a multi-line graph:</p>
-<pre>
-SELECT
+<pre class="query">
+<span class="sql">SELECT
     repo AS name,
     groupArrayInsertAt(toUInt32(c), toUInt64(dateDiff('month', toDate('2015-01-01'), month))) AS data
 FROM
@@ -838,7 +853,7 @@ FROM
 )
 GROUP BY repo
 ORDER BY repo ASC
-FORMAT JSON
+</span>
 
 10 rows in set. Elapsed: 1.729 sec. Processed 204.18 million rows, 1.44 GB (118.08 million rows/s., 835.15 MB/s.)
 </pre>
@@ -847,8 +862,8 @@ FORMAT JSON
 
 <h3>How has the total number of stars changed over time?</h3>
 
-<pre>
-:) SELECT toYear(created_at) AS year, count() AS stars, bar(stars, 0, 50000000, 10) AS bar FROM github_events WHERE event_type = 'WatchEvent' GROUP BY year ORDER BY year
+<pre class="query">
+:) <span class="sql">SELECT toYear(created_at) AS year, count() AS stars, bar(stars, 0, 50000000, 10) AS bar FROM github_events WHERE event_type = 'WatchEvent' GROUP BY year ORDER BY year</span>
 
 ┌─year─┬────stars─┬─bar────────┐
 │ 2011 │    47390 │            │
@@ -869,8 +884,8 @@ FORMAT JSON
 
 <h3>Who are all those people giving stars?</h3>
 
-<pre>
-:) SELECT actor_login, count() AS stars FROM github_events WHERE event_type = 'WatchEvent' GROUP BY actor_login ORDER BY stars DESC LIMIT 50
+<pre class="query">
+:) <span class="sql">SELECT actor_login, count() AS stars FROM github_events WHERE event_type = 'WatchEvent' GROUP BY actor_login ORDER BY stars DESC LIMIT 50</span>
 
     ┌─actor_login─────┬──stars─┐
  1. │ <a href="https://github.com/4148">4148</a>            │ 231859 │
@@ -931,8 +946,8 @@ FORMAT JSON
 <p>I checked the results: <span class="code">4148</span> looks like an empty account... very suspicious. The next user looks okay. But how is it possible to give 202 534 stars?</p>
 
 <p>In comparison, I only gave 195 stars:</p>
-<pre>
-:) SELECT actor_login, count() AS stars FROM github_events WHERE event_type = 'WatchEvent' AND actor_login = 'alexey-milovidov' GROUP BY actor_login ORDER BY stars DESC LIMIT 50
+<pre class="query">
+:) <span class="sql">SELECT actor_login, count() AS stars FROM github_events WHERE event_type = 'WatchEvent' AND actor_login = 'alexey-milovidov' GROUP BY actor_login ORDER BY stars DESC LIMIT 50</span>
 
    ┌─actor_login──────┬─stars─┐
 1. │ <a href="https://github.com/alexey-milovidov">alexey-milovidov</a> │   196 │
@@ -942,8 +957,8 @@ FORMAT JSON
 </pre>
 
 <p>And here are my favorites sorted by the total number of stars:</p>
-<pre>
-SELECT
+<pre class="query">
+<span class="sql">SELECT
     repo_name,
     count() AS stars
 FROM github_events
@@ -955,7 +970,7 @@ WHERE (event_type = 'WatchEvent') AND (repo_name IN
 ))
 GROUP BY repo_name
 ORDER BY stars DESC
-LIMIT 50
+LIMIT 50</span>
 
     ┌─repo_name──────────────────────────────┬─stars─┐
  1. │ <a href="https://github.com/koalaman/shellcheck">koalaman/shellcheck</a>                    │ 21933 │
@@ -1017,8 +1032,8 @@ LIMIT 50
 
 <p>A quick question I'm eager to ask: what are the top repositories sorted by the number of stars from people who starred the ClickHouse repository?</p>
 
-<pre>
-SELECT
+<pre class="query">
+<span class="sql">SELECT
     repo_name,
     count() AS stars
 FROM github_events
@@ -1030,7 +1045,7 @@ WHERE (event_type = 'WatchEvent') AND (actor_login IN
 )) AND (repo_name NOT IN ('ClickHouse/ClickHouse', 'yandex/ClickHouse'))
 GROUP BY repo_name
 ORDER BY stars DESC
-LIMIT 50
+LIMIT 50</span>
 
     ┌─repo_name────────────────────────┬─stars─┐
  1. │ <a href="https://github.com/tensorflow/tensorflow">tensorflow/tensorflow</a>            │  4672 │
@@ -1097,8 +1112,8 @@ LIMIT 50
 Don't worry, the query is pretty simple.</p>
 
 <div id="affinity_ClickHouse">
-<pre>
-SELECT
+<pre class="query">
+<span class="sql">SELECT
     repo_name,
     uniq(actor_login) AS total_stars,
     uniqIf(actor_login, actor_login IN
@@ -1113,7 +1128,7 @@ WHERE (event_type = 'WatchEvent') AND (repo_name NOT IN ('ClickHouse/ClickHouse'
 GROUP BY repo_name
 HAVING total_stars >= 100
 ORDER BY ratio DESC
-LIMIT 50
+LIMIT 50</span>
 
 ┌─repo_name─────────────────────────────┬─total_stars─┬─clickhouse_stars─┬─ratio─┐
 │ <a href="https://github.com/yandex/clickhouse-jdbc">yandex/clickhouse-jdbc</a>                │         340 │              240 │  0.71 │
@@ -1177,8 +1192,8 @@ LIMIT 50
 </div>
 
 <div id="affinity_Linux">
-<pre>
-SELECT
+<pre class="query">
+<span class="sql">SELECT
     repo_name,
     uniq(actor_login) AS total_stars,
     uniqIf(actor_login, actor_login IN
@@ -1193,7 +1208,7 @@ WHERE (event_type = 'WatchEvent') AND (repo_name NOT IN ('torvalds/linux'))
 GROUP BY repo_name
 HAVING total_stars >= 100
 ORDER BY ratio DESC
-LIMIT 50
+LIMIT 50</span>
 
 ┌─repo_name─────────────────────┬─total_stars─┬─clickhouse_stars─┬─ratio─┐
 │ <a href="https://github.com/torvalds/libdc-for-dirk">torvalds/libdc-for-dirk</a>       │         103 │               79 │  0.77 │
@@ -1253,8 +1268,8 @@ LIMIT 50
 </div>
 
 <div id="affinity_LLVM">
-<pre>
-SELECT
+<pre class="query">
+<span class="sql">SELECT
     repo_name,
     uniq(actor_login) AS total_stars,
     uniqIf(actor_login, actor_login IN
@@ -1269,7 +1284,7 @@ WHERE (event_type = 'WatchEvent') AND (repo_name NOT IN ('llvm/llvm-project'))
 GROUP BY repo_name
 HAVING total_stars >= 100
 ORDER BY ratio DESC
-LIMIT 50
+LIMIT 50</span>
 
 ┌─repo_name──────────────────────────────────────┬─total_stars─┬─clickhouse_stars─┬─ratio─┐
 │ <a href="https://github.com/AliveToolkit/alive2">AliveToolkit/alive2</a>                            │         167 │               74 │  0.44 │
@@ -1335,8 +1350,8 @@ LIMIT 50
 
 <p>Let me find a friend by the intersection on starred repositories.</p>
 
-<pre>
-WITH repo_name IN
+<pre class="query">
+<span class="sql">WITH repo_name IN
     (
         SELECT repo_name
         FROM github_events
@@ -1351,7 +1366,7 @@ FROM github_events
 WHERE event_type = 'WatchEvent'
 GROUP BY actor_login
 ORDER BY ratio DESC
-LIMIT 50
+LIMIT 50</span>
 
     ┌─actor_login───────┬─stars_my─┬─stars_other─┬─ratio─┐
  1. │ <a href="https://github.com/alexey-milovidov">alexey-milovidov</a>  │      196 │           0 │     1 │
@@ -1416,8 +1431,8 @@ LIMIT 50
 
 <p>Authors that contributed to ClickHouse also contributed to what repositories?</p>
 
-<pre>
-SELECT
+<pre class="query">
+<span class="sql">SELECT
     repo_name,
     count() AS prs,
     uniq(actor_login) AS authors
@@ -1430,7 +1445,7 @@ WHERE (event_type = 'PullRequestEvent') AND (action = 'opened') AND (actor_login
 )) AND (repo_name NOT ILIKE '%ClickHouse%')
 GROUP BY repo_name
 ORDER BY authors DESC
-LIMIT 50
+LIMIT 50</span>
 
 ┌─repo_name─────────────────────────┬──prs─┬─authors─┐
 │ <a href="https://github.com/Homebrew/homebrew-core">Homebrew/homebrew-core</a>            │   28 │      14 │
@@ -1490,8 +1505,8 @@ LIMIT 50
 
 <p>Authors that filed an issue in ClickHouse also filed issues in what repositories?</p>
 
-<pre>
-SELECT
+<pre class="query">
+<span class="sql">SELECT
     repo_name,
     count() AS prs,
     uniq(actor_login) AS authors
@@ -1504,7 +1519,7 @@ WHERE (event_type = 'IssuesEvent') AND (action = 'opened') AND (actor_login IN
 )) AND (repo_name NOT ILIKE '%ClickHouse%')
 GROUP BY repo_name
 ORDER BY authors DESC
-LIMIT 50
+LIMIT 50</span>
 
 ┌─repo_name─────────────────────────┬─prs─┬─authors─┐
 │ <a href="https://github.com/grafana/grafana">grafana/grafana</a>                   │ 219 │      66 │
@@ -1565,8 +1580,8 @@ LIMIT 50
 <h3>Repositories with the most stars over one day</h3>
 
 
-<pre>
-SELECT
+<pre class="query">
+<span class="sql">SELECT
     repo_name,
     toDate(created_at) AS day,
     count() AS stars
@@ -1577,7 +1592,7 @@ GROUP BY
     day
 ORDER BY count() DESC
 LIMIT 1 BY repo_name
-LIMIT 50
+LIMIT 50</span>
 
     ┌─repo_name──────────────────────────────────────┬────────day─┬─stars─┐
  1. │ <a href="https://github.com/996icu/996.ICU">996icu/996.ICU</a>                                 │ 2019-03-28 │ 76056 │
@@ -1638,8 +1653,8 @@ LIMIT 50
 <p>The <a href="https://github.com/desktop/desktop">GitHub Desktop</a> is the most new. There is "openbilibili" &mdash; something like Chinese YouTube, but the repository is closed due to DMCA takedown.</p>
 
 <p>I accidentially made a similar query for repositories the gained the most stars over just one second:</p>
-<pre>
-:) SELECT repo_name, created_at, count() AS stars FROM github_events WHERE event_type = 'WatchEvent' GROUP BY repo_name, created_at ORDER BY count() DESC LIMIT 50
+<pre class="query">
+:) <span class="sql">SELECT repo_name, created_at, count() AS stars FROM github_events WHERE event_type = 'WatchEvent' GROUP BY repo_name, created_at ORDER BY count() DESC LIMIT 50</span>
 
     ┌─repo_name────────────────────────────┬──────────created_at─┬─stars─┐
  1. │ <a href="https://github.com/expressjs/express">expressjs/express</a>                    │ 2018-04-29 20:30:59 │   370 │
@@ -1701,8 +1716,8 @@ LIMIT 50
 
 <h3>Repositories with the highest growth YoY</h3>
 
-<pre>
-WITH toYear(created_at) AS year
+<pre class="query">
+<span class="sql">WITH toYear(created_at) AS year
 SELECT
     repo_name,
     sum(year = 2020) AS stars2020,
@@ -1714,7 +1729,7 @@ WHERE event_type = 'WatchEvent'
 GROUP BY repo_name
 HAVING (min(created_at) &lt;= '2019-01-01 00:00:00') AND (stars2019 >= 1000)
 ORDER BY yoy DESC
-LIMIT 50
+LIMIT 50</span>
 
     ┌─repo_name──────────────────────────────────┬─stars2020─┬─stars2019─┬───yoy─┬──────────first_seen─┐
  1. │ <a href="https://github.com/puppeteer/puppeteer">puppeteer/puppeteer</a>                        │     10733 │      1255 │ 8.552 │ 2015-01-14 08:00:55 │
@@ -1776,8 +1791,8 @@ LIMIT 50
 
 <h3>Repositories with the worst stagnation</h3>
 
-<pre>
-WITH toYear(created_at) AS year
+<pre class="query">
+<span class="sql">WITH toYear(created_at) AS year
 SELECT
     repo_name,
     sum(year = 2020) AS stars2020,
@@ -1787,9 +1802,9 @@ SELECT
 FROM github_events
 WHERE event_type = 'WatchEvent'
 GROUP BY repo_name
-HAVING (min(created_at) <= '2019-01-01 00:00:00') AND (max(created_at) >= '2020-06-01 00:00:00') AND (stars2019 >= 1000)
+HAVING (min(created_at) &lt;= '2019-01-01 00:00:00') AND (max(created_at) >= '2020-06-01 00:00:00') AND (stars2019 >= 1000)
 ORDER BY yoy ASC
-LIMIT 50
+LIMIT 50</span>
 
     ┌─repo_name─────────────────────────────────────┬─stars2020─┬─stars2019─┬───yoy─┬──────────first_seen─┐
  1. │ <a href="https://github.com/DoubleLabyrinth/navicat-keygen">DoubleLabyrinth/navicat-keygen</a>                │         1 │      6459 │     0 │ 2017-12-08 02:04:48 │
@@ -1851,8 +1866,8 @@ LIMIT 50
 
 <h3>Repositories with the most steady growth over time</h3>
 
-<pre>
-SELECT
+<pre class="query">
+<span class="sql">SELECT
     repo_name,
     max(stars) AS daily_stars,
     sum(stars) AS total_stars,
@@ -1871,7 +1886,7 @@ FROM
 )
 GROUP BY repo_name
 ORDER BY rate DESC
-LIMIT 50
+LIMIT 50</span>
 
     ┌─repo_name─────────────────────────┬─daily_stars─┬─total_stars─┬────rate─┐
  1. │ <a href="https://github.com/powerline/fonts">powerline/fonts</a>                   │          28 │       20509 │ 732.464 │
@@ -1931,8 +1946,8 @@ LIMIT 50
 
 <h3>What is the best day of the week to catch a star?</h3>
 
-<pre>
-:) SELECT toDayOfWeek(created_at) AS day, count() AS stars, bar(stars, 0, 50000000, 10) AS bar FROM github_events WHERE event_type = 'WatchEvent' GROUP BY day ORDER BY day
+<pre class="query">
+:) <span class="sql">SELECT toDayOfWeek(created_at) AS day, count() AS stars, bar(stars, 0, 50000000, 10) AS bar FROM github_events WHERE event_type = 'WatchEvent' GROUP BY day ORDER BY day</span>
 
 ┌─day─┬────stars─┬─bar─────┐
 │   1 │ 32208422 │ ██████▍ │
@@ -1952,8 +1967,8 @@ LIMIT 50
 
 <h3>The total number of users on GitHub</h3>
 
-<pre>
-:) SELECT uniq(actor_login) FROM github_events
+<pre class="query">
+:) <span class="sql">SELECT uniq(actor_login) FROM github_events</span>
 
 ┌─uniq(actor_login)─┐
 │          31705618 │
@@ -1967,8 +1982,8 @@ LIMIT 50
 
 <p>Total number of users that gave at least one star:</p>
 
-<pre>
-:) SELECT uniq(actor_login) FROM github_events WHERE event_type = 'WatchEvent'
+<pre class="query">
+:) <span class="sql">SELECT uniq(actor_login) FROM github_events WHERE event_type = 'WatchEvent'</span>
 
 ┌─uniq(actor_login)─┐
 │           9500852 │
@@ -1982,8 +1997,8 @@ LIMIT 50
 
 <p>Total number of users with at least one push:</p>
 
-<pre>
-:) SELECT uniq(actor_login) FROM github_events WHERE event_type = 'PushEvent'
+<pre class="query">
+:) <span class="sql">SELECT uniq(actor_login) FROM github_events WHERE event_type = 'PushEvent'</span>
 
 ┌─uniq(actor_login)─┐
 │          17663259 │
@@ -1997,8 +2012,8 @@ LIMIT 50
 
 <p>Total number of users with at least one created PR:</p>
 
-<pre>
-:) SELECT uniq(actor_login) FROM github_events WHERE event_type = 'PullRequestEvent' AND action = 'opened'
+<pre class="query">
+:) <span class="sql">SELECT uniq(actor_login) FROM github_events WHERE event_type = 'PullRequestEvent' AND action = 'opened'</span>
 
 ┌─uniq(actor_login)─┐
 │           6077236 │
@@ -2011,8 +2026,8 @@ LIMIT 50
 
 <p>What if we count top starred repositories but only from those who made at least one PR in at least one repo?</p>
 
-<pre>
-SELECT
+<pre class="query">
+<span class="sql">SELECT
     repo_name,
     count()
 FROM github_events
@@ -2024,7 +2039,7 @@ WHERE (event_type = 'WatchEvent') AND (actor_login IN
 ))
 GROUP BY repo_name
 ORDER BY count() DESC
-LIMIT 50
+LIMIT 50</span>
 
     ┌─repo_name──────────────────────────────┬─count()─┐
  1. │ <a href="https://github.com/facebook/react">facebook/react</a>                         │  108346 │
@@ -2085,8 +2100,8 @@ LIMIT 50
 <p>The list is similar to the overall top list.</p>
 <p>What if we take authors who have made at least 10 PRs?</p>
 
-<pre>
-SELECT
+<pre class="query">
+<span class="sql">SELECT
     repo_name,
     count()
 FROM github_events
@@ -2100,7 +2115,7 @@ WHERE (event_type = 'WatchEvent') AND (actor_login IN
 ))
 GROUP BY repo_name
 ORDER BY count() DESC
-LIMIT 50
+LIMIT 50</span>
 
     ┌─repo_name─────────────────────────────┬─count()─┐
  1. │ <a href="https://github.com/facebook/react">facebook/react</a>                        │   47781 │
@@ -2163,8 +2178,8 @@ LIMIT 50
 
 <h3>Repositories with the maximum amount of pull requests:</h3>
 
-<pre>
-:) SELECT repo_name, count(), uniq(actor_login) FROM github_events WHERE event_type = 'PullRequestEvent' AND action = 'opened' GROUP BY repo_name ORDER BY count() DESC LIMIT 50
+<pre class="query">
+:) <span class="sql">SELECT repo_name, count(), uniq(actor_login) FROM github_events WHERE event_type = 'PullRequestEvent' AND action = 'opened' GROUP BY repo_name ORDER BY count() DESC LIMIT 50</span>
 
     ┌─repo_name───────────────────────────────┬─count()─┬─uniq(actor_login)─┐
  1. │ <a href="https://github.com/google-test/signcla-probe-repo">google-test/signcla-probe-repo</a>          │  346268 │                 4 │
@@ -2233,8 +2248,8 @@ LIMIT 50
 
 <p>Repositories with the maximum amount of pull request contributors:</p>
 
-<pre>
-:) SELECT repo_name, count(), uniq(actor_login) AS u FROM github_events WHERE event_type = 'PullRequestEvent' AND action = 'opened' GROUP BY repo_name ORDER BY u DESC LIMIT 50
+<pre class="query">
+:) <span class="sql">SELECT repo_name, count(), uniq(actor_login) AS u FROM github_events WHERE event_type = 'PullRequestEvent' AND action = 'opened' GROUP BY repo_name ORDER BY u DESC LIMIT 50</span>
 
     ┌─repo_name─────────────────────────────────────────────────────────────┬─count()─┬─────u─┐
  1. │ <a href="https://github.com/jlord/patchwork">jlord/patchwork</a>                                                       │   34665 │ 30310 │
@@ -2297,8 +2312,8 @@ LIMIT 50
 
 <h3>Repositories with the maximum amount of issues</h3>
 
-<pre>
-:) SELECT repo_name, count() AS c, uniq(actor_login) AS u FROM github_events WHERE event_type = 'IssuesEvent' AND action = 'opened' GROUP BY repo_name ORDER BY c DESC LIMIT 50
+<pre class="query">
+:) <span class="sql">SELECT repo_name, count() AS c, uniq(actor_login) AS u FROM github_events WHERE event_type = 'IssuesEvent' AND action = 'opened' GROUP BY repo_name ORDER BY c DESC LIMIT 50</span>
 
     ┌─repo_name───────────────────────────────┬──────c─┬─────u─┐
  1. │ <a href="https://github.com/koorellasuresh/UKRegionTest">koorellasuresh/UKRegionTest</a>             │ 379340 │     4 │
@@ -2363,8 +2378,8 @@ LIMIT 50
 <p>Conclusion: if a repository has a high number of issues, maybe issues are created automatically from crash reports.</p>
 
 <p>Let's also add the number of stars to this report:</p>
-<pre>
-WITH (event_type = 'IssuesEvent') AND (action = 'opened') AS issue_created
+<pre class="query">
+<span class="sql">WITH (event_type = 'IssuesEvent') AND (action = 'opened') AS issue_created
 SELECT
     repo_name,
     sum(issue_created) AS c,
@@ -2374,7 +2389,7 @@ FROM github_events
 WHERE event_type IN ('IssuesEvent', 'WatchEvent')
 GROUP BY repo_name
 ORDER BY c DESC
-LIMIT 50
+LIMIT 50</span>
 
     ┌─repo_name───────────────────────────────┬──────c─┬─────u─┬──stars─┐
  1. │ <a href="https://github.com/koorellasuresh/UKRegionTest">koorellasuresh/UKRegionTest</a>             │ 379340 │     4 │      1 │
@@ -2433,8 +2448,8 @@ LIMIT 50
 </pre>
 
 <p>Now we can distinguish real issues from robot ones. Let's add a cutoff at 1000 stars:</p>
-<pre>
-WITH (event_type = 'IssuesEvent') AND (action = 'opened') AS issue_created
+<pre class="query">
+<span class="sql">WITH (event_type = 'IssuesEvent') AND (action = 'opened') AS issue_created
 SELECT
     repo_name,
     sum(issue_created) AS c,
@@ -2445,7 +2460,7 @@ WHERE event_type IN ('IssuesEvent', 'WatchEvent')
 GROUP BY repo_name
 HAVING stars >= 1000
 ORDER BY c DESC
-LIMIT 50
+LIMIT 50</span>
 
     ┌─repo_name─────────────────────┬─────c─┬─────u─┬──stars─┐
  1. │ <a href="https://github.com/Microsoft/vscode">Microsoft/vscode</a>              │ 65111 │ 27037 │  82037 │
@@ -2507,8 +2522,8 @@ LIMIT 50
 
 <p>And for the next report, let's sort by the number of issue authors:</p>
 
-<pre>
-WITH (event_type = 'IssuesEvent') AND (action = 'opened') AS issue_created
+<pre class="query">
+<span class="sql">WITH (event_type = 'IssuesEvent') AND (action = 'opened') AS issue_created
 SELECT
     repo_name,
     sum(issue_created) AS c,
@@ -2518,7 +2533,7 @@ FROM github_events
 WHERE event_type IN ('IssuesEvent', 'WatchEvent')
 GROUP BY repo_name
 ORDER BY u DESC
-LIMIT 50
+LIMIT 50</span>
 
     ┌─repo_name───────────────────────────────────────────────────┬──────c─┬─────u─┬──stars─┐
  1. │ <a href="https://github.com/Microsoft/vscode">Microsoft/vscode</a>                                            │  65111 │ 27037 │  82037 │
@@ -2578,8 +2593,8 @@ LIMIT 50
 
 <h3>Repositories with the most people who have push access</h3>
 
-<pre>
-:) SELECT repo_name, uniqIf(actor_login, event_type = 'PushEvent') AS u, sum(event_type = 'WatchEvent') AS stars FROM github_events WHERE event_type IN ('PushEvent', 'WatchEvent') AND repo_name != '/' GROUP BY repo_name ORDER BY u DESC LIMIT 50
+<pre class="query">
+:) <span class="sql">SELECT repo_name, uniqIf(actor_login, event_type = 'PushEvent') AS u, sum(event_type = 'WatchEvent') AS stars FROM github_events WHERE event_type IN ('PushEvent', 'WatchEvent') AND repo_name != '/' GROUP BY repo_name ORDER BY u DESC LIMIT 50</span>
 
     ┌─repo_name───────────────────────────────────────────────────┬────u─┬─stars─┐
  1. │ <a href="https://github.com/githubschool/open-enrollment-classes-introduction-to-github">githubschool/open-enrollment-classes-introduction-to-github</a> │ 7869 │   921 │
@@ -2642,8 +2657,8 @@ LIMIT 50
 
 <p>Repositories with the most people who have push access to the main branch.</p>
 
-<pre>
-SELECT
+<pre class="query">
+<span class="sql">SELECT
     repo_name,
     uniqIf(actor_login, (event_type = 'PushEvent') AND match(ref, '/(main|master)$')) AS u,
     sum(event_type = 'WatchEvent') AS stars
@@ -2651,7 +2666,7 @@ FROM github_events
 WHERE (event_type IN ('PushEvent', 'WatchEvent')) AND (repo_name != '/')
 GROUP BY repo_name
 ORDER BY u DESC
-LIMIT 50
+LIMIT 50</span>
 
     ┌─repo_name───────────────────────────────────────────────────┬────u─┬─stars─┐
  1. │ <a href="https://github.com/githubschool/open-enrollment-classes-introduction-to-github">githubschool/open-enrollment-classes-introduction-to-github</a> │ 5602 │   921 │
@@ -2713,8 +2728,8 @@ LIMIT 50
 
 <p>With a cutoff for the number of stars:</p>
 
-<pre>
-SELECT
+<pre class="query">
+<span class="sql">SELECT
     repo_name,
     uniqIf(actor_login, (event_type = 'PushEvent') AND match(ref, '/(main|master)$')) AS u,
     sum(event_type = 'WatchEvent') AS stars
@@ -2723,7 +2738,7 @@ WHERE (event_type IN ('PushEvent', 'WatchEvent')) AND (repo_name != '/')
 GROUP BY repo_name
 HAVING stars >= 100
 ORDER BY u DESC
-LIMIT 50
+LIMIT 50</span>
 
     ┌─repo_name───────────────────────────────────────────────────┬────u─┬──stars─┐
  1. │ <a href="https://github.com/githubschool/open-enrollment-classes-introduction-to-github">githubschool/open-enrollment-classes-introduction-to-github</a> │ 5602 │    921 │
@@ -2784,8 +2799,8 @@ LIMIT 50
 
 <h3>Repositories with the maximum number of accepted invitations</h3>
 
-<pre>
-:) SELECT repo_name, sum(event_type = 'MemberEvent') AS invitations, sum(event_type = 'WatchEvent') AS stars FROM github_events WHERE event_type IN ('MemberEvent', 'WatchEvent') GROUP BY repo_name HAVING stars >= 100 ORDER BY invitations DESC LIMIT 50
+<pre class="query">
+:) <span class="sql">SELECT repo_name, sum(event_type = 'MemberEvent') AS invitations, sum(event_type = 'WatchEvent') AS stars FROM github_events WHERE event_type IN ('MemberEvent', 'WatchEvent') GROUP BY repo_name HAVING stars >= 100 ORDER BY invitations DESC LIMIT 50</span>
 
     ┌─repo_name───────────────────────────────────────────────────┬─invitations─┬─stars─┐
  1. │ <a href="https://github.com/githubschool/open-enrollment-classes-introduction-to-github">githubschool/open-enrollment-classes-introduction-to-github</a> │       10451 │   921 │
@@ -2845,8 +2860,8 @@ LIMIT 50
 
 <h3>Most forked repositories</h3>
 
-<pre>
-:) SELECT repo_name, count() AS forks FROM github_events WHERE event_type = 'ForkEvent' GROUP BY repo_name ORDER BY forks DESC LIMIT 50
+<pre class="query">
+:) <span class="sql">SELECT repo_name, count() AS forks FROM github_events WHERE event_type = 'ForkEvent' GROUP BY repo_name ORDER BY forks DESC LIMIT 50</span>
 
     ┌─repo_name───────────────────────────────┬──forks─┐
  1. │ <a href="https://github.com/jtleek/datasharing">jtleek/datasharing</a>                      │ 193088 │
@@ -2911,8 +2926,8 @@ LIMIT 50
 
 <p>Let's check the proportion of stars to forks.</p>
 
-<pre>
-SELECT
+<pre class="query">
+<span class="sql">SELECT
     repo_name,
     sum(event_type = 'ForkEvent') AS forks,
     sum(event_type = 'WatchEvent') AS stars,
@@ -2921,7 +2936,7 @@ FROM github_events
 WHERE event_type IN ('ForkEvent', 'WatchEvent')
 GROUP BY repo_name
 ORDER BY forks DESC
-LIMIT 50
+LIMIT 50</span>
 
     ┌─repo_name───────────────────────────────┬──forks─┬──stars─┬──ratio─┐
  1. │ <a href="https://github.com/jtleek/datasharing">jtleek/datasharing</a>                      │ 193088 │   5506 │  0.029 │
@@ -2985,8 +3000,8 @@ LIMIT 50
 
 <p>More stars less forks:</p>
 
-<pre>
-SELECT
+<pre class="query">
+<span class="sql">SELECT
     repo_name,
     sum(event_type = 'ForkEvent') AS forks,
     sum(event_type = 'WatchEvent') AS stars,
@@ -2996,7 +3011,7 @@ WHERE event_type IN ('ForkEvent', 'WatchEvent')
 GROUP BY repo_name
 HAVING (stars > 100) AND (forks > 100)
 ORDER BY ratio DESC
-LIMIT 50
+LIMIT 50</span>
 
     ┌─repo_name──────────────────────────────┬─forks─┬─stars─┬──ratio─┐
  1. │ <a href="https://github.com/M4cs/BabySploit">M4cs/BabySploit</a>                        │   146 │ 71568 │ 490.19 │
@@ -3056,8 +3071,8 @@ LIMIT 50
 
 <p>More forks less stars:</p>
 
-<pre>
-SELECT
+<pre class="query">
+<span class="sql">SELECT
     repo_name,
     sum(event_type = 'ForkEvent') AS forks,
     sum(event_type = 'WatchEvent') AS stars,
@@ -3067,7 +3082,7 @@ WHERE event_type IN ('ForkEvent', 'WatchEvent')
 GROUP BY repo_name
 HAVING (stars > 100) AND (forks > 100)
 ORDER BY ratio DESC
-LIMIT 50
+LIMIT 50</span>
 
     ┌─repo_name─────────────────────────────────┬──forks─┬─stars─┬──ratio─┐
  1. │ <a href="https://github.com/rdpeng/RepData_PeerAssessment1">rdpeng/RepData_PeerAssessment1</a>            │  34518 │   111 │ 310.97 │
@@ -3129,8 +3144,8 @@ LIMIT 50
 
 <p>The overall proportion between stars and forks:</p>
 
-<pre>
-:) SELECT sum(event_type = 'ForkEvent') AS forks, sum(event_type = 'WatchEvent') AS stars, round(stars / forks, 2) AS ratio FROM github_events WHERE event_type IN ('ForkEvent', 'WatchEvent')
+<pre class="query">
+:) <span class="sql">SELECT sum(event_type = 'ForkEvent') AS forks, sum(event_type = 'WatchEvent') AS stars, round(stars / forks, 2) AS ratio FROM github_events WHERE event_type IN ('ForkEvent', 'WatchEvent')</span>
 
 ┌────forks─┬─────stars─┬─ratio─┐
 │ 74117570 │ 204140309 │  2.75 │
@@ -3141,8 +3156,8 @@ LIMIT 50
 
 <p>And it's higher for more popular repositories:</p>
 
-<pre>
-SELECT
+<pre class="query">
+<span class="sql">SELECT
     sum(stars) AS stars,
     sum(forks) AS forks,
     round(stars / forks, 2) AS ratio
@@ -3155,7 +3170,7 @@ FROM
     WHERE event_type IN ('ForkEvent', 'WatchEvent')
     GROUP BY repo_name
     HAVING stars > 100
-)
+)</span>
 
 ┌─────stars─┬────forks─┬─ratio─┐
 │ 149984341 │ 38519787 │  3.89 │
@@ -3168,8 +3183,8 @@ FROM
 
 <p>Total number of issues on GitHub:</p>
 
-<pre>
-:) SELECT count() FROM github_events WHERE event_type = 'IssueCommentEvent'
+<pre class="query">
+:) <span class="sql">SELECT count() FROM github_events WHERE event_type = 'IssueCommentEvent'</span>
 
 ┌───count()─┐
 │ 191589390 │
@@ -3180,8 +3195,8 @@ FROM
 
 <p>The top repositories by issue comments:</p>
 
-<pre>
-:) SELECT repo_name, count() FROM github_events WHERE event_type = 'IssueCommentEvent' GROUP BY repo_name ORDER BY count() DESC LIMIT 50
+<pre class="query">
+:) <span class="sql">SELECT repo_name, count() FROM github_events WHERE event_type = 'IssueCommentEvent' GROUP BY repo_name ORDER BY count() DESC LIMIT 50</span>
 
     ┌─repo_name────────────────────────────┬─count()─┐
  1. │ <a href="https://github.com/kubernetes/kubernetes">kubernetes/kubernetes</a>                │ 1441025 │
@@ -3241,8 +3256,8 @@ FROM
 
 <p>The proportion between issue comments and issues:</p>
 
-<pre>
-SELECT
+<pre class="query">
+<span class="sql">SELECT
     repo_name,
     count() AS comments,
     uniq(number) AS issues,
@@ -3251,7 +3266,7 @@ FROM github_events
 WHERE event_type = 'IssueCommentEvent'
 GROUP BY repo_name
 ORDER BY count() DESC
-LIMIT 50
+LIMIT 50</span>
 
     ┌─repo_name────────────────────────────┬─comments─┬─issues─┬─ratio─┐
  1. │ <a href="https://github.com/kubernetes/kubernetes">kubernetes/kubernetes</a>                │  1441025 │  84954 │ 16.96 │
@@ -3313,8 +3328,8 @@ LIMIT 50
 
 <p>Now let's find the most active issues...</p>
 
-<pre>
-SELECT
+<pre class="query">
+<span class="sql">SELECT
     repo_name,
     number,
     count() AS comments
@@ -3324,7 +3339,7 @@ GROUP BY
     repo_name,
     number
 ORDER BY count() DESC
-LIMIT 50
+LIMIT 50</span>
 
     ┌─repo_name───────────────────────────────────────────────────┬─number─┬─comments─┐
  1. │ <a href="https://github.com/sauron-demo/sauron">sauron-demo/sauron</a>                                          │      1 │    21297 │
@@ -3386,8 +3401,8 @@ LIMIT 50
 
 <p>I aimed to find some "epic bugs". Let's filter out by issue number:</p>
 
-<pre>
-SELECT
+<pre class="query">
+<span class="sql">SELECT
     repo_name,
     number,
     count() AS comments
@@ -3397,7 +3412,7 @@ GROUP BY
     repo_name,
     number
 ORDER BY count() DESC
-LIMIT 50
+LIMIT 50</span>
 
     ┌─repo_name───────────────────────────────────────────────────┬─number─┬─comments─┐
  1. │ <a href="https://github.com/openshift/oc">openshift/oc</a>                                                │    270 │     5914 │
@@ -3458,8 +3473,8 @@ LIMIT 50
 <p>I checked the <a href="https://github.com/openshift/oc/pull/270">first one</a> and it also looks like some script gone out of control.</p>
 <p>Let's also count the number of comment authors and add a threshold:</p>
 
-<pre>
-SELECT
+<pre class="query">
+<span class="sql">SELECT
     repo_name,
     number,
     count() AS comments,
@@ -3471,7 +3486,7 @@ GROUP BY
     number
 HAVING authors >= 10
 ORDER BY count() DESC
-LIMIT 50
+LIMIT 50</span>
 
     ┌─repo_name───────────────────────────────────────────────────┬─number─┬─comments─┬─authors─┐
  1. │ <a href="https://github.com/getlantern/forum">getlantern/forum</a>                                            │    313 │     3123 │    1658 │
@@ -3534,8 +3549,8 @@ LIMIT 50
 
 <h3>Top commented issues for each of the top repositories</h3>
 
-<pre>
-SELECT
+<pre class="query">
+<span class="sql">SELECT
     concat('https://github.com/', repo_name, '/issues/', toString(number)) AS URL,
     max(comments),
     argMax(authors, comments) AS authors,
@@ -3571,7 +3586,7 @@ FROM
 )
 GROUP BY repo_name
 ORDER BY stars DESC
-LIMIT 50
+LIMIT 50</span>
 
     ┌─URL───────────────────────────────────────────────────────────┬─max(comments)─┬─authors─┬─number─┬─────stars─┐
  1. │ <a href="https://github.com/tensorflow/tensorflow/issues/22">https://github.com/tensorflow/tensorflow/issues/22</a>            │           632 │     156 │     22 │ 218685620 │
@@ -3637,8 +3652,8 @@ LIMIT 50
 <p>It's rarely the case when a single commit has comments.</p>
 
 <p>Here are the top repositories by the number of commit comments:</p>
-<pre>
-SELECT
+<pre class="query">
+<span class="sql">SELECT
     repo_name,
     count() AS comments,
     uniq(actor_login) AS authors
@@ -3646,7 +3661,7 @@ FROM github_events
 WHERE event_type = 'CommitCommentEvent'
 GROUP BY repo_name
 ORDER BY count() DESC
-LIMIT 50
+LIMIT 50</span>
 
     ┌─repo_name────────────────────────────────────────────────────┬─comments─┬─authors─┐
  1. │ <a href="https://github.com/dcos/dcos">dcos/dcos</a>                                                    │    99168 │      16 │
@@ -3708,8 +3723,8 @@ LIMIT 50
 
 <p>Here are the "hottest" commits:</p>
 
-<pre>
-SELECT
+<pre class="query">
+<span class="sql">SELECT
     concat('https://github.com/', repo_name, '/commit/', commit_id) AS URL,
     count() AS comments,
     uniq(actor_login) AS authors
@@ -3720,7 +3735,7 @@ GROUP BY
     commit_id
 HAVING authors >= 10
 ORDER BY count() DESC
-LIMIT 50
+LIMIT 50</span>
 
     ┌─URL─────────────────────────────────────────────────────────────────────────────────────────────────────────────┬─comments─┬─authors─┐
  1. │ <a href="https://github.com/nixxquality/WebMConverter/commit/c1ac0baac06fa7175677a4a1bf65860a84708d67">https://github.com/nixxquality/WebMConverter/commit/c1ac0baac06fa7175677a4a1bf65860a84708d67</a>                    │      467 │     156 │
@@ -3783,8 +3798,8 @@ LIMIT 50
 
 <h3>The most tough code reviews</h3>
 
-<pre>
-SELECT
+<pre class="query">
+<span class="sql">SELECT
     concat('https://github.com/', repo_name, '/pull/', toString(number)) AS URL,
     uniq(actor_login) AS authors
 FROM github_events
@@ -3793,7 +3808,7 @@ GROUP BY
     repo_name,
     number
 ORDER BY authors DESC
-LIMIT 50
+LIMIT 50</span>
 
     ┌─URL─────────────────────────────────────────────────────────────┬─authors─┐
  1. │ <a href="https://github.com/torvalds/linux/pull/684">https://github.com/torvalds/linux/pull/684</a>                      │      66 │
@@ -3856,8 +3871,8 @@ LIMIT 50
 
 <h3>Authors with the most pushes</h3>
 
-<pre>
-SELECT
+<pre class="query">
+<span class="sql">SELECT
     actor_login,
     count() AS c,
     uniq(repo_name) AS repos
@@ -3865,7 +3880,7 @@ FROM github_events
 WHERE event_type = 'PushEvent'
 GROUP BY actor_login
 ORDER BY c DESC
-LIMIT 50
+LIMIT 50</span>
 
     ┌─actor_login───────────────────────┬────────c─┬───repos─┐
  1. │ <a href="https://github.com/LombiqBot">LombiqBot</a>                         │ 45900574 │     143 │
@@ -3927,8 +3942,8 @@ LIMIT 50
 
 <p>How can we filter out bots? Let's add a threshold on the number of repositories. Let's also count only those who created at least two issues and gave at least two stars. And also output the favorite repository for every user. And also count only across the top 10k repositories.</p>
 
-<pre>
-SELECT
+<pre class="query">
+<span class="sql">SELECT
     actor_login,
     sum(event_type = 'PushEvent') AS c,
     uniqIf(repo_name, event_type = 'PushEvent') AS repos,
@@ -3948,7 +3963,7 @@ WHERE (event_type IN ('PushEvent', 'IssuesEvent', 'WatchEvent')) AND (repo_name 
 GROUP BY actor_login
 HAVING (repos &lt; 10000) AND (issues > 1) AND (stars > 1)
 ORDER BY c DESC
-LIMIT 50
+LIMIT 50</span>
 
     ┌─actor_login──────┬─────c─┬─repos─┬─issues─┬─stars─┬─anyHeavy(repo_name)────────────────────┐
  1. │ <a href="https://github.com/ornicar">ornicar</a>          │ 46657 │     1 │   4203 │    51 │ <a href="https://github.com/graphite-project/graphite-web">graphite-project/graphite-web</a>          │
@@ -4011,15 +4026,15 @@ LIMIT 50
 
 <h3>Organizations by the number of stars</h3>
 
-<pre>
-SELECT
+<pre class="query">
+<span class="sql">SELECT
     lower(substring(repo_name, 1, position(repo_name, '/'))) AS org,
     count() AS stars
 FROM github_events
 WHERE event_type = 'WatchEvent'
 GROUP BY org
 ORDER BY stars DESC
-LIMIT 50
+LIMIT 50</span>
 
     ┌─org──────────────────┬───stars─┐
  1. │ <a href="https://github.com/microsoft/">microsoft/</a>           │ 1326689 │
@@ -4081,8 +4096,8 @@ LIMIT 50
 
 <h3>Organizations by the number of repositories</h3>
 
-<pre>
-SELECT
+<pre class="query">
+<span class="sql">SELECT
     lower(substring(repo_name, 1, position(repo_name, '/'))) AS org,
     uniq(repo_name) AS repos
 FROM
@@ -4095,7 +4110,7 @@ FROM
 )
 GROUP BY org
 ORDER BY repos DESC
-LIMIT 50
+LIMIT 50</span>
 
     ┌─org──────────────────┬─repos─┐
  1. │ <a href="https://github.com/microsoft/">microsoft/</a>           │  3313 │
@@ -4160,8 +4175,8 @@ LIMIT 50
 
 <p>The size of community that is visible on GitHub.</p>
 
-<pre>
-SELECT
+<pre class="query">
+<span class="sql">SELECT
     lower(substring(repo_name, 1, position(repo_name, '/'))) AS org,
     uniq(actor_login) AS authors,
     uniqIf(actor_login, event_type = 'PullRequestEvent') AS pr_authors,
@@ -4173,7 +4188,7 @@ FROM github_events
 WHERE event_type IN ('PullRequestEvent', 'IssuesEvent', 'IssueCommentEvent', 'PullRequestReviewCommentEvent', 'PushEvent')
 GROUP BY org
 ORDER BY authors DESC
-LIMIT 50
+LIMIT 50</span>
 
 ┌─org─────────────────────┬─authors─┬─pr_authors─┬─issue_authors─┬─comment_authors─┬─review_authors─┬─push_authors─┐
 │ <a href="https://github.com/microsoft/">microsoft/</a>              │  <b>237967</b> │      30971 │        <b>141313</b> │          <b>180346</b> │          10568 │         <b>6936</b> │
@@ -4240,8 +4255,8 @@ LIMIT 50
 
 <p>I want to get the repositories with the most added and removed code over time. If I do it in a naive way, the multiple forks of <a href="https://github.com/cdnjs/cdnjs">cdn.js</a> repository will be on top. By the way, cdn.js is the largest repository in GitHub by size in bytes (it contains all popular JavaScript libraries, the total size is ). To get something interesting, I added a threshold for the number of diff size and also for the ratio of added and removed code (in actively developing codebases, the ratio should be close to one).</p>
 
-<pre>
-SELECT
+<pre class="query">
+<span class="sql">SELECT
     repo_name,
     count() AS prs,
     uniq(actor_login) AS authors,
@@ -4252,7 +4267,7 @@ WHERE (event_type = 'PullRequestEvent') AND (action = 'opened') AND (additions &
 GROUP BY repo_name
 HAVING (adds / dels) &lt; 10
 ORDER BY adds + dels DESC
-LIMIT 50
+LIMIT 50</span>
 
 ┌─repo_name──────────────────────────────────┬────prs─┬─authors─┬─────adds─┬─────dels─┐
 │ <a href="https://github.com/everypolitician/everypolitician-data">everypolitician/everypolitician-data</a>       │ 150505 │      18 │ 66774979 │ 71198331 │
@@ -4313,8 +4328,8 @@ LIMIT 50
 
 <h3>Repositories by the number of pushes</h3>
 
-<pre>
-SELECT
+<pre class="query">
+<span class="sql">SELECT
     repo_name,
     count() AS pushes,
     uniq(actor_login) AS authors
@@ -4330,7 +4345,7 @@ WHERE (event_type = 'PushEvent') AND (repo_name IN
 ))
 GROUP BY repo_name
 ORDER BY count() DESC
-LIMIT 50
+LIMIT 50</span>
 
 ┌─repo_name────────────────────┬─pushes─┬─authors─┐
 │ <a href="https://github.com/CocoaPods/Specs">CocoaPods/Specs</a>              │ 482617 │      13 │
@@ -4391,7 +4406,8 @@ LIMIT 50
 
 <h3>Authors with the most code reviews</h3>
 
-<pre>SELECT
+<pre class="query">
+<span class="sql">SELECT
     actor_login,
     count(),
     uniq(repo_name) AS repos,
@@ -4401,7 +4417,7 @@ FROM github_events
 WHERE (event_type = 'PullRequestReviewCommentEvent') AND (action = 'created')
 GROUP BY actor_login
 ORDER BY count() DESC
-LIMIT 50
+LIMIT 50</span>
 
 ┌─actor_login──────────────┬─count()─┬─repos─┬───prs─┬─comment─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
 │ <a href="https://github.com/houndci-bot">houndci-bot</a>              │  989833 │  5870 │ 78479 │ Layout/DotPosition: Place the . on the previous line, together with the method call receiver. (https                                            │
@@ -4466,15 +4482,15 @@ LIMIT 50
 
 <p>What are the most popular labels for issues and pull requests?</p>
 
-<pre>
-SELECT
+<pre class="query">
+<span class="sql">SELECT
     arrayJoin(labels) AS label,
     count() AS c
 FROM github_events
 WHERE (event_type IN ('IssuesEvent', 'PullRequestEvent', 'IssueCommentEvent')) AND (action IN ('created', 'opened', 'labeled'))
 GROUP BY label
 ORDER BY c DESC
-LIMIT 50
+LIMIT 50</span>
 
     ┌─label─────────────────────────┬────────c─┐
  1. │ bug                           │ 10992271 │
@@ -4536,15 +4552,15 @@ LIMIT 50
 
 <p>The diversity of bugs and features is overwhelming:</p>
 
-<pre>
-SELECT
+<pre class="query">
+<span class="sql">SELECT
     arrayJoin(labels) AS label,
     count() AS c
 FROM github_events
 WHERE (event_type IN ('IssuesEvent', 'PullRequestEvent', 'IssueCommentEvent')) AND (action IN ('created', 'opened', 'labeled')) AND ((label ILIKE '%bug%') OR (label ILIKE '%feature%'))
 GROUP BY label
 ORDER BY c DESC
-LIMIT 50
+LIMIT 50</span>
 
     ┌─label──────────────────────┬────────c─┐
  1. │ bug                        │ 10992271 │
@@ -4604,14 +4620,14 @@ LIMIT 50
 
 <p>Actually, the "bugzilla" label is not only about bugs.</p>
 
-<pre>
-WITH arrayJoin(labels) AS label
+<pre class="query">
+<span class="sql">WITH arrayJoin(labels) AS label
 SELECT
     sum(label ILIKE '%bug%') AS bugs,
     sum(label ILIKE '%feature%') AS features,
     bugs / features AS ratio
 FROM github_events
-WHERE (event_type IN ('IssuesEvent', 'PullRequestEvent', 'IssueCommentEvent')) AND (action IN ('created', 'opened', 'labeled')) AND ((label ILIKE '%bug%') OR (label ILIKE '%feature%'))
+WHERE (event_type IN ('IssuesEvent', 'PullRequestEvent', 'IssueCommentEvent')) AND (action IN ('created', 'opened', 'labeled')) AND ((label ILIKE '%bug%') OR (label ILIKE '%feature%'))</span>
 
 ┌─────bugs─┬─features─┬──────────────ratio─┐
 │ 17066125 │  4689235 │ 3.6394262603601653 │
@@ -4625,8 +4641,8 @@ WHERE (event_type IN ('IssuesEvent', 'PullRequestEvent', 'IssueCommentEvent')) A
 
 <h3>The longest repository names</h3>
 
-<pre>
-:) SELECT count(), repo_name FROM github_events WHERE event_type = 'WatchEvent' GROUP BY repo_name ORDER BY length(repo_name) DESC LIMIT 50
+<pre class="query">
+:) <span class="sql">SELECT count(), repo_name FROM github_events WHERE event_type = 'WatchEvent' GROUP BY repo_name ORDER BY length(repo_name) DESC LIMIT 50</span>
 
 ┌─count()─┬─repo_name────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
 │       1 │ <a href="https://github.com/accounts-inheritance-finders-of-america/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee">accounts-inheritance-finders-of-america/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee</a> │
@@ -4689,8 +4705,8 @@ WHERE (event_type IN ('IssuesEvent', 'PullRequestEvent', 'IssueCommentEvent')) A
 
 <h3>The shortest repository names</h3>
 
-<pre>
-:) SELECT repo_name, count() FROM github_events WHERE event_type = 'WatchEvent' GROUP BY repo_name ORDER BY length(repo_name) ASC LIMIT 50
+<pre class="query">
+:) <span class="sql">SELECT repo_name, count() FROM github_events WHERE event_type = 'WatchEvent' GROUP BY repo_name ORDER BY length(repo_name) ASC LIMIT 50</span>
 
 ┌─repo_name─┬─count()─┐
 │ /         │     229 │
@@ -4753,8 +4769,8 @@ WHERE (event_type IN ('IssuesEvent', 'PullRequestEvent', 'IssueCommentEvent')) A
 
 <h3>Repositories with ClickHouse-related comments</h3>
 
-<pre>
-:) SELECT repo_name, count() FROM github_events WHERE body ILIKE '%ClickHouse%' GROUP BY repo_name ORDER BY count() DESC LIMIT 50
+<pre class="query">
+:) <span class="sql">SELECT repo_name, count() FROM github_events WHERE body ILIKE '%ClickHouse%' GROUP BY repo_name ORDER BY count() DESC LIMIT 50</span>
 
 ┌─repo_name──────────────────────────┬─count()─┐
 │ <a href="https://github.com/ClickHouse/ClickHouse">ClickHouse/ClickHouse</a>              │   11825 │
@@ -4816,8 +4832,8 @@ WHERE (event_type IN ('IssuesEvent', 'PullRequestEvent', 'IssueCommentEvent')) A
 
 <p>Repositories with ClickHouse-related comments, sorted by stars:</p>
 
-<pre>
-SELECT
+<pre class="query">
+<span class="sql">SELECT
     repo_name,
     sum(event_type = 'WatchEvent') AS num_stars,
     sum(body ILIKE '%ClickHouse%') AS num_comments
@@ -4826,7 +4842,7 @@ WHERE (body ILIKE '%ClickHouse%') OR (event_type = 'WatchEvent')
 GROUP BY repo_name
 HAVING num_comments > 0
 ORDER BY num_stars DESC
-LIMIT 50
+LIMIT 50</span>
 
     ┌─repo_name───────────────────┬─num_stars─┬─num_comments─┐
  1. │ <a href="https://github.com/996icu/996.ICU">996icu/996.ICU</a>              │    354327 │            1 │
@@ -4886,12 +4902,8 @@ LIMIT 50
 
 <p>Even the "996.ICU" repository has something about ClickHouse. I cannot find it on the GitHub website, but I can do it with our dataset!</p>
 
-<pre>
-:) SELECT * FROM github_events WHERE body ILIKE '%ClickHouse%' AND repo_name = '996icu/996.ICU' \G
-
-SELECT *
-FROM github_events
-WHERE (body ILIKE '%ClickHouse%') AND (repo_name = '996icu/996.ICU')
+<pre class="query">
+:) <span class="sql">SELECT * FROM github_events WHERE body ILIKE '%ClickHouse%' AND repo_name = '996icu/996.ICU'</span> \G
 
 Row 1:
 ──────
@@ -4967,8 +4979,8 @@ review_state:          none
 
 <h3>Most popular comments on GitHub</h3>
 
-<pre>
-:) SELECT body, count() FROM github_events WHERE notEmpty(body) AND length(body) &lt; 100 GROUP BY body ORDER BY count() DESC LIMIT 50
+<pre class="query">
+:) <span class="sql">SELECT body, count() FROM github_events WHERE notEmpty(body) AND length(body) &lt; 100 GROUP BY body ORDER BY count() DESC LIMIT 50</span>
 
 ┌─body─────────────────────────────────────┬─count()─┐
 │ Body of PR                               │  693893 │
@@ -5036,8 +5048,8 @@ review_state:          none
 
 <p>If we roll a dice and SELECT 50 random repositories with probability proportional to the number of stars, what will we get?</p>
 
-<pre>
-:) SELECT repo_name FROM github_events WHERE event_type = 'WatchEvent' ORDER BY rand() LIMIT 50
+<pre class="query">
+:) <span class="sql">SELECT repo_name FROM github_events WHERE event_type = 'WatchEvent' ORDER BY rand() LIMIT 50</span>
 
 ┌─repo_name──────────────────────────┐
 │ <a href="https://github.com/233boy/v2ray">233boy/v2ray</a>                       │
@@ -6079,6 +6091,41 @@ document.querySelectorAll('.button,.button_selected').forEach(elem => {
         document.getElementById(elem.getAttribute('data-div-id-prefix') + elem.innerText).style.display = 'block';
     };
 });
+
+/// Query editor
+
+var clickhouse_url = 'https://gh-api.clickhouse.tech/?user=play&default_format=JSON';
+function onClickHouseAvailable(callback) {
+    var xhr = new XMLHttpRequest;
+    xhr.open('POST', clickhouse_url, true);
+
+    xhr.onreadystatechange = function()
+    {
+        if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+            var json;
+            try { json = JSON.parse(this.response); } catch (e) {}
+            if (json !== undefined && json.statistics !== undefined && json.data[0].c <= 25) {
+                callback();
+            }
+        }
+    }
+
+    xhr.send("SELECT count() AS c FROM system.processes");
+}
+
+onClickHouseAvailable(function() {
+    document.querySelectorAll('.query').forEach(elem => {
+        var link = document.createElement('a');
+        link.className = "edit";
+        link.href = "https://gh-api.clickhouse.tech/play?user=play#" + window.btoa(elem.querySelector('.sql').textContent);
+        link.target = "_blank";
+        var text = document.createTextNode('🖉');
+        link.appendChild(text);
+
+        elem.prepend(link);
+    });
+});
+
 
 /// Charts
 
