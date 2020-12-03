@@ -1,1 +1,1 @@
-[Website](https://github-sql.github.io/explorer/)
+[Website](https://gh.clickhouse.tech/explorer/)
