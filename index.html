@@ -6020,7 +6020,21 @@ clickhouse-client --progress --max_threads 1 --query "SELECT * FROM github_event
 
 <h2>ClickHouse Demo Access</h2>
 
-<p>We prepared an instance of ClickHouse in <a href="https://cloud.yandex.com/">Yandex.Cloud</a> for public access. It is a single server 80 vCPU (40 cores) Intel Cascade Lake with 640 GiB or RAM and 4 TiB network SSD. You can connect to it directly and execute your queries (TODO). Many restrictions apply and we don't guarantee it will work at the current moment of time. The server is located in Europe, so if you are in a different region, expect latency of hundreds ms.</p>
+<p>We prepared instances of ClickHouse in <a href="https://cloud.yandex.com/">Yandex.Cloud</a> and <a href="https://altinity.com/cloud-database/">Altinity.Cloud</a> for public access.
+The Yandex.Cloud server is located in Europe, and Altinity.Cloud server is in US East AWS region. You can connect to it directly and execute your queries.
+
+<h3>Yandex.Cloud</h3>
+(TODO)
+
+<h3>Altinity.Cloud</h3>
+Connect with clickhouse-client: 
+    <pre>clickhouse-client -h github.demo.trial.altinity.cloud --port 9440 -s --user=demo --password=demo</pre> -- note, use the latest client version.
+Connect with DBeaver and other tools over HTTPS or JDBC: 
+    <pre>https://demo:demo@github.demo.trial.altinity.cloud:8443</pre>
+    <pre>jdbc:clickhouse://github.demo.trial.altinity.cloud:8443</pre> -- note, that secure connection needs to be used that requires a dedicated flag in JDBC
+
+Many restrictions apply and we don't guarantee it will work all time. 
+</p>
 
 <p>TODO rerun all queries on this server (current results are from slow server).</p>
 
