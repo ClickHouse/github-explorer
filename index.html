@@ -183,7 +183,7 @@
 
 <h2>Abstract</h2>
 
-<p>We prepared a dataset from the <a href="https://www.gharchive.org/">GH Archive</a> that contains all the events in all GitHub repositories since 2015 in structured format. The dataset was uploaded into <a href="https://clickhouse.tech/">ClickHouse</a>, where it contains 2.8 billion records. We redistribute it for research purposes and it can be downloaded at this <a href="#download-the-dataset">direct link</a>. This dataset can help answer almost any question about GitHub that you can imagine.</p>
+<p>We prepared a dataset from the <a href="https://www.gharchive.org/">GH Archive</a> that contains all the events in all GitHub repositories since 2011 in structured format. The dataset was uploaded into <a href="https://clickhouse.tech/">ClickHouse</a>, where it contains 3.1 billion records. We redistribute it for research purposes and it can be downloaded at this <a href="#download-the-dataset">direct link</a>. This dataset can help answer almost any question about GitHub that you can imagine.</p>
 
 <p>This article shows the usage of the dataset and offers insights into the GitHub ecosystem. It emphasizes how easy it is to play with data using modern tools.</p>
 
@@ -4711,7 +4711,7 @@ WHERE (event_type IN ('IssuesEvent', 'PullRequestEvent', 'IssueCommentEvent')) A
 <h3>The shortest repository names</h3>
 
 <pre class="query">
-:) <span class="sql">SELECT repo_name, count() FROM github_events WHERE event_type = 'WatchEvent' GROUP BY repo_name ORDER BY length(repo_name) ASC LIMIT 50</span>
+:) <span class="sql">SELECT repo_name, count() FROM github_events WHERE event_type = 'WatchEvent' AND repo_name LIKE '%_/_%' GROUP BY repo_name ORDER BY length(repo_name) ASC LIMIT 50</span>
 
 ┌─repo_name─┬─count()─┐
 │ /         │     229 │
