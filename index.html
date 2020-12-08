@@ -5700,7 +5700,7 @@ clickhouse-local --query "
 &mdash; select files by wildcard pattern;<br/>
 &mdash; decompress gzip data on the fly (with zlib-ng);<br/>
 &mdash; parallelize data processing by files and by chunks within each file;<br/>
-&mdash; process JSON with the help of <a href="https://github.com/simdjson/simdjson/">simdjson</a> &mdash; the fastest JSON library out of existence;</p>
+&mdash; process JSON with the help of <a href="https://github.com/simdjson/simdjson/">simdjson</a> &mdash; the fastest JSON library in existence;</p>
 
 <p>Data processing will be limited by disk speed. If we assume 1 GB/sec sequential read speed, it will take about 20 minutes per query. You may think this is okay, but it isn't. It is just the best possible speed of processing raw <span class="code">.json.gz</span> data, but we can do better if we preprocess our data.</p>
 
