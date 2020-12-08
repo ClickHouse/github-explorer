@@ -2181,7 +2181,7 @@ LIMIT 50</span>
 <p>If we count only software, the list looks like this: React, Vue, Tensorflow, VSCode, Linux, Golang, Flutter.</p>
 
 
-<h3>Repositories with the maximum amount of pull requests:</h3>
+<h3>Repositories with the maximum amount of pull requests</h3>
 
 <pre class="query">
 :) <span class="sql">SELECT repo_name, count(), uniq(actor_login) FROM github_events WHERE event_type = 'PullRequestEvent' AND action = 'opened' GROUP BY repo_name ORDER BY count() DESC LIMIT 50</span>
