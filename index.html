@@ -5687,7 +5687,7 @@ gzip -cd &lt; 2020-11-13-9.json.gz | grep -F 'PullRequestEvent' | head -n1 | jq 
 
 <p>There are multiple ways to analyze a bunch of <span class="code">.json.gz</span> files without any preprocessing. For example, you can use the <span class="code">jq</span> tool, though it will be very inefficient.</p>
 
-<p>A more efficient way to analyze data "on rest" without proprocessing is by using the <span class="code">clickhouse-local</span> tool. It is like a replacement for <span class="code">awk</span>, <span class="code">sed</span>, <span class="code">grep</span> with the ClickHouse SQL engine:</p>
+<p>A more efficient way to analyze data without preprocessing is by using the <span class="code">clickhouse-local</span> tool. It is like a replacement for <span class="code">awk</span>, <span class="code">sed</span>, <span class="code">grep</span> with the ClickHouse SQL engine:</p>
 
 <pre>
 clickhouse-local --query "
