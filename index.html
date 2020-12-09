@@ -4262,7 +4262,7 @@ LIMIT 50</span>
 
 <h3>Repositories by amount of modified code</h3>
 
-<p>I want to get the repositories with the most added and removed code over time. If I do it in a naive way, the multiple forks of <a href="https://github.com/cdnjs/cdnjs">cdn.js</a> repository will be on top. By the way, cdn.js is the largest repository in GitHub by size in bytes (it contains all popular JavaScript libraries, the total size is ). To get something interesting, I added a threshold for the number of diff size and also for the ratio of added and removed code (in actively developing codebases, the ratio should be close to one).</p>
+<p>I want to get the repositories with the most added and removed code over time. If I do it in a naive way, the multiple forks of <a href="https://github.com/cdnjs/cdnjs">cdn.js</a> repository will be on top. By the way, cdn.js is the largest repository in GitHub by size in bytes (it contains all popular JavaScript libraries, the total size is 254GB). To get something interesting, I added a threshold for the number of diff size and also for the ratio of added and removed code (in actively developing codebases, the ratio should be close to one).</p>
 
 <pre class="query">
 <span class="sql">SELECT
