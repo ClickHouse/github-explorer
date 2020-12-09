@@ -344,7 +344,7 @@ SELECT
  repo_name,
  max(stars) AS daily_stars,
  sum(stars) AS total_stars,
- total_stars / daily_stars AS rate
+ round(total_stars / daily_stars, 2) AS rate
 FROM
 (
  SELECT
