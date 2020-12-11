@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <title>Everything You Always Wanted To Know About GitHub (But Were Afraid To Ask)</title>
+
+    <link type="text/css" rel="stylesheet" href="https://code.highcharts.com/css/highcharts.css"/>
+
     <style type="text/css">
         html
         {
@@ -174,6 +177,124 @@
             font-size: 300%;
             color: #888;
             z-index: -1;
+        }
+
+        @media (prefers-color-scheme: dark)
+        {
+            html, body
+            {
+                background: #211f22;
+                color: #d6d9d6;
+            }
+
+            h1
+            {
+                color: #eed9b7;
+            }
+
+            h2, h3
+            {
+                color: #eed9b7;
+            }
+
+            a, a:visited
+            {
+                font-weight: 400;
+                color: #4bdaf7;
+                text-decoration: none;
+            }
+
+            pre, .code
+            {
+                font-family: DejaVu Sans Mono, Liberation Mono, MonoLisa, Consolas, Monospace;
+            }
+
+            pre
+            {
+                background: #3d3b40;
+                scrollbar-color: dark;
+            }
+
+            .code
+            {
+                background: #3d3b40;
+                color: #FFF;
+            }
+
+            .button_selected, .button_selected:hover
+            {
+                color: #FFF;
+            }
+
+            .anchor, .anchor:visited, #move-to-top a
+            {
+                color: #555;
+            }
+
+            html
+            {
+                --scrollbarBG: #3d3b40;
+                --thumbBG: #4d4a50;
+            }
+
+            pre::-webkit-scrollbar
+            {
+                height: 0.75rem;
+            }
+
+            pre
+            {
+                scrollbar-height: thin;
+                scrollbar-color: var(--thumbBG) var(--scrollbarBG);
+            }
+
+            pre::-webkit-scrollbar-track
+            {
+                background: var(--scrollbarBG);
+            }
+
+            pre::-webkit-scrollbar-thumb
+            {
+                background-color: var(--thumbBG) ;
+                border-radius: 6px;
+                border: 3px solid var(--scrollbarBG);
+            }
+
+            .chart
+            {
+                box-shadow: none;
+            }
+
+            .highcharts-background
+            {
+                fill: #3d3b40;
+            }
+            .highcharts-series-1
+            {
+                stroke: magenta;
+            }
+            .highcharts-legend-item-hidden
+            {
+                fill-opacity: 0.5;
+            }
+            .highcharts-container text
+            {
+                fill: #d6d9d6;
+            }
+            .highcharts-subtitle,
+            .highcharts-credits,
+            .highcharts-axis-title
+            {
+                fill-opacity: 0.7;
+            }
+            .highcharts-tooltip-box
+            {
+                fill: #3d3b40;
+            }
+            .highcharts-column-series rect.highcharts-point
+            {
+                stroke: #3d3b40;
+            }
         }
     </style>
 </head>
@@ -6142,6 +6263,10 @@ onClickHouseAvailable(function() {
 /// Charts
 
 Highcharts.chart('chart_top_repos', {
+
+    chart: {
+        styledMode: true,
+    },
 
     title: {
         text: ''
