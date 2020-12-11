@@ -954,7 +954,7 @@ ORDER BY repo ASC
 
 <p>I checked the results: <span class="code">4148</span> looks like an empty account... very suspicious. The next user looks okay. But how is it possible to give 202 534 stars?</p>
 
-<p>In comparison, I only gave 195 stars:</p>
+<p>In comparison, I only gave 203 stars:</p>
 <pre class="query">
 :) <span class="sql">SELECT actor_login, count() AS stars FROM github_events WHERE event_type = 'WatchEvent' AND actor_login = 'alexey-milovidov' GROUP BY actor_login ORDER BY stars DESC LIMIT 50</span>
 
