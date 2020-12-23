@@ -6237,7 +6237,7 @@ function onClickHouseAvailable(callback) {
         if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
             var json;
             try { json = JSON.parse(this.response); } catch (e) {}
-            if (json !== undefined && json.statistics !== undefined && json.data[0].c <= 25) {
+            if (json !== undefined && json.statistics !== undefined && +json.data[0].c <= 25) {
                 callback();
             }
         }
