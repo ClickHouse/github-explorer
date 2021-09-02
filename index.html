@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <title>Everything You Always Wanted To Know About GitHub (But Were Afraid To Ask)</title>
+
+    <link type="text/css" rel="stylesheet" href="https://code.highcharts.com/css/highcharts.css"/>
+
     <style type="text/css">
         html
         {
@@ -175,6 +178,124 @@
             color: #888;
             z-index: -1;
         }
+
+        @media (prefers-color-scheme: dark)
+        {
+            html, body
+            {
+                background: #211f22;
+                color: #d6d9d6;
+            }
+
+            h1
+            {
+                color: #eed9b7;
+            }
+
+            h2, h3
+            {
+                color: #eed9b7;
+            }
+
+            a, a:visited
+            {
+                font-weight: 400;
+                color: #4bdaf7;
+                text-decoration: none;
+            }
+
+            pre, .code
+            {
+                font-family: DejaVu Sans Mono, Liberation Mono, MonoLisa, Consolas, Monospace;
+            }
+
+            pre
+            {
+                background: #3d3b40;
+                scrollbar-color: dark;
+            }
+
+            .code
+            {
+                background: #3d3b40;
+                color: #FFF;
+            }
+
+            .button_selected, .button_selected:hover
+            {
+                color: #FFF;
+            }
+
+            .anchor, .anchor:visited, #move-to-top a
+            {
+                color: #555;
+            }
+
+            html
+            {
+                --scrollbarBG: #3d3b40;
+                --thumbBG: #4d4a50;
+            }
+
+            pre::-webkit-scrollbar
+            {
+                height: 0.75rem;
+            }
+
+            pre
+            {
+                scrollbar-height: thin;
+                scrollbar-color: var(--thumbBG) var(--scrollbarBG);
+            }
+
+            pre::-webkit-scrollbar-track
+            {
+                background: var(--scrollbarBG);
+            }
+
+            pre::-webkit-scrollbar-thumb
+            {
+                background-color: var(--thumbBG) ;
+                border-radius: 6px;
+                border: 3px solid var(--scrollbarBG);
+            }
+
+            .chart
+            {
+                box-shadow: none;
+            }
+
+            .highcharts-background
+            {
+                fill: #3d3b40;
+            }
+            .highcharts-series-1
+            {
+                stroke: magenta;
+            }
+            .highcharts-legend-item-hidden
+            {
+                fill-opacity: 0.5;
+            }
+            .highcharts-container text
+            {
+                fill: #d6d9d6;
+            }
+            .highcharts-subtitle,
+            .highcharts-credits,
+            .highcharts-axis-title
+            {
+                fill-opacity: 0.7;
+            }
+            .highcharts-tooltip-box
+            {
+                fill: #3d3b40;
+            }
+            .highcharts-column-series rect.highcharts-point
+            {
+                stroke: #3d3b40;
+            }
+        }
     </style>
 </head>
 <body>
@@ -343,7 +464,7 @@ ORDER BY stars ASC</span>
 6 rows in set. Elapsed: 1.249 sec. Processed 232.13 million rows, 1.81 GB (185.80 million rows/s., 1.45 GB/s.)
 </pre>
 
-<p>There are only 13 million repositories that have at least one star. There are only 1.2 million repositories with 10+ stars. Just 200 000 repositories have over 100 stars, 25 000 have over 1k stars, 1500 have over 10k stars and there are only 14 repositories with more than 100k stars.</p>
+<p>There are only 16 million repositories that have at least one star. There are only 1.4 million repositories with 10+ stars. Just 240 000 repositories have over 100 stars, 29 000 have over 1k stars, 1800 have over 10k stars and there are only 20 repositories with more than 100k stars.</p>
 
 <h3>The total number of repositories on GitHub</h3>
 <pre class="query">
@@ -954,7 +1075,7 @@ ORDER BY repo ASC
 
 <p>I checked the results: <span class="code">4148</span> looks like an empty account... very suspicious. The next user looks okay. But how is it possible to give 202 534 stars?</p>
 
-<p>In comparison, I only gave 195 stars:</p>
+<p>In comparison, I only gave 203 stars:</p>
 <pre class="query">
 :) <span class="sql">SELECT actor_login, count() AS stars FROM github_events WHERE event_type = 'WatchEvent' AND actor_login = 'alexey-milovidov' GROUP BY actor_login ORDER BY stars DESC LIMIT 50</span>
 
@@ -4101,7 +4222,7 @@ LIMIT 50</span>
 50 rows in set. Elapsed: 0.609 sec. Processed 232.13 million rows, 1.81 GB (380.98 million rows/s., 2.97 GB/s.)
 </pre>
 
-<p>You may notice that Microsoft is slightly ahead of Google. Actually, it depends on how you count. Maybe you should sum up Tensorflow, Kubernetes, Flutter, Golang, and Chrome for Google; GitHub and DotNet for Microsoft; Facebook Research and React for Facebook.</p>
+<p>You may notice that Google is slightly ahead of Microsoft. Actually, it depends on how you count. Maybe you should sum up Tensorflow, Kubernetes, Flutter, Golang, and Chrome for Google; GitHub and DotNet for Microsoft; Facebook Research and React for Facebook.</p>
 
 <h3>Organizations by the number of repositories</h3>
 
@@ -4262,7 +4383,7 @@ LIMIT 50</span>
 
 <h3>Repositories by amount of modified code</h3>
 
-<p>I want to get the repositories with the most added and removed code over time. If I do it in a naive way, the multiple forks of <a href="https://github.com/cdnjs/cdnjs">cdn.js</a> repository will be on top. By the way, cdn.js is the largest repository in GitHub by size in bytes (it contains all popular JavaScript libraries, the total size is ). To get something interesting, I added a threshold for the number of diff size and also for the ratio of added and removed code (in actively developing codebases, the ratio should be close to one).</p>
+<p>I want to get the repositories with the most added and removed code over time. If I do it in a naive way, the multiple forks of <a href="https://github.com/cdnjs/cdnjs">cdn.js</a> repository will be on top. By the way, cdn.js is the largest repository in GitHub by size in bytes (it contains all popular JavaScript libraries, the total size is 254GB). To get something interesting, I added a threshold for the number of diff size and also for the ratio of added and removed code (in actively developing codebases, the ratio should be close to one).</p>
 
 <pre class="query">
 <span class="sql">SELECT
@@ -6116,7 +6237,7 @@ function onClickHouseAvailable(callback) {
         if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
             var json;
             try { json = JSON.parse(this.response); } catch (e) {}
-            if (json !== undefined && json.statistics !== undefined && json.data[0].c <= 25) {
+            if (json !== undefined && json.statistics !== undefined && +json.data[0].c <= 25) {
                 callback();
             }
         }
@@ -6131,7 +6252,7 @@ onClickHouseAvailable(function() {
         link.className = "edit";
         link.href = "https://gh-api.clickhouse.tech/play?user=play#" + window.btoa(elem.querySelector('.sql').textContent);
         link.target = "_blank";
-        var text = document.createTextNode('🖉');
+        var text = document.createTextNode('✎');
         link.appendChild(text);
 
         elem.prepend(link);
@@ -6142,6 +6263,10 @@ onClickHouseAvailable(function() {
 /// Charts
 
 Highcharts.chart('chart_top_repos', {
+
+    chart: {
+        styledMode: true,
+    },
 
     title: {
         text: ''
