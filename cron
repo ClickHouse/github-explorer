@@ -1,0 +1,1 @@
+*/10 * * * * milovidov cd /home/milovidov/gharchive_new && ./update.sh >>/home/milovidov/gharchive_new/log 2>&1
