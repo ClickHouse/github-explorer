@@ -6133,11 +6133,6 @@ clickhouse-client --progress --max_threads 1 --query "SELECT * FROM github_event
 
 <h2>ClickHouse Demo Access</h2>
 
-<p>We prepared instances of ClickHouse in <a href="https://cloud.yandex.com/">Yandex.Cloud</a> and <a href="https://altinity.com/cloud-database/">Altinity.Cloud</a> for public access.
-The Yandex.Cloud server is located in Europe, and Altinity.Cloud server is in US East AWS region. You can connect to it directly and execute your queries.
-
-<h3>Yandex.Cloud</h3>
-
 <p>Connect with clickhouse-client:<br/>
 <span class="code">clickhouse-client --secure --host gh-api.clickhouse.tech --user explorer</span>
 </p>
@@ -6146,23 +6141,7 @@ The Yandex.Cloud server is located in Europe, and Altinity.Cloud server is in US
 
 <p>Minimal web UI: <a href="https://gh-api.clickhouse.tech/play?user=play">https://gh-api.clickhouse.tech/play?user=play</a></p>
 
-<h3>Altinity.Cloud</h3>
-
-<p>Connect with clickhouse-client:<br/>
-<span class="code">clickhouse-client -h github.demo.trial.altinity.cloud --port 9440 -s --user=demo --password=demo</span>
-<br/>&mdash; note, use the latest client version.</p>
-
-<p>Connect with DBeaver and other tools over HTTPS or JDBC:<br/>
-<span class="code">https://demo:demo@github.demo.trial.altinity.cloud:8443</span><br/>
-<span class="code">jdbc:clickhouse://github.demo.trial.altinity.cloud:8443</span><br/>
-&mdash; note, that secure connection needs to be used that requires a dedicated flag in JDBC</p>
-
-<p>Many restrictions apply and we don't guarantee it will work all time.</p>
-
-<p>This dataset is not actually "Big Data". It is the "Fits on Your Laptop" kind of data. But if your laptop is not powerful enough, you can roll your own <a href="https://cloud.yandex.com/services/managed-clickhouse">Managed ClickHouse</a> instance to play with the data.</p>
-
-<p>Keep in mind that this dataset is actually very small for ClickHouse. There are <a href="https://clickhouse.tech/docs/en/introduction/adopters/">multiple companies</a> that use distributed multi-petabyte ClickHouse setups for various heavy duty tasks, e.g. to analyze a significant share of all internet traffic in real time. This article is not intended to advertise ClickHouse, but at least now you know where to look.</p>
-
+<p>Keep in mind that this dataset is actually very small for ClickHouse. There are <a href="https://clickhouse.com/docs/en/introduction/adopters/">multiple companies</a> that use distributed multi-petabyte ClickHouse setups for various heavy duty tasks, e.g. to analyze a significant share of all internet traffic in real time. This article is not intended to advertise ClickHouse, but at least now you know where to look.</p>
 
 <h2>Sharing the results</h2>
 
