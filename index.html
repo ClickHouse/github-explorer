@@ -5816,7 +5816,7 @@ gzip -cd &lt; 2020-11-13-9.json.gz | grep -F 'PullRequestEvent' | head -n1 | jq 
 
 <pre>
 clickhouse-local --query "
-    SELECT count() FROM file('*.json.gz', TSV, 'data String')
+    SELECT count() FROM file('*.json.gz', LineAsString, 'data String')
     WHERE JSONExtractString(data, 'actor', 'login') = 'alexey-milovidov'"
 </pre>
 
