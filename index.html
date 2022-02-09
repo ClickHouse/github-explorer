@@ -304,7 +304,7 @@
 
 <h2>Abstract</h2>
 
-<p>We prepared a dataset from the <a href="https://www.gharchive.org/">GH Archive</a> that contains all the events in all GitHub repositories since 2011 in structured format. The dataset was uploaded into <a href="https://clickhouse.tech/">ClickHouse</a>, where it contains 3.1 billion records. We redistribute it for research purposes and it can be downloaded at this <a href="#download-the-dataset">direct link</a>. This dataset can help answer almost any question about GitHub that you can imagine.</p>
+<p>We prepared a dataset from the <a href="https://www.gharchive.org/">GH Archive</a> that contains all the events in all GitHub repositories since 2011 in structured format. The dataset was uploaded into <a href="https://clickhouse.com/">ClickHouse</a>, where it contains 3.1 billion records. We redistribute it for research purposes and it can be downloaded at this <a href="#download-the-dataset">direct link</a>. This dataset can help answer almost any question about GitHub that you can imagine.</p>
 
 <p>This article shows the usage of the dataset and offers insights into the GitHub ecosystem. It emphasizes how easy it is to play with data using modern tools.</p>
 
@@ -5244,14 +5244,14 @@ review_state:          none
 
 <h3>Install ClickHouse</h3>
 
-<p>Follow the <a href="https://clickhouse.tech/docs/en/getting-started/install/">instruction</a>.</p>
+<p>Follow the <a href="https://clickhouse.com/docs/en/getting-started/install/">instruction</a>.</p>
 
 <h3>Download the dataset</h3>
 
 <p>You can download the dataset as a file and then insert into ClickHouse or any other DBMS.</p>
 
-<p>Here is the dataset in <a href="https://datasets.clickhouse.tech/github_events_v2.native.xz">ClickHouse Native format</a> (73 GB).<br/>
-Alternatively you can download the same dataset in <a href="https://datasets.clickhouse.tech/github_events/tsv/github_events_v2.tsv.xz">tab-separated format</a> (85 GB).</p>
+<p>Here is the dataset in <a href="https://datasets.clickhouse.com/github_events_v2.native.xz">ClickHouse Native format</a> (73 GB).<br/>
+Alternatively you can download the same dataset in <a href="https://datasets.clickhouse.com/github_events/tsv/github_events_v2.tsv.xz">tab-separated format</a> (85 GB).</p>
 
 <p>To decompress the dataset from <span class="code">.xz</span> it's recommended to install and use the <span class="code">pixz</span> (parallel xz) tool. The ordinary <span class="code">xz</span> tool can be used as well.</p>
 
@@ -5411,7 +5411,7 @@ CREATE TABLE github_events_url
     release_tag_name String,
     release_name String,
     review_state Enum('none' = 0, 'approved' = 1, 'changes_requested' = 2, 'commented' = 3, 'dismissed' = 4, 'pending' = 5)
-) ENGINE = URL('https://datasets.clickhouse.tech/github_events_v2.native.xz', Native);
+) ENGINE = URL('https://datasets.clickhouse.com/github_events_v2.native.xz', Native);
 </pre>
 
 <p>Create the destination table and insert data:</p>
@@ -6041,7 +6041,7 @@ gzip -cd {} | jq -c '
 
 <p>This <span class="code">jq</span> expression will create an array for every event. We pipe these arrays into <span class="code">clickhouse-client</span> to <span class="code">INSERT INTO github_events</span> parsing the data with <span class="code">JSONCompactEachRow</span> format.</p>
 
-<p>The <span class="code">JSONCompactEachRow</span> is one of the <a href="https://clickhouse.tech/docs/en/interfaces/formats/">input/output formats</a> supported by ClickHouse. Basically it means "JSON array for every table row".</p>
+<p>The <span class="code">JSONCompactEachRow</span> is one of the <a href="https://clickhouse.com/docs/en/interfaces/formats/">input/output formats</a> supported by ClickHouse. Basically it means "JSON array for every table row".</p>
 
 <p>The option <span class="code">--input_format_null_as_default</span> will transform JSON nulls (when the field is not found) to default values (like 0 or empty string). The option <span class="code">--date_time_input_format best_effort</span> allows to parse the DateTime field in various formats, including <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>.</p>
 
@@ -6134,12 +6134,12 @@ clickhouse-client --progress --max_threads 1 --query "SELECT * FROM github_event
 <h2>ClickHouse Demo Access</h2>
 
 <p>Connect with clickhouse-client:<br/>
-<span class="code">clickhouse-client --secure --host gh-api.clickhouse.tech --user explorer</span>
+<span class="code">clickhouse-client --secure --host gh-api.clickhouse.com --user explorer</span>
 </p>
 
-<p>HTTPS interface: <a href="https://gh-api.clickhouse.tech/">https://gh-api.clickhouse.tech/</a> (port 443)</p>
+<p>HTTPS interface: <a href="https://gh-api.clickhouse.com/">https://gh-api.clickhouse.com/</a> (port 443)</p>
 
-<p>Minimal web UI: <a href="https://gh-api.clickhouse.tech/play?user=play">https://gh-api.clickhouse.tech/play?user=play</a></p>
+<p>Minimal web UI: <a href="https://gh-api.clickhouse.com/play?user=play">https://gh-api.clickhouse.com/play?user=play</a></p>
 
 <p>Keep in mind that this dataset is actually very small for ClickHouse. There are <a href="https://clickhouse.com/docs/en/introduction/adopters/">multiple companies</a> that use distributed multi-petabyte ClickHouse setups for various heavy duty tasks, e.g. to analyze a significant share of all internet traffic in real time. This article is not intended to advertise ClickHouse, but at least now you know where to look.</p>
 
@@ -6148,7 +6148,7 @@ clickhouse-client --progress --max_threads 1 --query "SELECT * FROM github_event
 <p>We encourage you to create your own research and tools based on the dataset. This article is <a href="https://github.com/github-sql/explorer">open-source</a> and the content is available under the <a href="https://creativecommons.org/licenses/by/4.0/">CC-BY-4.0</a> license or <a href="https://www.apache.org/licenses/LICENSE-2.0">Apache 2</a> license. Attribution is required. You can propose changes, extend the article, and share ideas by pull requests and issues on <a href="https://github.com/github-sql/explorer">GitHub repository</a>. Please notify us about interesting usages of the dataset. We also encourage the application of the dataset for DBMS benchmarks.</p>
 
 <p>If you need to cite this article, please do it as follows:<br/>
-<span class="code wrap">"Milovidov A., 2020. Everything You Ever Wanted To Know About GitHub (But Were Afraid To Ask), https://gh.clickhouse.tech/explorer/"</span></p>
+<span class="code wrap">"Milovidov A., 2020. Everything You Ever Wanted To Know About GitHub (But Were Afraid To Ask), https://gh.clickhouse.com/explorer/"</span></p>
 
 <p>The authors don't own any rights to the dataset. The dataset includes material that may be subject to third party rights. The query results from the dataset are published under section 107 of the Copyright Act of 1976; allowance is made for "fair use" for purposes such as criticism, comment, news reporting, teaching, scholarship, education and research. Fair use is a use permitted by copyright statute that might otherwise be infringing.</p>
 
@@ -6206,7 +6206,7 @@ document.querySelectorAll('.button,.button_selected').forEach(elem => {
 
 /// Query editor
 
-var clickhouse_url = 'https://gh-api.clickhouse.tech/?user=play&default_format=JSON';
+var clickhouse_url = 'https://gh-api.clickhouse.com/?user=play&default_format=JSON';
 function onClickHouseAvailable(callback) {
     var xhr = new XMLHttpRequest;
     xhr.open('POST', clickhouse_url, true);
@@ -6229,7 +6229,7 @@ onClickHouseAvailable(function() {
     document.querySelectorAll('.query').forEach(elem => {
         var link = document.createElement('a');
         link.className = "edit";
-        link.href = "https://gh-api.clickhouse.tech/play?user=play#" + window.btoa(elem.querySelector('.sql').textContent);
+        link.href = "https://gh-api.clickhouse.com/play?user=play#" + window.btoa(elem.querySelector('.sql').textContent);
         link.target = "_blank";
         var text = document.createTextNode('✎');
         link.appendChild(text);
