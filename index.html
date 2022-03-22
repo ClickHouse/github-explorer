@@ -6134,12 +6134,12 @@ clickhouse-client --progress --max_threads 1 --query "SELECT * FROM github_event
 <h2>ClickHouse Demo Access</h2>
 
 <p>Connect with clickhouse-client:<br/>
-<span class="code">clickhouse-client --secure --host gh-api.clickhouse.com --user explorer</span>
+<span class="code">clickhouse-client --secure --host play.clickhouse.com --user explorer</span>
 </p>
 
-<p>HTTPS interface: <a href="https://gh-api.clickhouse.com/">https://gh-api.clickhouse.com/</a> (port 443)</p>
+<p>HTTPS interface: <a href="https://play.clickhouse.com/">https://play.clickhouse.com/</a> (port 443)</p>
 
-<p>Minimal web UI: <a href="https://gh-api.clickhouse.com/play?user=play">https://gh-api.clickhouse.com/play?user=play</a></p>
+<p>Minimal web UI: <a href="https://play.clickhouse.com/play?user=play">https://play.clickhouse.com/play?user=play</a></p>
 
 <p>Keep in mind that this dataset is actually very small for ClickHouse. There are <a href="https://clickhouse.com/docs/en/introduction/adopters/">multiple companies</a> that use distributed multi-petabyte ClickHouse setups for various heavy duty tasks, e.g. to analyze a significant share of all internet traffic in real time. This article is not intended to advertise ClickHouse, but at least now you know where to look.</p>
 
@@ -6206,7 +6206,7 @@ document.querySelectorAll('.button,.button_selected').forEach(elem => {
 
 /// Query editor
 
-var clickhouse_url = 'https://gh-api.clickhouse.com/?user=play&default_format=JSON';
+var clickhouse_url = 'https://play.clickhouse.com/?user=play&default_format=JSON';
 function onClickHouseAvailable(callback) {
     var xhr = new XMLHttpRequest;
     xhr.open('POST', clickhouse_url, true);
@@ -6229,7 +6229,7 @@ onClickHouseAvailable(function() {
     document.querySelectorAll('.query').forEach(elem => {
         var link = document.createElement('a');
         link.className = "edit";
-        link.href = "https://gh-api.clickhouse.com/play?user=play#" + window.btoa(elem.querySelector('.sql').textContent);
+        link.href = "https://play.clickhouse.com/play?user=play#" + window.btoa(elem.querySelector('.sql').textContent);
         link.target = "_blank";
         var text = document.createTextNode('✎');
         link.appendChild(text);
