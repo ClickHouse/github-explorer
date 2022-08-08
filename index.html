@@ -6222,7 +6222,7 @@ function onClickHouseAvailable(callback) {
         }
     }
 
-    xhr.send("SELECT count() AS c FROM system.processes");
+    xhr.send("SELECT value AS c FROM system.metrics WHERE metric = 'Query'");
 }
 
 onClickHouseAvailable(function() {
