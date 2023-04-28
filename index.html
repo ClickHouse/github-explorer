@@ -5250,8 +5250,8 @@ review_state:          none
 
 <p>You can download the dataset as a file and then insert into ClickHouse or any other DBMS.</p>
 
-<p>Here is the dataset in <a href="https://datasets.clickhouse.com/github_events_v2.native.xz">ClickHouse Native format</a> (73 GB).<br/>
-Alternatively you can download the same dataset in <a href="https://datasets.clickhouse.com/github_events/tsv/github_events_v2.tsv.xz">tab-separated format</a> (85 GB).</p>
+<p>Here is the dataset in <a href="https://clickhouse-public-datasets.s3.amazonaws.com/github_events_v2.native.xz">ClickHouse Native format</a> (73 GB).<br/>
+Alternatively you can download the same dataset in <a href="https://clickhouse-public-datasets.s3.amazonaws.com/github_events/tsv/github_events_v2.tsv.xz">tab-separated format</a> (85 GB).</p>
 
 <p>To decompress the dataset from <span class="code">.xz</span> it's recommended to install and use the <span class="code">pixz</span> (parallel xz) tool. The ordinary <span class="code">xz</span> tool can be used as well.</p>
 
@@ -5350,7 +5350,7 @@ xz -d &lt; github_events.native.xz | clickhouse-local --input-format Native --ou
 <p>Create a foreign table that will read data from a URL:</p>
 <pre>
 CREATE TABLE github_events_url
-ENGINE = URL('https://datasets.clickhouse.com/github_events_v2.native.xz');
+ENGINE = URL('https://clickhouse-public-datasets.s3.amazonaws.com/github_events_v2.native.xz');
 </pre>
 
 <p>Create the destination table and insert data:</p>
