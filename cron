@@ -1,1 +1,1 @@
-*/10 * * * * milovidov cd /home/milovidov/gharchive_new && ./update.sh >>/home/milovidov/gharchive_new/log 2>&1
+* * * * * ubuntu cd /home/ubuntu && ./update.sh >> update.log 2>&1
