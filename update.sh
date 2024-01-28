@@ -1,65 +1,172 @@
 #!/bin/bash
 
-ls -1 ../gharchive | clickhouse-local --structure 'file String' --query "WITH (SELECT max(parseDateTimeBestEffort(extract(file, '^(.+)\.json\.gz$'), 'UTC')) FROM table) AS last SELECT toString(toDate(last + INTERVAL arrayJoin(range(0, 24)) - 12 HOUR AS t)) || '-' || toString(toHour(t)) || '.json.gz' WHERE t < now()" | xargs -I{} bash -c "[ -f ../gharchive/{} ] || wget --continue 'https://data.gharchive.org/{}'"
+source config
 
-echo "Importing..."
-
-find . -name '*.json.gz' | xargs -P$(nproc) -I{} bash -c "
-gzip -cd {} | jq -c '
-[
-    (\"{}\" | scan(\"[0-9]+-[0-9]+-[0-9]+-[0-9]+\")),
-    .type,
-    .actor.login? // .actor_attributes.login? // (.actor | strings) // null,
-    .repo.name? // (.repository.owner? + \"/\" + .repository.name?) // null,
-    .created_at,
-    .payload.updated_at? // .payload.comment?.updated_at? // .payload.issue?.updated_at? // .payload.pull_request?.updated_at? // null,
-    .payload.action,
-    .payload.comment.id,
-    .payload.review.body // .payload.comment.body // .payload.issue.body? // .payload.pull_request.body? // .payload.release.body? // null,
-    .payload.comment?.path? // null,
-    .payload.comment?.position? // null,
-    .payload.comment?.line? // null,
-    .payload.ref? // null,
-    .payload.ref_type? // null,
-    .payload.comment.user?.login? // .payload.issue.user?.login? // .payload.pull_request.user?.login? // null,
-    .payload.issue.number? // .payload.pull_request.number? // .payload.number? // null,
-    .payload.issue.title? // .payload.pull_request.title? // null,
-    [.payload.issue.labels?[]?.name // .payload.pull_request.labels?[]?.name],
-    .payload.issue.state? // .payload.pull_request.state? // null,
-    .payload.issue.locked? // .payload.pull_request.locked? // null,
-    .payload.issue.assignee?.login? // .payload.pull_request.assignee?.login? // null,
-    [.payload.issue.assignees?[]?.login? // .payload.pull_request.assignees?[]?.login?],
-    .payload.issue.comments? // .payload.pull_request.comments? // null,
-    .payload.review.author_association // .payload.issue.author_association? // .payload.pull_request.author_association? // null,
-    .payload.issue.closed_at? // .payload.pull_request.closed_at? // null,
-    .payload.pull_request.merged_at? // null,
-    .payload.pull_request.merge_commit_sha? // null,
-    [.payload.pull_request.requested_reviewers?[]?.login],
-    [.payload.pull_request.requested_teams?[]?.name],
-    .payload.pull_request.head?.ref? // null,
-    .payload.pull_request.head?.sha? // null,
-    .payload.pull_request.base?.ref? // null,
-    .payload.pull_request.base?.sha? // null,
-    .payload.pull_request.merged? // null,
-    .payload.pull_request.mergeable? // null,
-    .payload.pull_request.rebaseable? // null,
-    .payload.pull_request.mergeable_state? // null,
-    .payload.pull_request.merged_by?.login? // null,
-    .payload.pull_request.review_comments? // null,
-    .payload.pull_request.maintainer_can_modify? // null,
-    .payload.pull_request.commits? // null,
-    .payload.pull_request.additions? // null,
-    .payload.pull_request.deletions? // null,
-    .payload.pull_request.changed_files? // null,
-    .payload.comment.diff_hunk? // null,
-    .payload.comment.original_position? // null,
-    .payload.comment.commit_id? // null,
-    .payload.comment.original_commit_id? // null,
-    .payload.size? // null,
-    .payload.distinct_size? // null,
-    .payload.member.login? // .payload.member? // null,
-    .payload.release?.tag_name? // null,
-    .payload.release?.name? // null,
-    .payload.review?.state? // null
-]' | clickhouse-client --input_format_null_as_default 1 --date_time_input_format best_effort --query 'INSERT INTO github_events FORMAT JSONCompactEachRow' || echo 'File {} has issues'
-" && mv *.json.gz ../gharchive
+clickhouse-client $CLICKHOUSE_PLAY_PARAMS --query_id github_events_update --query "
+INSERT INTO github_events
+WITH
+    (SELECT max(file_time) + INTERVAL 1 HOUR FROM github_events) AS time,
+    format(
+        'https://clickhouse-public-datasets.s3.amazonaws.com/gharchive/original/{}-{}.json.gz',
+        formatDateTime(time, '%Y-%m-%d'), toHour(time)) AS url
+SELECT
+    time,
+    type,
+    COALESCE(actor.login, actor_attributes.login),
+    COALESCE(repo.name, repository.owner || '/' || repository.name),
+    created_at,
+    COALESCE(payload.updated_at, payload.comment.updated_at, payload.issue.updated_at, payload.pull_request.updated_at),
+    payload.action,
+    payload.comment.id,
+    COALESCE(payload.review.body, payload.comment.body, payload.issue.body, payload.pull_request.body, payload.release.body),
+    payload.comment.path,
+    payload.comment.position,
+    payload.comment.line,
+    payload.ref,
+    payload.ref_type,
+    COALESCE(payload.comment.user.login, payload.issue.user.login, payload.pull_request.user.login),
+    COALESCE(payload.issue.number, payload.pull_request.number, payload.number),
+    COALESCE(payload.issue.title, payload.pull_request.title),
+    arrayMap(x -> tupleElement(x, 'name'), payload.issue.labels || payload.pull_request.labels),
+    COALESCE(payload.issue.state, payload.pull_request.state),
+    COALESCE(payload.issue.locked, payload.pull_request.locked),
+    COALESCE(payload.issue.assignee.login, payload.pull_request.assignee.login),
+    arrayMap(x -> tupleElement(x, 'login'), payload.issue.assignees || payload.pull_request.assignees),
+    COALESCE(payload.issue.comments, payload.pull_request.comments),
+    COALESCE(payload.review.author_association, payload.issue.author_association, payload.pull_request.author_association),
+    COALESCE(payload.issue.closed_at, payload.pull_request.closed_at),
+    payload.pull_request.merged_at,
+    payload.pull_request.merged_commit_sha,
+    arrayMap(x -> tupleElement(x, 'login'), payload.pull_request.requested_reviewers),
+    arrayMap(x -> tupleElement(x, 'name'), payload.pull_request.requested_teams),
+    payload.pull_request.head.ref,
+    payload.pull_request.head.sha,
+    payload.pull_request.base.ref,
+    payload.pull_request.base.sha,
+    payload.pull_request.merged,
+    payload.pull_request.mergeable,
+    payload.pull_request.rebaseable,
+    payload.pull_request.mergeable_state,
+    payload.pull_request.merged_by.login,
+    payload.pull_request.review_comments,
+    payload.pull_request.maintainer_can_modify,
+    payload.pull_request.commits,
+    payload.pull_request.additions,
+    payload.pull_request.deletions,
+    payload.pull_request.changed_files,
+    payload.comment.diff_hunk,
+    payload.comment.original_position,
+    payload.comment.commit_id,
+    payload.comment.original_commit_id,
+    payload.size,
+    payload.distinct_size,
+    startsWith(payload.member, '{') ? JSONExtractString(payload.member, 'login') : payload.member,
+    payload.release.tag_name,
+    payload.release.name,
+    payload.review.state
+FROM url((SELECT url), auto,
+'
+    id Nullable(String),
+    type Nullable(String),
+    actor Tuple(
+        login Nullable(String)),
+    actor_attributes Tuple(
+        login Nullable(String)),
+    repo Tuple(
+        name Nullable(String)),
+    repository Tuple(
+        owner Nullable(String),
+        name Nullable(String)),
+    created_at DateTime,
+    payload Tuple(
+        updated_at Nullable(DateTime),
+        action Nullable(String),
+        ref Nullable(String),
+        ref_type Nullable(String),
+        number Nullable(Int64),
+        size Nullable(Int64),
+        distinct_size Nullable(Int64),
+        comment Tuple(
+            updated_at Nullable(DateTime),
+            id Nullable(String),
+            body Nullable(String),
+            path Nullable(String),
+            position Nullable(String),
+            line Nullable(String),
+            user Tuple(
+                login Nullable(String)),
+            diff_hunk Nullable(String),
+            original_position Nullable(String),
+            commit_id Nullable(String),
+            original_commit_id Nullable(String)),
+        issue Tuple(
+            updated_at Nullable(DateTime),
+            closed_at Nullable(DateTime),
+            body Nullable(String),
+            user Tuple(
+                login Nullable(String)),
+            number Nullable(Int64),
+            title Nullable(String),
+            labels Array(Tuple(name Nullable(String))),
+            state Nullable(String),
+            locked Nullable(String),
+            assignee Tuple(
+                login Nullable(String)),
+            assignees Array(Tuple(
+                login Nullable(String))),
+            comments Nullable(Int64),
+            author_association Nullable(String)),
+        pull_request Tuple(
+            updated_at Nullable(DateTime),
+            closed_at Nullable(DateTime),
+            merged_at Nullable(DateTime),
+            merged_commit_sha Nullable(String),
+            body Nullable(String),
+            user Tuple(
+                login Nullable(String)),
+            number Nullable(Int64),
+            title Nullable(String),
+            labels Array(Tuple(name Nullable(String))),
+            state Nullable(String),
+            locked Nullable(String),
+            assignee Tuple(
+                login Nullable(String)),
+            assignees Array(Tuple(
+                login Nullable(String))),
+            comments Nullable(Int64),
+            review_comments Nullable(Int64),
+            author_association Nullable(String),
+            requested_reviewers Array(Tuple(
+                login Nullable(String))),
+            requested_teams Array(Tuple(
+                name Nullable(String))),
+            head Tuple(
+                ref Nullable(String),
+                sha Nullable(String)),
+            base Tuple(
+                ref Nullable(String),
+                sha Nullable(String)),
+            merged Nullable(String),
+            mergeable Nullable(String),
+            rebaseable Nullable(String),
+            maintainer_can_modify Nullable(String),
+            mergeable_state Nullable(String),
+            merged_by Tuple(
+                login Nullable(String)),
+            commits Nullable(Int64),
+            additions Nullable(Int64),
+            deletions Nullable(Int64),
+            changed_files Nullable(Int64)),
+        review Tuple(
+            body Nullable(String),
+            author_association Nullable(String),
+            state Nullable(String)),
+        release Tuple(
+            body Nullable(String),
+            tag_name Nullable(String),
+            name Nullable(String)),
+        member Nullable(String)
+    )
+')
+SETTINGS date_time_input_format = 'best_effort', input_format_allow_errors_ratio = 0.01, input_format_allow_errors_num = 1000
+"

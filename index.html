@@ -5308,7 +5308,7 @@ CREATE TABLE github_events
     merged UInt8,
     mergeable UInt8,
     rebaseable UInt8,
-    mergeable_state Enum('unknown' = 0, 'dirty' = 1, 'clean' = 2, 'unstable' = 3, 'draft' = 4),
+    mergeable_state Enum('unknown' = 0, 'dirty' = 1, 'clean' = 2, 'unstable' = 3, 'draft' = 4, 'blocked' = 5),
     merged_by LowCardinality(String),
     review_comments UInt32,
     maintainer_can_modify UInt8,
@@ -5325,7 +5325,11 @@ CREATE TABLE github_events
     member_login LowCardinality(String),
     release_tag_name String,
     release_name String,
-    review_state Enum('none' = 0, 'approved' = 1, 'changes_requested' = 2, 'commented' = 3, 'dismissed' = 4, 'pending' = 5)
+    review_state Enum('none' = 0, 'approved' = 1, 'changes_requested' = 2, 'commented' = 3, 'dismissed' = 4, 'pending' = 5),
+    PROJECTION max_file_time
+    (
+        SELECT max(file_time)
+    )
 )
 ENGINE = MergeTree
 ORDER BY (event_type, repo_name, created_at)
@@ -5860,7 +5864,7 @@ CREATE TABLE github_events
     merged UInt8,
     mergeable UInt8,
     rebaseable UInt8,
-    mergeable_state Enum('unknown' = 0, 'dirty' = 1, 'clean' = 2, 'unstable' = 3, 'draft' = 4),
+    mergeable_state Enum('unknown' = 0, 'dirty' = 1, 'clean' = 2, 'unstable' = 3, 'draft' = 4, 'blocked' = 5),
     merged_by LowCardinality(String),
     review_comments UInt32,
     maintainer_can_modify UInt8,
