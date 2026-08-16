@@ -43,35 +43,65 @@ SELECT uniq(repo_name) FROM github_events;
 
 -- Query 7:
 
-SELECT repo_name, count() AS stars FROM github_events WHERE event_type = 'WatchEvent' AND toYear(created_at) = '2020' GROUP BY repo_name ORDER BY stars DESC LIMIT 50;
+SELECT repo_name, count() AS stars FROM github_events WHERE event_type = 'WatchEvent' AND toYear(created_at) = '2026' GROUP BY repo_name ORDER BY stars DESC LIMIT 50;
 
 
 -- Query 8:
 
-SELECT repo_name, count() AS stars FROM github_events WHERE event_type = 'WatchEvent' AND toYear(created_at) = '2019' GROUP BY repo_name ORDER BY stars DESC LIMIT 50;
+SELECT repo_name, count() AS stars FROM github_events WHERE event_type = 'WatchEvent' AND toYear(created_at) = '2025' GROUP BY repo_name ORDER BY stars DESC LIMIT 50;
 
 
 -- Query 9:
 
-SELECT repo_name, count() AS stars FROM github_events WHERE event_type = 'WatchEvent' AND toYear(created_at) = '2018' GROUP BY repo_name ORDER BY stars DESC LIMIT 50;
+SELECT repo_name, count() AS stars FROM github_events WHERE event_type = 'WatchEvent' AND toYear(created_at) = '2024' GROUP BY repo_name ORDER BY stars DESC LIMIT 50;
 
 
 -- Query 10:
 
-SELECT repo_name, count() AS stars FROM github_events WHERE event_type = 'WatchEvent' AND toYear(created_at) = '2017' GROUP BY repo_name ORDER BY stars DESC LIMIT 50;
+SELECT repo_name, count() AS stars FROM github_events WHERE event_type = 'WatchEvent' AND toYear(created_at) = '2023' GROUP BY repo_name ORDER BY stars DESC LIMIT 50;
 
 
 -- Query 11:
 
-SELECT repo_name, count() AS stars FROM github_events WHERE event_type = 'WatchEvent' AND toYear(created_at) = '2016' GROUP BY repo_name ORDER BY stars DESC LIMIT 50;
+SELECT repo_name, count() AS stars FROM github_events WHERE event_type = 'WatchEvent' AND toYear(created_at) = '2022' GROUP BY repo_name ORDER BY stars DESC LIMIT 50;
 
 
 -- Query 12:
 
-SELECT repo_name, count() AS stars FROM github_events WHERE event_type = 'WatchEvent' AND toYear(created_at) = '2015' GROUP BY repo_name ORDER BY stars DESC LIMIT 50;
+SELECT repo_name, count() AS stars FROM github_events WHERE event_type = 'WatchEvent' AND toYear(created_at) = '2021' GROUP BY repo_name ORDER BY stars DESC LIMIT 50;
 
 
 -- Query 13:
+
+SELECT repo_name, count() AS stars FROM github_events WHERE event_type = 'WatchEvent' AND toYear(created_at) = '2020' GROUP BY repo_name ORDER BY stars DESC LIMIT 50;
+
+
+-- Query 14:
+
+SELECT repo_name, count() AS stars FROM github_events WHERE event_type = 'WatchEvent' AND toYear(created_at) = '2019' GROUP BY repo_name ORDER BY stars DESC LIMIT 50;
+
+
+-- Query 15:
+
+SELECT repo_name, count() AS stars FROM github_events WHERE event_type = 'WatchEvent' AND toYear(created_at) = '2018' GROUP BY repo_name ORDER BY stars DESC LIMIT 50;
+
+
+-- Query 16:
+
+SELECT repo_name, count() AS stars FROM github_events WHERE event_type = 'WatchEvent' AND toYear(created_at) = '2017' GROUP BY repo_name ORDER BY stars DESC LIMIT 50;
+
+
+-- Query 17:
+
+SELECT repo_name, count() AS stars FROM github_events WHERE event_type = 'WatchEvent' AND toYear(created_at) = '2016' GROUP BY repo_name ORDER BY stars DESC LIMIT 50;
+
+
+-- Query 18:
+
+SELECT repo_name, count() AS stars FROM github_events WHERE event_type = 'WatchEvent' AND toYear(created_at) = '2015' GROUP BY repo_name ORDER BY stars DESC LIMIT 50;
+
+
+-- Query 19:
 
 SELECT
  year,
@@ -88,7 +118,7 @@ ORDER BY
 LIMIT 10 BY year;
 
 
--- Query 14:
+-- Query 20:
 
 SELECT
  repo AS name,
@@ -118,22 +148,22 @@ ORDER BY repo ASC
 ;
 
 
--- Query 15:
+-- Query 21:
 
-SELECT toYear(created_at) AS year, count() AS stars, bar(stars, 0, 50000000, 10) AS bar FROM github_events WHERE event_type = 'WatchEvent' GROUP BY year ORDER BY year;
+SELECT toYear(created_at) AS year, count() AS stars, bar(stars, 0, 80000000, 10) AS bar FROM github_events WHERE event_type = 'WatchEvent' GROUP BY year ORDER BY year;
 
 
--- Query 16:
+-- Query 22:
 
 SELECT actor_login, count() AS stars FROM github_events WHERE event_type = 'WatchEvent' GROUP BY actor_login ORDER BY stars DESC LIMIT 50;
 
 
--- Query 17:
+-- Query 23:
 
 SELECT actor_login, count() AS stars FROM github_events WHERE event_type = 'WatchEvent' AND actor_login = 'alexey-milovidov' GROUP BY actor_login ORDER BY stars DESC LIMIT 50;
 
 
--- Query 18:
+-- Query 24:
 
 SELECT
  repo_name,
@@ -150,7 +180,7 @@ ORDER BY stars DESC
 LIMIT 50;
 
 
--- Query 19:
+-- Query 25:
 
 SELECT
  repo_name,
@@ -167,7 +197,7 @@ ORDER BY stars DESC
 LIMIT 50;
 
 
--- Query 20:
+-- Query 26:
 
 SELECT
  repo_name,
@@ -187,7 +217,7 @@ ORDER BY ratio DESC
 LIMIT 50;
 
 
--- Query 21:
+-- Query 27:
 
 SELECT
  repo_name,
@@ -207,7 +237,7 @@ ORDER BY ratio DESC
 LIMIT 50;
 
 
--- Query 22:
+-- Query 28:
 
 SELECT
  repo_name,
@@ -227,7 +257,7 @@ ORDER BY ratio DESC
 LIMIT 50;
 
 
--- Query 23:
+-- Query 29:
 
 WITH repo_name IN
  (
@@ -239,7 +269,7 @@ SELECT
  actor_login,
  sum(is_my_repo) AS stars_my,
  sum(NOT is_my_repo) AS stars_other,
- round(stars_my / (196 + stars_other), 3) AS ratio
+ round(stars_my / (497 + stars_other), 3) AS ratio
 FROM github_events
 WHERE event_type = 'WatchEvent'
 GROUP BY actor_login
@@ -247,7 +277,7 @@ ORDER BY ratio DESC
 LIMIT 50;
 
 
--- Query 24:
+-- Query 30:
 
 SELECT
  repo_name,
@@ -265,7 +295,7 @@ ORDER BY authors DESC
 LIMIT 50;
 
 
--- Query 25:
+-- Query 31:
 
 SELECT
  repo_name,
@@ -283,7 +313,7 @@ ORDER BY authors DESC
 LIMIT 50;
 
 
--- Query 26:
+-- Query 32:
 
 SELECT
  repo_name,
@@ -299,46 +329,46 @@ LIMIT 1 BY repo_name
 LIMIT 50;
 
 
--- Query 27:
+-- Query 33:
 
 SELECT repo_name, created_at, count() AS stars FROM github_events WHERE event_type = 'WatchEvent' GROUP BY repo_name, created_at ORDER BY count() DESC LIMIT 50;
 
 
--- Query 28:
+-- Query 34:
 
 WITH toYear(created_at) AS year
 SELECT
  repo_name,
- sum(year = 2020) AS stars2020,
- sum(year = 2019) AS stars2019,
- stars2020 / stars2019 AS yoy,
+ sum(year = 2024) AS stars2024,
+ sum(year = 2023) AS stars2023,
+ stars2024 / stars2023 AS yoy,
  min(created_at) AS first_seen
 FROM github_events
 WHERE event_type = 'WatchEvent'
 GROUP BY repo_name
-HAVING (min(created_at) <= '2019-01-01 00:00:00') AND (stars2019 >= 1000)
+HAVING (min(created_at) <= '2023-01-01 00:00:00') AND (stars2023 >= 1000)
 ORDER BY yoy DESC
 LIMIT 50;
 
 
--- Query 29:
+-- Query 35:
 
 WITH toYear(created_at) AS year
 SELECT
  repo_name,
- sum(year = 2020) AS stars2020,
- sum(year = 2019) AS stars2019,
- round(stars2020 / stars2019, 3) AS yoy,
+ sum(year = 2024) AS stars2024,
+ sum(year = 2023) AS stars2023,
+ round(stars2024 / stars2023, 3) AS yoy,
  min(created_at) AS first_seen
 FROM github_events
 WHERE event_type = 'WatchEvent'
 GROUP BY repo_name
-HAVING (min(created_at) <= '2019-01-01 00:00:00') AND (max(created_at) >= '2020-06-01 00:00:00') AND (stars2019 >= 1000)
+HAVING (min(created_at) <= '2023-01-01 00:00:00') AND (max(created_at) >= '2024-06-01 00:00:00') AND (stars2023 >= 1000)
 ORDER BY yoy ASC
 LIMIT 50;
 
 
--- Query 30:
+-- Query 36:
 
 SELECT
  repo_name,
@@ -362,32 +392,32 @@ ORDER BY rate DESC
 LIMIT 50;
 
 
--- Query 31:
+-- Query 37:
 
-SELECT toDayOfWeek(created_at) AS day, count() AS stars, bar(stars, 0, 50000000, 10) AS bar FROM github_events WHERE event_type = 'WatchEvent' GROUP BY day ORDER BY day;
+SELECT toDayOfWeek(created_at) AS day, count() AS stars, bar(stars, 0, 100000000, 10) AS bar FROM github_events WHERE event_type = 'WatchEvent' GROUP BY day ORDER BY day;
 
 
--- Query 32:
+-- Query 38:
 
 SELECT uniq(actor_login) FROM github_events;
 
 
--- Query 33:
+-- Query 39:
 
 SELECT uniq(actor_login) FROM github_events WHERE event_type = 'WatchEvent';
 
 
--- Query 34:
+-- Query 40:
 
 SELECT uniq(actor_login) FROM github_events WHERE event_type = 'PushEvent';
 
 
--- Query 35:
+-- Query 41:
 
 SELECT uniq(actor_login) FROM github_events WHERE event_type = 'PullRequestEvent' AND action = 'opened';
 
 
--- Query 36:
+-- Query 42:
 
 SELECT
  repo_name,
@@ -404,7 +434,7 @@ ORDER BY count() DESC
 LIMIT 50;
 
 
--- Query 37:
+-- Query 43:
 
 SELECT
  repo_name,
@@ -423,22 +453,22 @@ ORDER BY count() DESC
 LIMIT 50;
 
 
--- Query 38:
+-- Query 44:
 
 SELECT repo_name, count(), uniq(actor_login) FROM github_events WHERE event_type = 'PullRequestEvent' AND action = 'opened' GROUP BY repo_name ORDER BY count() DESC LIMIT 50;
 
 
--- Query 39:
+-- Query 45:
 
 SELECT repo_name, count(), uniq(actor_login) AS u FROM github_events WHERE event_type = 'PullRequestEvent' AND action = 'opened' GROUP BY repo_name ORDER BY u DESC LIMIT 50;
 
 
--- Query 40:
+-- Query 46:
 
 SELECT repo_name, count() AS c, uniq(actor_login) AS u FROM github_events WHERE event_type = 'IssuesEvent' AND action = 'opened' GROUP BY repo_name ORDER BY c DESC LIMIT 50;
 
 
--- Query 41:
+-- Query 47:
 
 WITH (event_type = 'IssuesEvent') AND (action = 'opened') AS issue_created
 SELECT
@@ -453,7 +483,7 @@ ORDER BY c DESC
 LIMIT 50;
 
 
--- Query 42:
+-- Query 48:
 
 WITH (event_type = 'IssuesEvent') AND (action = 'opened') AS issue_created
 SELECT
@@ -469,7 +499,7 @@ ORDER BY c DESC
 LIMIT 50;
 
 
--- Query 43:
+-- Query 49:
 
 WITH (event_type = 'IssuesEvent') AND (action = 'opened') AS issue_created
 SELECT
@@ -484,12 +514,12 @@ ORDER BY u DESC
 LIMIT 50;
 
 
--- Query 44:
+-- Query 50:
 
 SELECT repo_name, uniqIf(actor_login, event_type = 'PushEvent') AS u, sum(event_type = 'WatchEvent') AS stars FROM github_events WHERE event_type IN ('PushEvent', 'WatchEvent') AND repo_name != '/' GROUP BY repo_name ORDER BY u DESC LIMIT 50;
 
 
--- Query 45:
+-- Query 51:
 
 SELECT
  repo_name,
@@ -502,7 +532,7 @@ ORDER BY u DESC
 LIMIT 50;
 
 
--- Query 46:
+-- Query 52:
 
 SELECT
  repo_name,
@@ -516,17 +546,17 @@ ORDER BY u DESC
 LIMIT 50;
 
 
--- Query 47:
+-- Query 53:
 
 SELECT repo_name, sum(event_type = 'MemberEvent') AS invitations, sum(event_type = 'WatchEvent') AS stars FROM github_events WHERE event_type IN ('MemberEvent', 'WatchEvent') GROUP BY repo_name HAVING stars >= 100 ORDER BY invitations DESC LIMIT 50;
 
 
--- Query 48:
+-- Query 54:
 
 SELECT repo_name, count() AS forks FROM github_events WHERE event_type = 'ForkEvent' GROUP BY repo_name ORDER BY forks DESC LIMIT 50;
 
 
--- Query 49:
+-- Query 55:
 
 SELECT
  repo_name,
@@ -540,7 +570,7 @@ ORDER BY forks DESC
 LIMIT 50;
 
 
--- Query 50:
+-- Query 56:
 
 SELECT
  repo_name,
@@ -555,7 +585,7 @@ ORDER BY ratio DESC
 LIMIT 50;
 
 
--- Query 51:
+-- Query 57:
 
 SELECT
  repo_name,
@@ -570,12 +600,12 @@ ORDER BY ratio DESC
 LIMIT 50;
 
 
--- Query 52:
+-- Query 58:
 
 SELECT sum(event_type = 'ForkEvent') AS forks, sum(event_type = 'WatchEvent') AS stars, round(stars / forks, 2) AS ratio FROM github_events WHERE event_type IN ('ForkEvent', 'WatchEvent');
 
 
--- Query 53:
+-- Query 59:
 
 SELECT
  sum(stars) AS stars,
@@ -593,17 +623,17 @@ FROM
 );
 
 
--- Query 54:
+-- Query 60:
 
 SELECT count() FROM github_events WHERE event_type = 'IssueCommentEvent';
 
 
--- Query 55:
+-- Query 61:
 
 SELECT repo_name, count() FROM github_events WHERE event_type = 'IssueCommentEvent' GROUP BY repo_name ORDER BY count() DESC LIMIT 50;
 
 
--- Query 56:
+-- Query 62:
 
 SELECT
  repo_name,
@@ -617,7 +647,7 @@ ORDER BY count() DESC
 LIMIT 50;
 
 
--- Query 57:
+-- Query 63:
 
 SELECT
  repo_name,
@@ -632,7 +662,7 @@ ORDER BY count() DESC
 LIMIT 50;
 
 
--- Query 58:
+-- Query 64:
 
 SELECT
  repo_name,
@@ -647,7 +677,7 @@ ORDER BY count() DESC
 LIMIT 50;
 
 
--- Query 59:
+-- Query 65:
 
 SELECT
  repo_name,
@@ -664,7 +694,7 @@ ORDER BY count() DESC
 LIMIT 50;
 
 
--- Query 60:
+-- Query 66:
 
 SELECT
  concat('https://github.com/', repo_name, '/issues/', toString(number)) AS URL,
@@ -705,7 +735,7 @@ ORDER BY stars DESC
 LIMIT 50;
 
 
--- Query 61:
+-- Query 67:
 
 SELECT
  repo_name,
@@ -718,7 +748,7 @@ ORDER BY count() DESC
 LIMIT 50;
 
 
--- Query 62:
+-- Query 68:
 
 SELECT
  concat('https://github.com/', repo_name, '/commit/', commit_id) AS URL,
@@ -734,7 +764,7 @@ ORDER BY count() DESC
 LIMIT 50;
 
 
--- Query 63:
+-- Query 69:
 
 SELECT
  concat('https://github.com/', repo_name, '/pull/', toString(number)) AS URL,
@@ -748,7 +778,7 @@ ORDER BY authors DESC
 LIMIT 50;
 
 
--- Query 64:
+-- Query 70:
 
 SELECT
  actor_login,
@@ -761,7 +791,7 @@ ORDER BY c DESC
 LIMIT 50;
 
 
--- Query 65:
+-- Query 71:
 
 SELECT
  actor_login,
@@ -786,7 +816,7 @@ ORDER BY c DESC
 LIMIT 50;
 
 
--- Query 66:
+-- Query 72:
 
 SELECT
  lower(substring(repo_name, 1, position(repo_name, '/'))) AS org,
@@ -798,7 +828,7 @@ ORDER BY stars DESC
 LIMIT 50;
 
 
--- Query 67:
+-- Query 73:
 
 SELECT
  lower(substring(repo_name, 1, position(repo_name, '/'))) AS org,
@@ -816,7 +846,7 @@ ORDER BY repos DESC
 LIMIT 50;
 
 
--- Query 68:
+-- Query 74:
 
 SELECT
  lower(substring(repo_name, 1, position(repo_name, '/'))) AS org,
@@ -833,7 +863,7 @@ ORDER BY authors DESC
 LIMIT 50;
 
 
--- Query 69:
+-- Query 75:
 
 SELECT
  repo_name,
@@ -849,7 +879,7 @@ ORDER BY adds + dels DESC
 LIMIT 50;
 
 
--- Query 70:
+-- Query 76:
 
 SELECT
  repo_name,
@@ -870,7 +900,7 @@ ORDER BY count() DESC
 LIMIT 50;
 
 
--- Query 71:
+-- Query 77:
 
 SELECT
  actor_login,
@@ -885,7 +915,7 @@ ORDER BY count() DESC
 LIMIT 50;
 
 
--- Query 72:
+-- Query 78:
 
 SELECT
  arrayJoin(labels) AS label,
@@ -897,7 +927,7 @@ ORDER BY c DESC
 LIMIT 50;
 
 
--- Query 73:
+-- Query 79:
 
 SELECT
  arrayJoin(labels) AS label,
@@ -909,7 +939,7 @@ ORDER BY c DESC
 LIMIT 50;
 
 
--- Query 74:
+-- Query 80:
 
 WITH arrayJoin(labels) AS label
 SELECT
@@ -920,22 +950,22 @@ FROM github_events
 WHERE (event_type IN ('IssuesEvent', 'PullRequestEvent', 'IssueCommentEvent')) AND (action IN ('created', 'opened', 'labeled')) AND ((label ILIKE '%bug%') OR (label ILIKE '%feature%'));
 
 
--- Query 75:
+-- Query 81:
 
 SELECT count(), repo_name FROM github_events WHERE event_type = 'WatchEvent' GROUP BY repo_name ORDER BY length(repo_name) DESC LIMIT 50;
 
 
--- Query 76:
+-- Query 82:
 
 SELECT repo_name, count() FROM github_events WHERE event_type = 'WatchEvent' AND repo_name LIKE '%_/_%' GROUP BY repo_name ORDER BY length(repo_name) ASC LIMIT 50;
 
 
--- Query 77:
+-- Query 83:
 
 SELECT repo_name, count() FROM github_events WHERE body ILIKE '%ClickHouse%' GROUP BY repo_name ORDER BY count() DESC LIMIT 50;
 
 
--- Query 78:
+-- Query 84:
 
 SELECT
  repo_name,
@@ -949,17 +979,17 @@ ORDER BY num_stars DESC
 LIMIT 50;
 
 
--- Query 79:
+-- Query 85:
 
 SELECT * FROM github_events WHERE body ILIKE '%ClickHouse%' AND repo_name = '996icu/996.ICU';
 
 
--- Query 80:
+-- Query 86:
 
 SELECT body, count() FROM github_events WHERE notEmpty(body) AND length(body) < 100 GROUP BY body ORDER BY count() DESC LIMIT 50;
 
 
--- Query 81:
+-- Query 87:
 
 SELECT repo_name FROM github_events WHERE event_type = 'WatchEvent' ORDER BY rand() LIMIT 50;
 

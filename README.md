@@ -1,4 +1,4 @@
-We prepared a dataset from the [GH Archive](https://www.gharchive.org/) that contains all the events in all GitHub repositories since 2011 in a structured format. The dataset was uploaded into [ClickHouse](https://clickhouse.tech/), where it contains 3.1 billion records. We redistribute it for research purposes and it can be downloaded at this [direct link](https://ghe.clickhouse.tech/#download-the-dataset). This dataset can help answer almost any question about GitHub that you can imagine.
+We prepared a dataset from the [GH Archive](https://www.gharchive.org/) that contains all the events in all GitHub repositories since 2011 in a structured format. The dataset was uploaded into [ClickHouse](https://clickhouse.tech/), where it contains 11.1 billion records. We redistribute it for research purposes and it can be downloaded at this [direct link](https://ghe.clickhouse.tech/#download-the-dataset). This dataset can help answer almost any question about GitHub that you can imagine.
 
 - [Counting stars](https://ghe.clickhouse.tech/#counting-stars)
 - [Top repositories by stars](https://ghe.clickhouse.tech/#top-repositories-by-stars)
