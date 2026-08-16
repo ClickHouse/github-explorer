@@ -5812,7 +5812,7 @@ CREATE TABLE github_events ENGINE = MergeTree ORDER BY (event_type, repo_name, c
 
 <h2>How this dataset is created</h2>
 
-<p>This section explains how to recreate the dataset from the raw data (1.2 TB json.gz). You don't have to follow these steps because we have already prepared a <a href="#download-the-dataset">preprocessed structured dataset</a> for download (just 65 GB).</p>
+<p>This section explains how to recreate the dataset from the raw data (about 5 TB json.gz). You don't have to follow these steps because we have already prepared a <a href="#download-the-dataset">preprocessed structured dataset</a> for download (just 65 GB).</p>
 
 
 <h3>Download the raw data</h3>
@@ -5822,16 +5822,16 @@ CREATE TABLE github_events ENGINE = MergeTree ORDER BY (event_type, repo_name, c
 <p>You can download all the files with the command:</p>
 
 <pre>
-wget --continue https://data.gharchive.org/{2015..2020}-{01..12}-{01..31}-{0..23}.json.gz
+wget --continue https://data.gharchive.org/{2011..2026}-{01..12}-{01..31}-{0..23}.json.gz
 </pre>
 
 <p>If you see the <span class="code">Argument list too long</span> message, split to multiple commands by years.</p>
 <p>If download fails, just run the command again (<span class="code">--continue</span> will skip already downloaded files).</p>
 
-<p>The total number of files is 84 264 and the total size is about 1.2 TB.</p>
-<p>Typical download speed is ~16 MB/sec. The download will take about a day.</p>
+<p>The total number of files is about 135 000 and the total size is about 5 TB.</p>
+<p>Typical download speed is ~16 MB/sec. The download will take several days.</p>
 
-<p>There is no point parallelizing the download within one server, because rate limits will apply and the effective download speed will remain the same. You can parallelize by using different servers... but it's better not to bother because it is just one terabyte and you just need to wait from one day to several days at most. Prepare a server with at least 1.5 terabytes of space, run the download, leave for the weekend and that's it.</p>
+<p>There is no point parallelizing the download within one server, because rate limits will apply and the effective download speed will remain the same. You can parallelize by using different servers... but it's better not to bother because it is just a few terabytes and you just need to wait from several days to a week at most. Prepare a server with at least 6 terabytes of space, run the download, leave for the weekend and that's it.</p>
 
 
 <h3>Preprocess the raw data for analysis</h3>
@@ -6353,164 +6353,229 @@ CREATE TABLE github_events
 
 <h3>How to transform data from JSON to a flat table</h3>
 
-<p>The most simple way is to use <span class="code">jq</span>.</p>
+<p>No external tools are needed: ClickHouse reads the <span class="code">.json.gz</span> files itself and does the whole transformation in SQL.</p>
 
 <pre>
-find . -name '*.json.gz' | xargs -P$(nproc) -I{} bash -c "
-gzip -cd {} | jq -c '
-[
-    (\"{}\" | scan(\"[0-9]+-[0-9]+-[0-9]+-[0-9]+\")),
-    .type,
-    .actor.login? // .actor_attributes.login? // (.actor | strings) // null,
-    .repo.name? // (.repository.owner? + \"/\" + .repository.name?) // null,
-    .created_at,
-    .payload.updated_at? // .payload.comment?.updated_at? // .payload.issue?.updated_at? // .payload.pull_request?.updated_at? // null,
-    .payload.action,
-    .payload.comment.id,
-    .payload.review.body // .payload.comment.body // .payload.issue.body? // .payload.pull_request.body? // .payload.release.body? // null,
-    .payload.comment?.path? // null,
-    .payload.comment?.position? // null,
-    .payload.comment?.line? // null,
-    .payload.ref? // null,
-    .payload.ref_type? // null,
-    .payload.comment.user?.login? // .payload.issue.user?.login? // .payload.pull_request.user?.login? // null,
-    .payload.issue.number? // .payload.pull_request.number? // .payload.number? // null,
-    .payload.issue.title? // .payload.pull_request.title? // null,
-    [.payload.issue.labels?[]?.name // .payload.pull_request.labels?[]?.name],
-    .payload.issue.state? // .payload.pull_request.state? // null,
-    .payload.issue.locked? // .payload.pull_request.locked? // null,
-    .payload.issue.assignee?.login? // .payload.pull_request.assignee?.login? // null,
-    [.payload.issue.assignees?[]?.login? // .payload.pull_request.assignees?[]?.login?],
-    .payload.issue.comments? // .payload.pull_request.comments? // null,
-    .payload.review.author_association // .payload.issue.author_association? // .payload.pull_request.author_association? // null,
-    .payload.issue.closed_at? // .payload.pull_request.closed_at? // null,
-    .payload.pull_request.merged_at? // null,
-    .payload.pull_request.merge_commit_sha? // null,
-    [.payload.pull_request.requested_reviewers?[]?.login],
-    [.payload.pull_request.requested_teams?[]?.name],
-    .payload.pull_request.head?.ref? // null,
-    .payload.pull_request.head?.sha? // null,
-    .payload.pull_request.base?.ref? // null,
-    .payload.pull_request.base?.sha? // null,
-    .payload.pull_request.merged? // null,
-    .payload.pull_request.mergeable? // null,
-    .payload.pull_request.rebaseable? // null,
-    .payload.pull_request.mergeable_state? // null,
-    .payload.pull_request.merged_by?.login? // null,
-    .payload.pull_request.review_comments? // null,
-    .payload.pull_request.maintainer_can_modify? // null,
-    .payload.pull_request.commits? // null,
-    .payload.pull_request.additions? // null,
-    .payload.pull_request.deletions? // null,
-    .payload.pull_request.changed_files? // null,
-    .payload.comment.diff_hunk? // null,
-    .payload.comment.original_position? // null,
-    .payload.comment.commit_id? // null,
-    .payload.comment.original_commit_id? // null,
-    .payload.size? // null,
-    .payload.distinct_size? // null,
-    .payload.member.login? // .payload.member? // null,
-    .payload.release?.tag_name? // null,
-    .payload.release?.name? // null,
-    .payload.review?.state? // null
-]' | clickhouse-client --input_format_null_as_default 1 --date_time_input_format best_effort --query 'INSERT INTO github_events FORMAT JSONCompactEachRow' || echo 'File {} has issues'
-"
+INSERT INTO github_events
+WITH parseDateTimeBestEffort(replaceRegexpOne(_file,
+    '^(\\d{4}-\\d{2}-\\d{2})-(\\d{1,2})\\.json\\.gz$', '\\1 \\2:00:00')) AS file_time
+SELECT
+    file_time,
+    type,
+    COALESCE(actor.login, actor_attributes.login),
+    COALESCE(repo.name, repository.owner || '/' || repository.name),
+    created_at,
+    COALESCE(payload.updated_at, payload.comment.updated_at, payload.issue.updated_at, payload.pull_request.updated_at),
+    payload.action,
+    payload.comment.id,
+    COALESCE(payload.review.body, payload.comment.body, payload.issue.body, payload.pull_request.body, payload.release.body),
+    payload.comment.path,
+    payload.comment.position,
+    payload.comment.line,
+    payload.ref,
+    payload.ref_type,
+    COALESCE(payload.comment.user.login, payload.issue.user.login, payload.pull_request.user.login),
+    COALESCE(payload.issue.number, payload.pull_request.number, payload.number),
+    COALESCE(payload.issue.title, payload.pull_request.title),
+    arrayMap(x -&gt; tupleElement(x, 'name'), payload.issue.labels || payload.pull_request.labels),
+    COALESCE(payload.issue.state, payload.pull_request.state),
+    COALESCE(payload.issue.locked, payload.pull_request.locked),
+    COALESCE(payload.issue.assignee.login, payload.pull_request.assignee.login),
+    arrayMap(x -&gt; tupleElement(x, 'login'), payload.issue.assignees || payload.pull_request.assignees),
+    COALESCE(payload.issue.comments, payload.pull_request.comments),
+    COALESCE(payload.review.author_association, payload.issue.author_association, payload.pull_request.author_association),
+    COALESCE(payload.issue.closed_at, payload.pull_request.closed_at),
+    payload.pull_request.merged_at,
+    payload.pull_request.merged_commit_sha,
+    arrayMap(x -&gt; tupleElement(x, 'login'), payload.pull_request.requested_reviewers),
+    arrayMap(x -&gt; tupleElement(x, 'name'), payload.pull_request.requested_teams),
+    payload.pull_request.head.ref,
+    payload.pull_request.head.sha,
+    payload.pull_request.base.ref,
+    payload.pull_request.base.sha,
+    payload.pull_request.merged,
+    payload.pull_request.mergeable,
+    payload.pull_request.rebaseable,
+    payload.pull_request.mergeable_state,
+    payload.pull_request.merged_by.login,
+    payload.pull_request.review_comments,
+    payload.pull_request.maintainer_can_modify,
+    payload.pull_request.commits,
+    payload.pull_request.additions,
+    payload.pull_request.deletions,
+    payload.pull_request.changed_files,
+    payload.comment.diff_hunk,
+    payload.comment.original_position,
+    payload.comment.commit_id,
+    payload.comment.original_commit_id,
+    payload.size,
+    payload.distinct_size,
+    startsWith(payload.member, '{') ? JSONExtractString(payload.member, 'login') : payload.member,
+    payload.release.tag_name,
+    payload.release.name,
+    payload.review.state
+FROM file('*.json.gz', JSONEachRow,
+'
+    id Nullable(String),
+    type Nullable(String),
+    actor Tuple(
+        login Nullable(String)),
+    actor_attributes Tuple(
+        login Nullable(String)),
+    repo Tuple(
+        name Nullable(String)),
+    repository Tuple(
+        owner Nullable(String),
+        name Nullable(String)),
+    created_at DateTime,
+    payload Tuple(
+        updated_at Nullable(DateTime),
+        action Nullable(String),
+        ref Nullable(String),
+        ref_type Nullable(String),
+        number Nullable(Int64),
+        size Nullable(Int64),
+        distinct_size Nullable(Int64),
+        comment Tuple(
+            updated_at Nullable(DateTime),
+            id Nullable(String),
+            body Nullable(String),
+            path Nullable(String),
+            position Nullable(String),
+            line Nullable(String),
+            user Tuple(
+                login Nullable(String)),
+            diff_hunk Nullable(String),
+            original_position Nullable(String),
+            commit_id Nullable(String),
+            original_commit_id Nullable(String)),
+        issue Tuple(
+            updated_at Nullable(DateTime),
+            closed_at Nullable(DateTime),
+            body Nullable(String),
+            user Tuple(
+                login Nullable(String)),
+            number Nullable(Int64),
+            title Nullable(String),
+            labels Array(Tuple(name Nullable(String))),
+            state Nullable(String),
+            locked Nullable(String),
+            assignee Tuple(
+                login Nullable(String)),
+            assignees Array(Tuple(
+                login Nullable(String))),
+            comments Nullable(Int64),
+            author_association Nullable(String)),
+        pull_request Tuple(
+            updated_at Nullable(DateTime),
+            closed_at Nullable(DateTime),
+            merged_at Nullable(DateTime),
+            merged_commit_sha Nullable(String),
+            body Nullable(String),
+            user Tuple(
+                login Nullable(String)),
+            number Nullable(Int64),
+            title Nullable(String),
+            labels Array(Tuple(name Nullable(String))),
+            state Nullable(String),
+            locked Nullable(String),
+            assignee Tuple(
+                login Nullable(String)),
+            assignees Array(Tuple(
+                login Nullable(String))),
+            comments Nullable(Int64),
+            review_comments Nullable(Int64),
+            author_association Nullable(String),
+            requested_reviewers Array(Tuple(
+                login Nullable(String))),
+            requested_teams Array(Tuple(
+                name Nullable(String))),
+            head Tuple(
+                ref Nullable(String),
+                sha Nullable(String)),
+            base Tuple(
+                ref Nullable(String),
+                sha Nullable(String)),
+            merged Nullable(String),
+            mergeable Nullable(String),
+            rebaseable Nullable(String),
+            maintainer_can_modify Nullable(String),
+            mergeable_state Nullable(String),
+            merged_by Tuple(
+                login Nullable(String)),
+            commits Nullable(Int64),
+            additions Nullable(Int64),
+            deletions Nullable(Int64),
+            changed_files Nullable(Int64)),
+        review Tuple(
+            body Nullable(String),
+            author_association Nullable(String),
+            state Nullable(String)),
+        release Tuple(
+            body Nullable(String),
+            tag_name Nullable(String),
+            name Nullable(String)),
+        member Nullable(String)
+    )
+')
+SETTINGS date_time_input_format = 'best_effort', input_format_allow_errors_ratio = 0.01, input_format_allow_errors_num = 1000
 </pre>
 
-<p><span class="code">jq</span> is slow. <span class="code">gzip</span> decompression is slow. Here we parallelize it with the <span class="code">xargs -P</span> trick.</p>
+<p>Save it as <span class="code">load.sql</span> and run <span class="code">clickhouse-client --queries-file load.sql</span>.</p>
 
-<p>A quick intro into <span class="code">jq</span> syntax:</p>
+<p>A few details:</p>
 
-<p>
-<span class="code">[...]</span> means to collect into a JSON array.<br/>
-<span class="code">.actor.login</span> is the navigation inside the JSON object.<br/>
-<span class="code">.elem.field?</span> means to emit null instead of error if the elem is not an object.<br/>
-<span class="code">//</span> means "or" (Python-like). If the left-hand side is not found, the right-hand side will be selected.<br/>
-<span class="code">[]?.name</span> means to select the object's <span class="code">name</span> field if it exists, for each element of the array.
-</p>
+<p>1. The <span class="code">file</span> table function accepts a wildcard, so it reads every hourly file, decompresses gzip on the fly and parses JSON with <a href="https://github.com/simdjson/simdjson/">simdjson</a>, in parallel across the files and across chunks within every file. If you prefer not to download the archive first, replace <span class="code">file</span> with <span class="code">url</span> and pass the address of the file &mdash; everything else stays the same.</p>
 
-<p>This <span class="code">jq</span> expression will create an array for every event. We pipe these arrays into <span class="code">clickhouse-client</span> to <span class="code">INSERT INTO github_events</span> parsing the data with <span class="code">JSONCompactEachRow</span> format.</p>
+<p>2. The third argument is the structure of the input: only the fields we are interested in. Everything else in the JSON is skipped. Nested objects are described with <span class="code">Tuple</span>, and arrays of objects with <span class="code">Array(Tuple(...))</span>. All fields are <span class="code">Nullable</span>, because most of them are absent for most of the event types.</p>
 
-<p>The <span class="code">JSONCompactEachRow</span> is one of the <a href="https://clickhouse.com/docs/en/interfaces/formats/">input/output formats</a> supported by ClickHouse. Basically it means "JSON array for every table row".</p>
+<p>3. <span class="code">COALESCE</span> takes the first field that is present. The format of the archive changed over the years, and the same logical value can live in different places &mdash; for example, the actor login is <span class="code">actor.login</span> in the modern format and <span class="code">actor_attributes.login</span> in the oldest files.</p>
 
-<p>The option <span class="code">--input_format_null_as_default</span> will transform JSON nulls (when the field is not found) to default values (like 0 or empty string). The option <span class="code">--date_time_input_format best_effort</span> allows to parse the DateTime field in various formats, including <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>.</p>
+<p>4. <span class="code">arrayMap(x -&gt; tupleElement(x, 'name'), ...)</span> turns an array of objects into an array of strings, which is what the <span class="code">labels</span>, <span class="code">assignees</span> and <span class="code">requested_reviewers</span> columns are.</p>
 
-<p>Data loading will take a few hours, and the bottleneck is <span class="code">jq</span>.</p>
+<p>5. The destination columns are not <span class="code">Nullable</span>, and NULLs are converted into default values (zeros and empty strings) on insertion &mdash; exactly what we decided in the previous section.</p>
+
+<p>6. <span class="code">_file</span> is a virtual column with the name of the file being read. The name contains the hour, and that's where <span class="code">file_time</span> comes from.</p>
+
+<p>7. <span class="code">date_time_input_format = 'best_effort'</span> allows to parse the DateTime fields in various formats, including <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>. The <span class="code">input_format_allow_errors</span> settings let the load survive the handful of malformed records that the archive contains.</p>
+
+<p>Data loading is limited by decompression and JSON parsing, and it uses all your cores. Previous versions of this article used the <span class="code">jq</span> tool for this step and it was the bottleneck; it is not needed anymore.</p>
 
 <p>Congratulations, now we are able to recreate the dataset from the raw data! (Assuming the <span class="code">GHArchive</span> continues to exist).</p>
 
 
 <h3>How to update the database continuously</h3>
 
-<p>If you want to continuously update the database, just run the script in cron:</p>
+<p>If you want to continuously update the database, put one line in cron:</p>
 
 <pre>
-# Assuming raw data is located in './gharchive' directory.
-mkdir gharchive_new
-cd gharchive_new
-
-ls -1 ../gharchive | clickhouse-local --structure 'file String' --query "WITH (SELECT max(parseDateTimeBestEffort(extract(file, '^(.+)\.json\.gz$'), 'UTC')) FROM table) AS last SELECT toString(toDate(last + INTERVAL arrayJoin(range(0, 24)) - 12 HOUR AS t)) || '-' || toString(toHour(t)) || '.json.gz' WHERE t &lt; now()" | xargs -I{} bash -c "[ -f ../gharchive/{} ] || wget --continue 'https://data.gharchive.org/{}'"
-
-find . -name '*.json.gz' | xargs -P$(nproc) -I{} bash -c "
-gzip -cd {} | jq -c '
-[
-    (\"{}\" | scan(\"[0-9]+-[0-9]+-[0-9]+-[0-9]+\")),
-    .type,
-    .actor.login? // .actor_attributes.login? // (.actor | strings) // null,
-    .repo.name? // (.repository.owner? + \"/\" + .repository.name?) // null,
-    .created_at,
-    .payload.updated_at? // .payload.comment?.updated_at? // .payload.issue?.updated_at? // .payload.pull_request?.updated_at? // null,
-    .payload.action,
-    .payload.comment.id,
-    .payload.review.body // .payload.comment.body // .payload.issue.body? // .payload.pull_request.body? // .payload.release.body? // null,
-    .payload.comment?.path? // null,
-    .payload.comment?.position? // null,
-    .payload.comment?.line? // null,
-    .payload.ref? // null,
-    .payload.ref_type? // null,
-    .payload.comment.user?.login? // .payload.issue.user?.login? // .payload.pull_request.user?.login? // null,
-    .payload.issue.number? // .payload.pull_request.number? // .payload.number? // null,
-    .payload.issue.title? // .payload.pull_request.title? // null,
-    [.payload.issue.labels?[]?.name // .payload.pull_request.labels?[]?.name],
-    .payload.issue.state? // .payload.pull_request.state? // null,
-    .payload.issue.locked? // .payload.pull_request.locked? // null,
-    .payload.issue.assignee?.login? // .payload.pull_request.assignee?.login? // null,
-    [.payload.issue.assignees?[]?.login? // .payload.pull_request.assignees?[]?.login?],
-    .payload.issue.comments? // .payload.pull_request.comments? // null,
-    .payload.review.author_association // .payload.issue.author_association? // .payload.pull_request.author_association? // null,
-    .payload.issue.closed_at? // .payload.pull_request.closed_at? // null,
-    .payload.pull_request.merged_at? // null,
-    .payload.pull_request.merge_commit_sha? // null,
-    [.payload.pull_request.requested_reviewers?[]?.login],
-    [.payload.pull_request.requested_teams?[]?.name],
-    .payload.pull_request.head?.ref? // null,
-    .payload.pull_request.head?.sha? // null,
-    .payload.pull_request.base?.ref? // null,
-    .payload.pull_request.base?.sha? // null,
-    .payload.pull_request.merged? // null,
-    .payload.pull_request.mergeable? // null,
-    .payload.pull_request.rebaseable? // null,
-    .payload.pull_request.mergeable_state? // null,
-    .payload.pull_request.merged_by?.login? // null,
-    .payload.pull_request.review_comments? // null,
-    .payload.pull_request.maintainer_can_modify? // null,
-    .payload.pull_request.commits? // null,
-    .payload.pull_request.additions? // null,
-    .payload.pull_request.deletions? // null,
-    .payload.pull_request.changed_files? // null,
-    .payload.comment.diff_hunk? // null,
-    .payload.comment.original_position? // null,
-    .payload.comment.commit_id? // null,
-    .payload.comment.original_commit_id? // null,
-    .payload.size? // null,
-    .payload.distinct_size? // null,
-    .payload.member.login? // .payload.member? // null,
-    .payload.release?.tag_name? // null,
-    .payload.release?.name? // null,
-    .payload.review?.state? // null
-]' | clickhouse-client --input_format_null_as_default 1 --date_time_input_format best_effort --query 'INSERT INTO github_events FORMAT JSONCompactEachRow' || echo 'File {} has issues'
-" &amp;&amp; mv *.json.gz ../gharchive
+* * * * * ubuntu cd /home/ubuntu &amp;&amp; ./update.sh &gt;&gt; update.log 2&gt;&amp;1
 </pre>
+
+<p>And <a href="https://github.com/ClickHouse/github-explorer/blob/main/update.sh">update.sh</a> runs the same INSERT as above, with two differences: it reads a single hour straight from a URL instead of local files, and it works out which hour to read from the data that is already loaded:</p>
+
+<pre>
+clickhouse-client --query_id github_events_update --query "
+INSERT INTO github_events
+WITH
+    (SELECT max(file_time) + INTERVAL 1 HOUR FROM github_events) AS time,
+    format(
+        'https://clickhouse-public-datasets.s3.amazonaws.com/gharchive/original/{}-{}.json.gz',
+        formatDateTime(time, '%Y-%m-%d'), toHour(time)) AS url
+SELECT
+    time,
+    type,
+    COALESCE(actor.login, actor_attributes.login),
+    ... the same expressions as above ...
+FROM url((SELECT url), auto,
+'
+    ... the same structure as above ...
+')
+SETTINGS date_time_input_format = 'best_effort', input_format_allow_errors_ratio = 0.01, input_format_allow_errors_num = 1000
+"
+</pre>
+
+<p>There is no separate download step at all &mdash; the URL points to a mirror of the GH Archive files, and one hour is inserted per run. If the next hour has not been published yet, the query fails, nothing is inserted, and the run a minute later tries again. The <span class="code">max(file_time)</span> lookup is instant because of the <span class="code">max_file_time</span> projection in the table definition, and the fixed <span class="code">--query_id</span> makes ClickHouse refuse to start a second copy while the previous one is still running, which is what you want from a job that fires every minute.</p>
 
 <h3>How to create <span class="code">.tsv.xz</span> and <span class="code">.native.xz</span> dumps</h3>
 
